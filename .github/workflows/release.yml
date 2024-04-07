@@ -39,7 +39,9 @@ jobs:
         cache: 'pnpm'
     - name: Install dependencies
       run: pnpm i --frozen-lockfile
-    - name: Publish package
-      run: pnpm publish
+    - name: Set publishing config
+      run: pnpm config set '//registry.npmjs.org/:_authToken' "${NPM_TOKEN}"
       env:
         NPM_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
+    - name: Publish package
+      run: pnpm publish --access public --tag ${{ github.event.inputs.releaseType }}
