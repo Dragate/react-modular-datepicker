@@ -8,7 +8,6 @@ on:
         options:
           - canary
           - stable
-
       semverType:
         description: semver type?
         type: choice
@@ -18,6 +17,10 @@ on:
           - major
 
 name: Release
+
+env:
+  SEMVER_TYPE: ${{ github.event.inputs.semverType }}
+  RELEASE_TYPE: ${{ github.event.inputs.releaseType }}
 
 jobs:
   release:
