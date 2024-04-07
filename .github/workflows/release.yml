@@ -48,10 +48,14 @@ jobs:
         git push origin --tags
     - name: Create release
       if: github.event.inputs.releaseType == 'stable'
-      run: gh release create v${{ steps.bump.outputs.version }} --title "v${{ steps.bump.outputs.version }}" --generate-notes
+      run: gh release create v${{ steps.bump.outputs.version }} --target ${GITHUB_REF#refs/heads/} --generate-notes
+      env:
+        GH_TOKEN: ${{ github.token }}
     - name: Create prerelease
       if: github.event.inputs.releaseType == 'canary'
-      run: gh release create v${{ steps.bump.outputs.version }} --title "v${{ steps.bump.outputs.version }}" --prerelease --generate-notes
+      run: gh release create v${{ steps.bump.outputs.version }} --target ${GITHUB_REF#refs/heads/} --prerelease --generate-notes
+      env:
+        GH_TOKEN: ${{ github.token }}
     # - name: Set publishing config
     #   run: pnpm config set '//registry.npmjs.org/:_authToken' "${NPM_TOKEN}"
     #   env:
