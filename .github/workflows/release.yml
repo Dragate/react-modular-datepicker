@@ -17,31 +17,33 @@ on:
           - minor
           - major
 
-    secrets:
-      RELEASE_BOT_GITHUB_TOKEN:
-        required: true
-
 name: Release
 
 jobs:
-  start:
+  release:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v4
     - uses: pnpm/action-setup@v3
       with:
         version: 8
-    - name: Setup node
-      uses: actions/setup-node@v4
+    - uses: actions/setup-node@v4
       with:
         node-version: 18
         cache: 'pnpm'
     - name: Install dependencies
       run: pnpm i --frozen-lockfile
-    - name: Set publishing config
-      run: pnpm config set '//registry.npmjs.org/:_authToken' "${NPM_TOKEN}"
+    - name: Bump version and tag
+      run: node ./scripts/bump-version.js
+    - name: Push release commit
       env:
-        NPM_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
-    - name: Publish package
-      run: pnpm publish --access public --tag ${{ github.event.inputs.releaseType }}
+        RELEASE_BOT_GITHUB_TOKEN: ${{ secrets.RELEASE_BOT_GITHUB_TOKEN }}
+      run: |
+        git push origin main
+        git push origin --tags
+    # - name: Set publishing config
+    #   run: pnpm config set '//registry.npmjs.org/:_authToken' "${NPM_TOKEN}"
+    #   env:
+    #     NPM_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
+    # - name: Publish package
+    #   run: pnpm publish --tag ${{ github.event.inputs.releaseType }}
