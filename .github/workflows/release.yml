@@ -41,19 +41,14 @@ jobs:
         git config user.name "dragate"
         git config user.email "spidfair@gmail.com"
     - name: Bump version and tag
+      id: bump
       run: node ./scripts/bump-version.js
     - name: Push version commit
       run: |
         git push origin ${GITHUB_REF#refs/heads/}
         git push origin --tags
     - name: Create release
-      if: github.event.inputs.releaseType == 'stable'
-      run: gh release create v${{ steps.bump.outputs.version }} --target ${GITHUB_REF#refs/heads/} --generate-notes
-      env:
-        GH_TOKEN: ${{ github.token }}
-    - name: Create prerelease
-      if: github.event.inputs.releaseType == 'canary'
-      run: gh release create v${{ steps.bump.outputs.version }} --target ${GITHUB_REF#refs/heads/} --prerelease --generate-notes
+      run: gh release create v${{ steps.bump.outputs.version }} --target ${GITHUB_REF#refs/heads/} --generate-notes ${{ github.event.inputs.releaseType == 'canary' && '--prerelease' || '' }}
       env:
         GH_TOKEN: ${{ github.token }}
     # - name: Set publishing config

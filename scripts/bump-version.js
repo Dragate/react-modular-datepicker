@@ -27,6 +27,8 @@ switch (process.env.RELEASE_TYPE) {
         process.exit(1)
 }
 
+console.log(`::set-output name=version::${version}`);
+
 if (process.env.DRY_RUN) {
     console.log(`pnpm version ${version}`)
 } else {
