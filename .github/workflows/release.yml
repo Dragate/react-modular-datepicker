@@ -36,6 +36,10 @@ jobs:
         cache: 'pnpm'
     - name: Install dependencies
       run: pnpm i --frozen-lockfile
+    - name: Configure git
+      run: |
+        git config user.name "dragate"
+        git config user.email "spidfair@gmail.com"
     - name: Bump version and tag
       run: node ./scripts/bump-version.js
     - name: Push release commit

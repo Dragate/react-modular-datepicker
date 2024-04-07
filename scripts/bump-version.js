@@ -8,38 +8,32 @@ const packageJsonData = fs.readFileSync(packageJsonPath, 'utf8')
 const packageJson = JSON.parse(packageJsonData)
 
 let version = packageJson.version
-const releaseType = process.env.RELEASE_TYPE
-const semverType = process.env.SEMVER_TYPE
 
-function bumpVersion(version) {
-    if (process.env.DRY_RUN) {
-        console.log(`npm version ${version}`)
-    } else {
-        try {
-            execSync(`npm version ${version}`, { stdio: 'inherit' })
-        } catch (error) {
-            console.error('Failed to execute npm version:', error)
-            process.exit(1)
-        }
-    }
-}
-
-switch (releaseType) {
+switch (process.env.RELEASE_TYPE) {
     case "canary":
         version = semver.prerelease(version)
             ? semver.inc(version, 'prerelease')
-            : semver.inc(version, `pre${semverType}`, 'canary')
+            : semver.inc(version, `pre${process.env.SEMVER_TYPE}`, 'canary')
         break
     case "stable":
-        if (!semverType) {
+        if (!process.env.SEMVER_TYPE) {
             console.error('Missing semver type. Expected "patch", "minor" or "major".')
             process.exit(1)
         }
-        version = semver.inc(version, semverType)
+        version = semver.inc(version, process.env.SEMVER_TYPE)
         break
     default:
         console.error('Invalid release type. Expected "canary" or "stable".')
         process.exit(1)
 }
 
-bumpVersion(version)
+if (process.env.DRY_RUN) {
+    console.log(`pnpm version ${version}`)
+} else {
+    try {
+        execSync(`pnpm version ${version}`, { stdio: 'inherit' })
+    } catch (error) {
+        console.error('Failed to execute version:', error)
+        process.exit(1)
+    }
+}
