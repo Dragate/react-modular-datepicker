@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { useState } from 'react';
 
 import type { DateObj } from './utils';
@@ -8,7 +7,6 @@ import {
     getCalendars,
     isBackDisabled,
     isForwardDisabled,
-    requiredProp,
     subtractMonth,
     unwrapChildrenForPreact
 } from './utils';
@@ -25,7 +23,7 @@ function getOffset(prop, state): number {
 
 function getDateProps(
     onDateSelected: Function,
-    { onClick, dateObj = requiredProp('getDateProps', 'dateObj'), ...rest }: { onClick?: Function, dateObj: DateObj, rest?: Record<string, unknown> }
+    { onClick, dateObj, ...rest }: { onClick?: Function, dateObj: DateObj, rest?: Record<string, unknown> }
 ) {
     return {
         //@ts-ignore
@@ -45,7 +43,7 @@ function getBackProps(
     {
         onClick,
         offset = 1,
-        calendars = requiredProp('getBackProps', 'calendars'),
+        calendars,
         ...rest
     }: { onClick: Function, offset: number, calendars: ReturnType<typeof getCalendars>, rest?: Record<string, unknown> }
 ) {
@@ -67,7 +65,7 @@ function getForwardProps(
     {
         onClick,
         offset = 1,
-        calendars = requiredProp('getForwardProps', 'calendars'),
+        calendars,
         ...rest
     }: { onClick: Function, offset: number, calendars: ReturnType<typeof getCalendars>, rest?: Record<string, unknown> }
 ) {
@@ -140,31 +138,5 @@ function Component(props: { date: Date, maxDate?: Date, minDate?: Date, monthsTo
     //@ts-ignore
     return children(ComponentCalendar);
 }
-
-Component.defaultProps = {
-    date: new Date(),
-    monthsToDisplay: 1,
-    onOffsetChanged: () => { },
-    firstDayOfWeek: 0,
-    showOutsideDays: false
-};
-
-Component.propTypes = {
-    render: PropTypes.func,
-    children: PropTypes.func,
-    date: PropTypes.instanceOf(Date),
-    maxDate: PropTypes.instanceOf(Date),
-    minDate: PropTypes.instanceOf(Date),
-    monthsToDisplay: PropTypes.number,
-    firstDayOfWeek: PropTypes.number,
-    showOutsideDays: PropTypes.bool,
-    offset: PropTypes.number,
-    onDateSelected: PropTypes.func.isRequired,
-    onOffsetChanged: PropTypes.func,
-    selected: PropTypes.oneOfType([
-        PropTypes.arrayOf(PropTypes.instanceOf(Date)),
-        PropTypes.instanceOf(Date)
-    ])
-};
 
 export default Component;

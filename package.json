@@ -3,18 +3,16 @@
   "version": "0.0.2-canary.2",
   "description": "Another react datepicker",
   "scripts": {
-    "build": "bunchee",
+    "build": "bunchee -m",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "MIT",
   "peerDependencies": {
-    "prop-types": "^15",
     "react": "^16.8.0 || ^17.0.0 || ^18.0.0"
   },
   "devDependencies": {
-    "@types/prop-types": "^15.7.12",
     "@types/react": "^18.2.74",
     "bunchee": "^5.1.2",
     "react": "^18.2.0",
@@ -23,7 +21,6 @@
     "typescript": "^5.4.4"
   },
   "dependencies": {
-    "date-fns": "^2.30.0",
     "dayjs": "^1.11.10"
   },
   "files": [
