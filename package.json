@@ -15,16 +15,17 @@
     "react-dom": "^16.8.0 || ^17.0.0 || ^18.0.0"
   },
   "devDependencies": {
-    "@types/react": "^18.2.74",
-    "@types/react-dom": "^18.2.24",
+    "@types/react": "^18.2.78",
+    "@types/react-dom": "^18.2.25",
     "bunchee": "^5.1.2",
-    "next": "^14.2.0",
+    "concurrently": "^8.2.2",
+    "next": "^14.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-modular-datepicker": "workspace:*",
     "semver": "^7.6.0",
     "serve": "^14.2.1",
-    "typescript": "^5.4.4"
+    "typescript": "^5.4.5"
   },
   "dependencies": {
     "dayjs": "^1.11.10"
