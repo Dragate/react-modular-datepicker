@@ -3,7 +3,9 @@
   "version": "0.0.2-canary.2",
   "description": "Another react datepicker",
   "scripts": {
-    "watch": "bunchee -w",
+    "dev": "pnpm run -p \"/^dev:.*/\"",
+    "dev:watch": "bunchee -w",
+    "dev:example": "next dev examples/basic",
     "build": "bunchee -m",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -18,7 +20,6 @@
     "@types/react": "^18.2.78",
     "@types/react-dom": "^18.2.25",
     "bunchee": "^5.1.2",
-    "concurrently": "^8.2.2",
     "next": "^14.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
