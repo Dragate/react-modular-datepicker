@@ -1,6 +1,5 @@
 import Datepicker from "react-modular-datepicker";
 
-
 const monthNamesShort = [
     'Jan',
     'Feb',

@@ -77,7 +77,7 @@ function getForwardProps(
             );
         }),
         disabled: isForwardDisabled({ calendars, maxDate }),
-        'aria-label': `Go forward2 ${offset} month${offset === 1 ? '' : 's'}`,
+        'aria-label': `Go forward ${offset} month${offset === 1 ? '' : 's'}`,
         ...rest
     };
 }
