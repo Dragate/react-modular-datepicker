@@ -25,7 +25,7 @@
     "react-dom": "^18.3.1",
     "react-modular-datepicker": "workspace:*",
     "semver": "^7.6.2",
-    "typescript": "^5.5.2"
+    "typescript": "^5.5.3"
   },
   "dependencies": {
     "dayjs": "^1.11.11"
