@@ -22,9 +22,6 @@ env:
   SEMVER_TYPE: ${{ github.event.inputs.semverType }}
   RELEASE_TYPE: ${{ github.event.inputs.releaseType }}
 
-permissions:
-  contents: write
-
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -37,6 +34,7 @@ jobs:
       with:
         node-version: 22
         cache: 'pnpm'
+        registry-url: 'https://registry.npmjs.org'
     - name: Install dependencies
       run: pnpm i --frozen-lockfile
     - name: Configure git
@@ -54,9 +52,7 @@ jobs:
       run: gh release create v${{ steps.bump.outputs.version }} --target ${GITHUB_REF#refs/heads/} --generate-notes ${{ github.event.inputs.releaseType == 'canary' && '--prerelease' || '' }}
       env:
         GH_TOKEN: ${{ github.token }}
-    - name: Set publishing config
-      run: pnpm config set '//registry.npmjs.org/:_authToken' "${NPM_TOKEN}"
-      env:
-        NPM_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
     - name: Publish package
-      run: pnpm publish --tag ${{ github.event.inputs.releaseType }}
+      run: pnpm publish --tag ${{ github.event.inputs.releaseType }} --provenance
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
