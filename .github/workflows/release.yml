@@ -58,5 +58,3 @@ jobs:
         GH_TOKEN: ${{ github.token }}
     - name: Publish package
       run: pnpm publish --no-git-checks --provenance --access public --tag ${{ github.event.inputs.releaseType }}
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
