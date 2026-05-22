@@ -17,6 +17,7 @@ on:
           - major
 
 permissions:
+  contents: write
   id-token: write
 
 name: Release
