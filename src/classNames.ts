@@ -1,3 +1,16 @@
+export interface DayClassNames {
+  day?: string;
+  today?: string;
+  selected?: string;
+  unselected?: string;
+  disabled?: string;
+  outside?: string;
+  rangeStart?: string;
+  rangeEnd?: string;
+  rangeBetween?: string;
+  rangeHovering?: string;
+}
+
 export interface CalendarClassNames {
   // Main Calendar
   root?: string;
@@ -16,16 +29,7 @@ export interface CalendarClassNames {
   monthYearButton?: string;
 
   // Day
-  day?: string;
-  dayToday?: string;
-  daySelected?: string;
-  dayUnselected?: string;
-  dayDisabled?: string;
-  dayOutside?: string;
-  dayRangeStart?: string;
-  dayRangeEnd?: string;
-  dayRangeBetween?: string;
-  dayRangeHovering?: string;
+  day?: DayClassNames;
 
   // Months View
   monthsRoot?: string;
@@ -63,16 +67,18 @@ export const defaultClassNames: Required<CalendarClassNames> = {
   monthYearLabel: "flex gap-1 items-center font-semibold text-brand-text",
   monthYearButton: "hover:bg-gray-100 px-2 py-1 rounded cursor-pointer",
 
-  day: "aspect-square flex items-center justify-center text-sm font-medium transition-all relative group cursor-pointer",
-  dayToday: "text-brand-gold border border-brand-gold rounded-full",
-  daySelected: "bg-brand-gold text-white rounded-full",
-  dayUnselected: "hover:bg-brand-gray-light text-brand-text rounded-full",
-  dayDisabled: "text-gray-300 cursor-not-allowed",
-  dayOutside: "text-gray-400 rounded-full",
-  dayRangeStart: "bg-brand-gold text-white",
-  dayRangeEnd: "bg-brand-gold text-white",
-  dayRangeBetween: "bg-brand-gray-light text-brand-text rounded-none",
-  dayRangeHovering: "bg-brand-gray-light text-brand-text rounded-none",
+  day: {
+    day: "aspect-square flex items-center justify-center text-sm font-medium transition-all relative group cursor-pointer",
+    today: "text-brand-gold border border-brand-gold rounded-full",
+    selected: "bg-brand-gold text-white rounded-full",
+    unselected: "hover:bg-brand-gray-light text-brand-text rounded-full",
+    disabled: "text-gray-300 cursor-not-allowed",
+    outside: "text-gray-400 rounded-full",
+    rangeStart: "bg-brand-gold text-white",
+    rangeEnd: "bg-brand-gold text-white",
+    rangeBetween: "bg-brand-gray-light text-brand-text rounded-none",
+    rangeHovering: "bg-brand-gray-light text-brand-text rounded-none",
+  },
 
   monthsRoot: "w-fit p-4 bg-white rounded-lg shadow-lg min-w-[280px]",
   monthsHeader: "flex items-center justify-between mb-4",
@@ -96,9 +102,12 @@ export const defaultClassNames: Required<CalendarClassNames> = {
 export const mergeClassNames = (custom?: CalendarClassNames): Required<CalendarClassNames> => {
   const result = { ...defaultClassNames };
   if (!custom) return result;
+
   for (const key in custom) {
     const k = key as keyof CalendarClassNames;
-    if (custom[k]) {
+    if (k === 'day' && custom.day) {
+      result.day = { ...defaultClassNames.day, ...custom.day };
+    } else if (custom[k]) {
       (result as any)[k] = custom[k];
     }
   }

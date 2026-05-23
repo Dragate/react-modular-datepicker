@@ -15,34 +15,35 @@ export const Day: React.FC<DayProps> = ({ dateObj, getDateProps, classNames, too
 
   const { date, selected, selectable, today, prevMonth, nextMonth, isRangeStart, isRangeEnd, isRangeBetween, isRangeHovering, isRangeActive } = dateObj;
   const isOutside = prevMonth || nextMonth;
+  const dayClasses = classNames.day;
 
   let stateClasses = "rounded-full";
   if (isRangeStart && isRangeEnd) {
-    stateClasses = `${classNames.daySelected} rounded-full`;
+    stateClasses = `${dayClasses.selected} rounded-full`;
   } else if (isRangeStart) {
-    stateClasses = `${classNames.dayRangeStart} ${isRangeActive ? 'rounded-l-full rounded-r-none' : 'rounded-full'}`;
+    stateClasses = `${dayClasses.rangeStart} ${isRangeActive ? 'rounded-l-full rounded-r-none' : 'rounded-full'}`;
   } else if (isRangeEnd) {
-    stateClasses = `${classNames.dayRangeEnd} ${isRangeActive ? 'rounded-r-full rounded-l-none' : 'rounded-full'}`;
+    stateClasses = `${dayClasses.rangeEnd} ${isRangeActive ? 'rounded-r-full rounded-l-none' : 'rounded-full'}`;
   } else if (isRangeBetween) {
-    stateClasses = classNames.dayRangeBetween;
+    stateClasses = dayClasses.rangeBetween || '';
   } else if (isRangeHovering) {
-    stateClasses = classNames.dayRangeHovering;
+    stateClasses = dayClasses.rangeHovering || '';
   } else if (selected) {
-    stateClasses = classNames.daySelected;
+    stateClasses = dayClasses.selected || '';
   } else if (today) {
-    stateClasses = classNames.dayToday;
+    stateClasses = dayClasses.today || '';
   } else if (!selectable) {
-    stateClasses = classNames.dayDisabled;
+    stateClasses = dayClasses.disabled || '';
   } else if (isOutside) {
-    stateClasses = classNames.dayOutside;
+    stateClasses = dayClasses.outside || '';
   } else {
-    stateClasses = classNames.dayUnselected;
+    stateClasses = dayClasses.unselected || '';
   }
 
   const className = [
-    classNames.day,
+    dayClasses.day,
     stateClasses,
-    ...(dateObj.modifiers || []).map(m => (classNames as any)[`day${m.charAt(0).toUpperCase() + m.slice(1)}`] || m)
+    ...(dateObj.modifiers || []).map(m => (dayClasses as any)[m] || m)
   ].filter(Boolean).join(' ');
 
   return (
