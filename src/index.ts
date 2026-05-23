@@ -7,3 +7,4 @@ export { Day } from './components/Day';
 export { DayjsAdapter, defaultAdapter } from './adapters/dayjs';
 export * from './i18n';
 import './index.css';
+export { CalendarHeader, ChevronLeftIcon, ChevronRightIcon } from './components/CalendarHeader';

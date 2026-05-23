@@ -3,6 +3,8 @@ import { useDates, UseDatesProps } from '../useDates';
 import { Day } from './Day';
 import { defaultAdapter } from '../adapters/dayjs';
 import { getTranslations, Translations } from '../i18n';
+import { CalendarHeader, ChevronLeftIcon } from './CalendarHeader';
+import { DateObj } from '../types';
 
 interface CalendarProps extends UseDatesProps {
   classNames?: {
@@ -17,6 +19,9 @@ interface CalendarProps extends UseDatesProps {
   };
   locale?: string;
   translations?: Partial<Translations>;
+  header?: React.ReactNode | ((props: any) => React.ReactNode);
+  footer?: React.ReactNode;
+  renderDayTooltip?: (dateObj: DateObj) => React.ReactNode;
 }
 
 type CalendarView = 'days' | 'months' | 'years';
@@ -28,6 +33,9 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
     translations: customTranslations,
     adapter = defaultAdapter,
     firstDayOfWeek = 0,
+    header,
+    footer,
+    renderDayTooltip,
     ...useDatesProps
   } = props;
 
@@ -79,76 +87,60 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
     }
   }, [view]);
 
-  const renderDays = () => (
-    <div className={`w-fit flex flex-col md:flex-row gap-4 p-4 bg-white rounded-lg shadow-lg ${classNames?.root || ''}`}>
-      {calendars.map((calendar, i) => (
-        <div key={`${calendar.month}-${calendar.year}`} className="flex-1 min-w-[280px]">
-          <div className="flex items-center justify-between mb-6">
-            {i === 0 ? (
-              <button
-                {...getBackProps({ calendars })}
-                onMouseDown={(e) => e.preventDefault()}
-                className={`p-2 hover:bg-gray-100 rounded-full transition-colors ${classNames?.navButton || ''}`}
-                aria-label={t.back}
-              >
-                <ChevronLeftIcon />
-              </button>
-            ) : <div className="w-9" />}
+  const renderDefaultHeader = () => (
+    <CalendarHeader
+        calendars={calendars}
+        getBackProps={getBackProps}
+        getForwardProps={getForwardProps}
+        setView={setView}
+        monthNames={monthNames}
+        t={t}
+        classNames={classNames}
+    />
+  );
 
-            <div className={`flex gap-1 items-center font-semibold text-brand-text ${classNames?.monthName || ''}`}>
-                <button
-                    onMouseDown={(e) => e.preventDefault()}
-                    onClick={() => setView('months')}
-                    className="hover:bg-gray-100 px-2 py-1 rounded"
+  const renderDays = () => (
+    <div className={`w-fit flex flex-col p-4 bg-white rounded-lg shadow-lg ${classNames?.root || ''}`}>
+      {typeof header === 'function' ? header({
+          calendars,
+          getBackProps,
+          getForwardProps,
+          setView,
+          monthNames,
+          t
+      }) : (header || renderDefaultHeader())}
+
+      <div className="flex flex-col md:flex-row gap-4">
+        {calendars.map((calendar) => (
+          <div key={`${calendar.month}-${calendar.year}`} className="flex-1 min-w-[280px]">
+            <div className="grid grid-cols-7 gap-1 mb-2">
+              {sortedWeekdays.map((day) => (
+                <div
+                  key={day}
+                  className={`text-center text-xs font-bold text-gray-400 py-2 ${classNames?.weekday || ''}`}
                 >
-                    {monthNames[calendar.month]}
-                </button>
-                <button
-                    onMouseDown={(e) => e.preventDefault()}
-                    onClick={() => setView('years')}
-                    className="hover:bg-gray-100 px-2 py-1 rounded"
-                >
-                    {calendar.year}
-                </button>
+                  {day}
+                </div>
+              ))}
             </div>
 
-            {i === calendars.length - 1 ? (
-              <button
-                {...getForwardProps({ calendars })}
-                onMouseDown={(e) => e.preventDefault()}
-                className={`p-2 hover:bg-gray-100 rounded-full transition-colors ${classNames?.navButton || ''}`}
-                aria-label={t.forward}
-              >
-                <ChevronRightIcon />
-              </button>
-            ) : <div className="w-9" />}
+            <div className={`grid grid-cols-7 gap-1 ${classNames?.grid || ''}`}>
+              {calendar.weeks.map((week, wi) =>
+                week.map((dateObj, di) => (
+                  <Day
+                    key={`${wi}-${di}`}
+                    dateObj={dateObj}
+                    getDateProps={getDateProps}
+                    classNames={classNames?.day}
+                    tooltip={dateObj && renderDayTooltip?.(dateObj)}
+                  />
+                ))
+              )}
+            </div>
           </div>
-
-          <div className="grid grid-cols-7 gap-1 mb-2">
-            {sortedWeekdays.map((day) => (
-              <div
-                key={day}
-                className={`text-center text-xs font-bold text-gray-400 py-2 ${classNames?.weekday || ''}`}
-              >
-                {day}
-              </div>
-            ))}
-          </div>
-
-          <div className={`grid grid-cols-7 gap-1 ${classNames?.grid || ''}`}>
-            {calendar.weeks.map((week, wi) =>
-              week.map((dateObj, di) => (
-                <Day
-                  key={`${wi}-${di}`}
-                  dateObj={dateObj}
-                  getDateProps={getDateProps}
-                  classNames={classNames?.day}
-                />
-              ))
-            )}
-          </div>
-        </div>
-      ))}
+        ))}
+      </div>
+      {footer && <div className="mt-4">{footer}</div>}
     </div>
   );
 
@@ -224,15 +216,3 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
       default: return renderDays();
   }
 };
-
-const ChevronLeftIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <polyline points="15 18 9 12 15 6"></polyline>
-  </svg>
-);
-
-const ChevronRightIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <polyline points="9 18 15 12 9 6"></polyline>
-  </svg>
-);

@@ -11,6 +11,7 @@ export default function RootLayout({ children }) {
           <a href="/headless" className="hover:underline">Headless</a>
           <a href="/styling" className="hover:underline">Custom Styling</a>
           <a href="/form" className="hover:underline">Form</a>
+          <a href="/custom-header-footer" className="hover:underline">Header/Footer</a>
         </nav>
         {children}
       </body>
