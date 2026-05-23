@@ -66,11 +66,13 @@ export function getCalendars({
     firstDayOfWeek,
     showOutsideDays,
     adapter = defaultAdapter,
-    selectionMode = 'single'
+    selectionMode = 'single',
+    modifiers
 }: {
     date: Date,
     selected?: Date | Date[] | { start?: Date, end?: Date },
     disabledDates?: Date[],
+    modifiers?: Record<string, (date: Date) => boolean>,
     monthsToDisplay: number,
     offset: number,
     minDate?: Date,
@@ -88,6 +90,7 @@ export function getCalendars({
             year: adapter.get(startDate, 'year'),
             selectedDates: selected,
             disabledDates,
+            modifiers,
             minDate,
             maxDate,
             firstDayOfWeek,
@@ -122,6 +125,7 @@ function getMonthData({
     year,
     selectedDates,
     disabledDates,
+    modifiers,
     minDate,
     maxDate,
     firstDayOfWeek,
@@ -149,7 +153,7 @@ function getMonthData({
 
     for (let day = 1; day <= daysInMonth; day++) {
         const date = adapter.toDate(adapter.set(currentMonth, 'day', day));
-        const dateObj = createDateObj(date, selectedDates, disabledDates, minDate, maxDate, adapter, selectionMode);
+        const dateObj = createDateObj(date, selectedDates, disabledDates, modifiers, minDate, maxDate, adapter, selectionMode);
         dates.push(dateObj);
     }
 
@@ -162,6 +166,7 @@ function getMonthData({
         maxDate,
         selectedDates,
         disabledDates,
+        modifiers,
         firstDayOfWeek,
         showOutsideDays,
         adapter,
@@ -174,6 +179,7 @@ function getMonthData({
         maxDate,
         selectedDates,
         disabledDates,
+        modifiers,
         firstDayOfWeek,
         showOutsideDays,
         adapter,
@@ -198,6 +204,7 @@ function createDateObj(
     date: Date,
     selectedDates: Date | Date[] | { start?: Date, end?: Date } | undefined,
     disabledDates: Date[] | undefined,
+    modifiers: Record<string, (date: Date) => boolean> | undefined,
     minDate: Date | undefined,
     maxDate: Date | undefined,
     adapter: DateAdapter,
@@ -205,9 +212,14 @@ function createDateObj(
     isOutside = false
 ): DateObj {
     const { selected, isRangeStart, isRangeEnd, isRangeBetween } = isSelected(selectedDates, date, adapter, selectionMode);
+    const activeModifiers = modifiers
+        ? Object.keys(modifiers).filter(key => modifiers[key](date))
+        : [];
+
     return {
         date,
         selected,
+        modifiers: activeModifiers,
         selectable: isSelectable(minDate, maxDate, disabledDates, date, adapter),
         today: adapter.isSame(adapter.date(date), adapter.date(), "day"),
         prevMonth: isOutside && adapter.isBefore(adapter.date(date), adapter.startOf(adapter.date(date), 'month')),
@@ -224,6 +236,7 @@ function fillFrontWeek({
     maxDate,
     selectedDates,
     disabledDates,
+    modifiers,
     firstDayOfWeek,
     showOutsideDays,
     adapter,
@@ -246,7 +259,7 @@ function fillFrontWeek({
         let current = adapter.subtract(adapter.date(firstDayOfMonth), 1, "day");
         for (let i = 0; i < firstDay; i++) {
             const date = adapter.toDate(current);
-            const dateObj = createDateObj(date, selectedDates, disabledDates, minDate, maxDate, adapter, selectionMode, true);
+            const dateObj = createDateObj(date, selectedDates, disabledDates, modifiers, minDate, maxDate, adapter, selectionMode, true);
             dateObj.prevMonth = true;
             dates.unshift(dateObj);
             current = adapter.subtract(current, 1, "day");
@@ -267,6 +280,7 @@ function fillBackWeek({
     maxDate,
     selectedDates,
     disabledDates,
+    modifiers,
     firstDayOfWeek,
     showOutsideDays,
     adapter,
@@ -289,7 +303,7 @@ function fillBackWeek({
         let current = adapter.add(adapter.date(lastDayOfMonth), 1, "day");
         for (let i = 0; i < 6 - lastDay; i++) {
             const date = adapter.toDate(current);
-            const dateObj = createDateObj(date, selectedDates, disabledDates, minDate, maxDate, adapter, selectionMode, true);
+            const dateObj = createDateObj(date, selectedDates, disabledDates, modifiers, minDate, maxDate, adapter, selectionMode, true);
             dateObj.nextMonth = true;
             dates.push(dateObj);
             current = adapter.add(current, 1, "day");

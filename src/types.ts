@@ -29,6 +29,7 @@ export interface DateObj {
   isRangeStart?: boolean;
   isRangeEnd?: boolean;
   isRangeBetween?: boolean;
+  modifiers?: string[];
 }
 
 export interface Calendar {

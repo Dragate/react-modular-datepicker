@@ -89,6 +89,7 @@ export interface UseDatesProps {
     onDateSelected?: (dateObj: DateObj, event: any) => void;
     onOffsetChanged?: (newOffset: number) => void;
     selected?: Date | Date[] | { start?: Date, end?: Date };
+    modifiers?: Record<string, (date: Date) => boolean>;
     selectionMode?: SelectionMode;
     adapter?: DateAdapter;
     onChange?: (selected: Date | Date[] | { start?: Date, end?: Date } | null) => void;
@@ -108,6 +109,7 @@ export function useDates({
     onDateSelected,
     onOffsetChanged = () => { },
     selected,
+    modifiers,
     selectionMode = 'single',
     adapter = defaultAdapter,
     onChange,
@@ -161,6 +163,7 @@ export function useDates({
         date,
         selected,
         disabledDates,
+        modifiers,
         monthsToDisplay,
         minDate,
         maxDate,

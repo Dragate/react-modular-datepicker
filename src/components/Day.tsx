@@ -63,6 +63,7 @@ export const Day: React.FC<DayProps> = ({ dateObj, getDateProps, classNames }) =
     isRangeStart && classNames?.rangeStart,
     isRangeEnd && classNames?.rangeEnd,
     isRangeBetween && classNames?.rangeBetween,
+    ...(dateObj.modifiers || [])
   ].filter(Boolean).join(' ');
 
   return (
