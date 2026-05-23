@@ -230,6 +230,8 @@ function createDateObj(
 
     if (isToday) activeModifiers.push('today');
     if (isOutside) activeModifiers.push('outside');
+    const day = date.getDay();
+    if (day === 0 || day === 6) activeModifiers.push("weekend");
     if (isPrevMonth) activeModifiers.push('prev-month');
     if (isNextMonth) activeModifiers.push('next-month');
 

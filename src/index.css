@@ -5,6 +5,8 @@
   --color-brand-gray-light: #f1f3f5;
   --color-brand-gray-dark: #6c757d;
   --color-brand-text: #343a40;
+  --color-brand-border: #e9ecef;
+  --color-brand-weekend: #f8f9fa;
 }
 
 @layer base {

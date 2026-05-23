@@ -14,20 +14,25 @@ interface DayProps {
     rangeEnd?: string;
     rangeBetween?: string;
     rangeHovering?: string;
+    weekend?: string;
   };
+  isWeekend?: boolean;
 }
 
-export const Day: React.FC<DayProps> = ({ dateObj, getDateProps, classNames }) => {
+export const Day: React.FC<DayProps> = ({ dateObj, getDateProps, classNames, isWeekend: isWeekendCol }) => {
+  const cellClasses = "aspect-square flex items-center justify-center transition-all relative border-r border-b border-brand-border";
+
   if (!dateObj) {
-    return <div className="aspect-square" />;
+    return <div className={`${cellClasses} ${isWeekendCol ? 'bg-brand-weekend' : ''}`} />;
   }
 
-  const { date, selected, selectable, today, prevMonth, nextMonth, isRangeStart, isRangeEnd, isRangeBetween, isRangeHovering } = dateObj;
+  const { date, selected, selectable, today, prevMonth, nextMonth, isRangeStart, isRangeEnd, isRangeBetween, isRangeHovering, modifiers = [] } = dateObj;
   const isOutside = prevMonth || nextMonth;
+  const isWeekend = modifiers.includes('weekend');
 
-  const baseClasses = "aspect-square flex items-center justify-center text-sm font-medium transition-all relative cursor-pointer";
+  const baseClasses = "w-full h-full flex items-center justify-center text-sm font-medium transition-all relative cursor-pointer";
 
-  let stateClasses = "rounded-full";
+  let stateClasses = "";
   if (isRangeStart && isRangeEnd) {
     stateClasses = "bg-brand-gold text-white rounded-full";
   } else if (isRangeStart) {
@@ -39,14 +44,16 @@ export const Day: React.FC<DayProps> = ({ dateObj, getDateProps, classNames }) =
   } else if (selected) {
     stateClasses = "bg-brand-gold text-white rounded-full";
   } else if (today) {
-    stateClasses = "text-brand-gold border border-brand-gold rounded-full";
+    stateClasses = "text-brand-text border border-brand-gold rounded-full";
   } else if (!selectable) {
     stateClasses = "text-gray-300 cursor-not-allowed";
   } else if (isOutside) {
-    stateClasses = "text-gray-400 rounded-full";
+    stateClasses = "text-gray-400";
   } else {
-    stateClasses = "hover:bg-brand-gray-light text-brand-text rounded-full";
+    stateClasses = "hover:bg-brand-gray-light text-brand-text";
   }
+
+  const backgroundClass = isWeekend || isWeekendCol ? 'bg-brand-weekend' : 'bg-white';
 
   const className = [
     baseClasses,
@@ -60,15 +67,18 @@ export const Day: React.FC<DayProps> = ({ dateObj, getDateProps, classNames }) =
     isRangeEnd && classNames?.rangeEnd,
     isRangeBetween && classNames?.rangeBetween,
     isRangeHovering && classNames?.rangeHovering,
-    ...(dateObj.modifiers || []).map(m => classNames?.[m as keyof typeof classNames] || m)
+    ...modifiers.map(m => classNames?.[m as keyof typeof classNames] || m)
   ].filter(Boolean).join(' ');
 
   return (
-    <button
-      {...getDateProps({ dateObj })}
-      className={className}
-    >
-      {date.getDate()}
-    </button>
+    <div className={`${cellClasses} ${backgroundClass}`}>
+      <button
+        {...getDateProps({ dateObj })}
+        className={className}
+        style={(today && !selected) ? { width: 'calc(100% - 8px)', height: 'calc(100% - 8px)' } : {}}
+      >
+        {date.getDate()}
+      </button>
+    </div>
   );
 };

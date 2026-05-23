@@ -79,23 +79,25 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
     }
   }, [view]);
 
+  const commonViewClasses = "w-[300px] min-h-[380px] flex flex-col";
+
   const renderDays = () => (
-    <div className={`w-fit flex flex-col md:flex-row gap-4 p-4 bg-white rounded-lg shadow-lg ${classNames?.root || ''}`}>
+    <div className={`w-fit flex flex-col md:flex-row gap-8 p-4 bg-white rounded-lg shadow-lg ${classNames?.root || ''}`}>
       {calendars.map((calendar, i) => (
-        <div key={`${calendar.month}-${calendar.year}`} className="flex-1 min-w-[280px]">
-          <div className="flex items-center justify-between mb-6">
-            {i === 0 ? (
+        <div key={`${calendar.month}-${calendar.year}`} className={commonViewClasses}>
+          <div className="flex items-center justify-between mb-4 relative pb-2 border-b border-brand-border h-12">
+            {i === 0 && (
               <button
                 {...getBackProps({ calendars })}
                 onMouseDown={(e) => e.preventDefault()}
-                className={`p-2 hover:bg-gray-100 rounded-full transition-colors ${classNames?.navButton || ''}`}
+                className={`p-1 hover:bg-gray-100 rounded-full transition-colors text-gray-400 ${classNames?.navButton || ''}`}
                 aria-label={t.back}
               >
                 <ChevronLeftIcon />
               </button>
-            ) : <div className="w-9" />}
+            )}
 
-            <div className={`flex gap-1 items-center font-semibold text-brand-text ${classNames?.monthName || ''}`}>
+            <div className={`flex-1 flex gap-1 justify-center items-center font-semibold text-brand-text ${classNames?.monthName || ''}`}>
                 <button
                     onMouseDown={(e) => e.preventDefault()}
                     onClick={() => setView('months')}
@@ -112,30 +114,30 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
                 </button>
             </div>
 
-            {i === calendars.length - 1 ? (
+            {i === calendars.length - 1 && (
               <button
                 {...getForwardProps({ calendars })}
                 onMouseDown={(e) => e.preventDefault()}
-                className={`p-2 hover:bg-gray-100 rounded-full transition-colors ${classNames?.navButton || ''}`}
+                className={`p-1 hover:bg-gray-100 rounded-full transition-colors text-gray-400 ${classNames?.navButton || ''}`}
                 aria-label={t.forward}
               >
                 <ChevronRightIcon />
               </button>
-            ) : <div className="w-9" />}
+            )}
           </div>
 
-          <div className="grid grid-cols-7 gap-1 mb-2">
-            {sortedWeekdays.map((day) => (
+          <div className="grid grid-cols-7 gap-0">
+            {sortedWeekdays.map((day, di) => (
               <div
                 key={day}
-                className={`text-center text-xs font-bold text-gray-400 py-2 ${classNames?.weekday || ''}`}
+                className={`text-center text-[10px] font-bold text-gray-400 py-3 uppercase border-r border-brand-border last:border-r-0 ${((di + firstDayOfWeek) % 7 === 0 || (di + firstDayOfWeek) % 7 === 6) ? 'bg-brand-weekend' : ''} ${classNames?.weekday || ''}`}
               >
-                {day}
+                {day.substring(0, 3)}
               </div>
             ))}
           </div>
 
-          <div className={`grid grid-cols-7 gap-1 ${classNames?.grid || ''}`}>
+          <div className={`grid grid-cols-7 gap-0 border-t border-l border-brand-border flex-1 ${classNames?.grid || ''}`}>
             {calendar.weeks.map((week, wi) =>
               week.map((dateObj, di) => (
                 <Day
@@ -143,6 +145,7 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
                   dateObj={dateObj}
                   getDateProps={getDateProps}
                   classNames={classNames?.day}
+                  isWeekend={(di + firstDayOfWeek) % 7 === 0 || (di + firstDayOfWeek) % 7 === 6}
                 />
               ))
             )}
@@ -153,19 +156,19 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
   );
 
   const renderMonths = () => (
-      <div className="w-fit p-4 bg-white rounded-lg shadow-lg min-w-[280px]">
-          <div className="flex items-center justify-between mb-4">
+      <div className={`p-4 bg-white rounded-lg shadow-lg ${commonViewClasses}`}>
+          <div className="flex items-center justify-between mb-4 pb-2 border-b border-brand-border h-12">
               <button
                 onMouseDown={(e) => e.preventDefault()}
                 onClick={() => setView('days')}
-                className="p-2 hover:bg-gray-100 rounded-full"
+                className="p-1 hover:bg-gray-100 rounded-full text-gray-400"
               >
                   <ChevronLeftIcon />
               </button>
-              <div className="font-semibold">{year}</div>
-              <div className="w-9" />
+              <div className="font-semibold text-brand-text">{year}</div>
+              <div className="w-8" />
           </div>
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-3 gap-2 flex-1 items-center">
               {monthNames.map((name, idx) => (
                   <button
                     key={name}
@@ -173,7 +176,7 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
                     onClick={() => handleMonthSelect(idx)}
                     className={`py-4 rounded-lg hover:bg-brand-gray-light transition-colors ${idx === month ? 'bg-brand-gold text-white' : 'text-brand-text'}`}
                   >
-                      {name}
+                      {name.substring(0, 3)}
                   </button>
               ))}
           </div>
@@ -189,19 +192,19 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
       }
 
       return (
-          <div className="w-fit p-4 bg-white rounded-lg shadow-lg min-w-[280px]">
-               <div className="flex items-center justify-between mb-4">
+          <div className={`p-4 bg-white rounded-lg shadow-lg ${commonViewClasses}`}>
+               <div className="flex items-center justify-between mb-4 pb-2 border-b border-brand-border h-12">
                     <button
                         onMouseDown={(e) => e.preventDefault()}
                         onClick={() => setView('days')}
-                        className="p-2 hover:bg-gray-100 rounded-full"
+                        className="p-1 hover:bg-gray-100 rounded-full text-gray-400"
                     >
                         <ChevronLeftIcon />
                     </button>
-                    <div className="font-semibold">Select Year</div>
-                    <div className="w-9" />
+                    <div className="font-semibold text-brand-text">Select Year</div>
+                    <div className="w-8" />
                 </div>
-                <div ref={yearListRef} className="grid grid-cols-3 gap-2 max-h-[300px] overflow-y-auto pr-2">
+                <div ref={yearListRef} className="grid grid-cols-3 gap-2 flex-1 overflow-y-auto pr-2">
                     {years.map(y => (
                         <button
                             key={y}
