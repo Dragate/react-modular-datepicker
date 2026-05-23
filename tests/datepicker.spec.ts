@@ -42,8 +42,10 @@ test.describe('Range Selection', () => {
 test.describe('Disabled Dates', () => {
   test('should not select a disabled date', async ({ page }) => {
     await page.goto('http://localhost:3000/styling');
-    await expect(page.getByRole('button', { name: 'Next month' })).toBeVisible();
-    const disabledDay = page.locator('button[disabled]').first();
+    // Using testid to isolate one of the calendars
+    const emeraldTheme = page.getByTestId('emerald-theme');
+    await expect(emeraldTheme.getByRole('button', { name: 'Next month' })).toBeVisible();
+    const disabledDay = emeraldTheme.locator('button[disabled]').first();
     if (await disabledDay.count() > 0) {
         await expect(disabledDay).toBeDisabled();
     }
