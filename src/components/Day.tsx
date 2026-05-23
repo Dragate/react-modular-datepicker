@@ -25,32 +25,27 @@ export const Day: React.FC<DayProps> = ({ dateObj, getDateProps, classNames }) =
   const { date, selected, selectable, today, prevMonth, nextMonth, isRangeStart, isRangeEnd, isRangeBetween, isRangeHovering } = dateObj;
   const isOutside = prevMonth || nextMonth;
 
-  const baseClasses = "aspect-square flex items-center justify-center text-sm font-medium transition-colors relative cursor-pointer rounded-full";
+  const baseClasses = "aspect-square flex items-center justify-center text-sm font-medium transition-all relative cursor-pointer";
 
-  let stateClasses = "";
-  if (selected) {
-    stateClasses = "bg-brand-gold text-white";
+  let stateClasses = "rounded-full";
+  if (isRangeStart && isRangeEnd) {
+    stateClasses = "bg-brand-gold text-white rounded-full";
+  } else if (isRangeStart) {
+    stateClasses = "bg-brand-gold text-white rounded-l-full rounded-r-none";
+  } else if (isRangeEnd) {
+    stateClasses = "bg-brand-gold text-white rounded-r-full rounded-l-none";
+  } else if (isRangeBetween || isRangeHovering) {
+    stateClasses = "bg-brand-gray-light text-brand-text rounded-none";
+  } else if (selected) {
+    stateClasses = "bg-brand-gold text-white rounded-full";
   } else if (today) {
-    stateClasses = "text-brand-gold border border-brand-gold";
+    stateClasses = "text-brand-gold border border-brand-gold rounded-full";
   } else if (!selectable) {
     stateClasses = "text-gray-300 cursor-not-allowed";
   } else if (isOutside) {
-    stateClasses = "text-gray-400";
+    stateClasses = "text-gray-400 rounded-full";
   } else {
-    stateClasses = "hover:bg-brand-gray-light text-brand-text";
-  }
-
-  if ((isRangeBetween || isRangeHovering) && !isRangeStart && !isRangeEnd) {
-      stateClasses = "bg-brand-gray-light text-brand-text rounded-none";
-  }
-  if (isRangeStart) {
-      stateClasses = "bg-brand-gold text-white rounded-r-none";
-  }
-  if (isRangeEnd) {
-      stateClasses = "bg-brand-gold text-white rounded-l-none";
-  }
-  if (isRangeStart && isRangeEnd) {
-      stateClasses = "bg-brand-gold text-white rounded-full";
+    stateClasses = "hover:bg-brand-gray-light text-brand-text rounded-full";
   }
 
   const className = [
@@ -65,7 +60,7 @@ export const Day: React.FC<DayProps> = ({ dateObj, getDateProps, classNames }) =
     isRangeEnd && classNames?.rangeEnd,
     isRangeBetween && classNames?.rangeBetween,
     isRangeHovering && classNames?.rangeHovering,
-    ...(dateObj.modifiers || [])
+    ...(dateObj.modifiers || []).map(m => classNames?.[m as keyof typeof classNames] || m)
   ].filter(Boolean).join(' ');
 
   return (
