@@ -1,16 +1,7 @@
-import dayjs from "dayjs";
+import { defaultAdapter } from "./adapters/dayjs";
+import type { DateAdapter, DateObj, Calendar } from "./types";
 
-export type DateObj = { date: Date, selected: boolean, selectable: boolean, today: boolean, prevMonth: boolean, nextMonth: boolean }
-
-/**
- * This is intended to be used to compose event handlers
- * They are executed in order until one of them calls
- * `event.preventDefault()`. Not sure this is the best
- * way to do this, but it seems legit...
- * @param {Function} fns the event hanlder functions
- * @return {Function} the event handler to add to an element
- */
-export function composeEventHandlers(...fns: Array<(event: Event, ...args: unknown[]) => void>): (event: Event, ...args: unknown[]) => boolean {
+export function composeEventHandlers(...fns: Array<((event: any, ...args: unknown[]) => void) | undefined>): (event: any, ...args: unknown[]) => boolean {
     return (event, ...args) =>
         fns.some(fn => {
             fn && fn(event, ...args);
@@ -18,41 +9,16 @@ export function composeEventHandlers(...fns: Array<(event: Event, ...args: unkno
         });
 }
 
-/**
- * Throws a helpful error message for required properties. Useful
- * to be used as a default in destructuring or object params.
- * @param {String} fnName the function name
- * @param {String} propName the prop name
- */
-export function requiredProp(fnName: string, propName: string): never {
-    throw new Error(`The property "${propName}" is required in "${fnName}"`);
-}
-
-/**
- * Takes an argument and if it's an array, returns the first item in the array
- * otherwise returns the argument.
- * @param {*} arg the maybe-array
- * @return {*} the arg or it's first item
- */
 export function unwrapChildrenForPreact<T>(arg: T | T[]): T | typeof noop {
     arg = Array.isArray(arg) ? /* istanbul ignore next (preact) */ arg[0] : arg;
     return arg || noop;
 }
 function noop() { }
 
-/**
- * Takes a calendars array and figures out the number of months to subtract
- * based on the current offset and the minDate allowed.
- * @param {Object} param The param object
- * @param {Array} param.calendars The calendars array created by the getCalendars function
- * @param {Number} param.offset The num of months to be subtracted
- * @param {Date} param.minDate The earliest date we are allow to subtract back to
- * @returns {Number} The number of months to subtract
- */
-export function subtractMonth({ calendars, offset, minDate }: { calendars: ReturnType<typeof getCalendars>, offset: number, minDate: Date }): number {
+export function subtractMonth({ calendars, offset, minDate, adapter = defaultAdapter }: { calendars: Calendar[], offset: number, minDate?: Date, adapter?: DateAdapter }): number {
     if (offset > 1 && minDate) {
         const { firstDayOfMonth } = calendars[0];
-        const diffInMonths = dayjs(firstDayOfMonth).diff(minDate, "month");
+        const diffInMonths = adapter.diff(adapter.date(firstDayOfMonth), adapter.date(minDate), "month");
         if (diffInMonths < offset) {
             offset = diffInMonths;
         }
@@ -60,19 +26,10 @@ export function subtractMonth({ calendars, offset, minDate }: { calendars: Retur
     return offset;
 }
 
-/**
- * Takes a calendars array and figures out the number of months to add
- * based on the current offset and the maxDate allowed.
- * @param {Object} param The param object
- * @param {Array} param.calendars The calendars array created by the getCalendars function
- * @param {Number} param.offset The num of months to be added
- * @param {Date} param.maxDate The furthest date we are allow to add forward to
- * @returns {Number} The number of months to add
- */
-export function addMonth({ calendars, offset, maxDate }: { calendars: ReturnType<typeof getCalendars>, offset: number, maxDate: Date }): number {
+export function addMonth({ calendars, offset, maxDate, adapter = defaultAdapter }: { calendars: Calendar[], offset: number, maxDate?: Date, adapter?: DateAdapter }): number {
     if (offset > 1 && maxDate) {
         const { lastDayOfMonth } = calendars[calendars.length - 1];
-        const diffInMonths = dayjs(maxDate).diff(lastDayOfMonth, "month");
+        const diffInMonths = adapter.diff(adapter.date(maxDate), adapter.date(lastDayOfMonth), "month");
         if (diffInMonths < offset) {
             offset = diffInMonths;
         }
@@ -80,160 +37,135 @@ export function addMonth({ calendars, offset, maxDate }: { calendars: ReturnType
     return offset;
 }
 
-/**
- * Takes a calendars array and figures out if the back button should be
- * disabled based on the minDate allowed.
- * @param {Object} param The param object
- * @param {Array} param.calendars The calendars array created by the getCalendars function
- * @param {Date} param.minDate The earliest date available
- * @returns {Boolean} Whether the back button should be disabled.
- */
-export function isBackDisabled({ calendars, minDate }: { calendars: ReturnType<typeof getCalendars>, minDate: Date }): boolean {
+export function isBackDisabled({ calendars, minDate, adapter = defaultAdapter }: { calendars: Calendar[], minDate?: Date, adapter?: DateAdapter }): boolean {
     if (!minDate) {
         return false;
     }
     const { firstDayOfMonth } = calendars[0];
-    const firstDayOfMonthMinusOne = dayjs(firstDayOfMonth).subtract(1, "day").toDate();
-    return dayjs(firstDayOfMonthMinusOne).isBefore(minDate)
+    const firstDayOfMonthMinusOne = adapter.subtract(adapter.date(firstDayOfMonth), 1, "day");
+    return adapter.isBefore(firstDayOfMonthMinusOne, adapter.date(minDate));
 }
 
-/**
- * Takes a calendars array and figures out if the forward button should be
- * disabled based on the maxDate allowed.
- * @param {Object} param The param object
- * @param {Array} param.calendars The calendars array created by the getCalendars function
- * @param {Date} param.maxDate The furthest date available
- * @returns {Boolean} Whether the forward button should be disabled.
- */
-export function isForwardDisabled({ calendars, maxDate }: { calendars: ReturnType<typeof getCalendars>, maxDate: Date }): boolean {
+export function isForwardDisabled({ calendars, maxDate, adapter = defaultAdapter }: { calendars: Calendar[], maxDate?: Date, adapter?: DateAdapter }): boolean {
     if (!maxDate) {
         return false;
     }
     const { lastDayOfMonth } = calendars[calendars.length - 1];
-    const lastDayOfMonthPlusOne = dayjs(lastDayOfMonth).add(1, "day").toDate();
-    return dayjs(maxDate).isBefore(lastDayOfMonthPlusOne)
+    const lastDayOfMonthPlusOne = adapter.add(adapter.date(lastDayOfMonth), 1, "day");
+    return adapter.isBefore(adapter.date(maxDate), lastDayOfMonthPlusOne);
 }
 
-/**
- * Figures out the months data needed based off the number of monthsToDisplay
- * and other options provided.
- * @param {Object} param The param object
- * @param {Date} param.date The date to start the calendar at
- * @param {Array.<Date>} param.selected An array of dates currently selected
- * @param {Number} param.monthsToDisplay The number of months to return in the calendar view
- * @param {Number} param.offset The number of months to offset based off the param.date given
- * @param {Date} param.minDate The earliest date available
- * @param {Date} param.maxDate The furthest date available
- * @param {Number} param.firstDayOfWeek First day of week, 0-6 (Sunday to Saturday)
- * @param {Bool} param.showOutsideDays Flag to fill front and back weeks with dates from adjacent months
- * @returns {Array.<Object>} An array of objects with month data
- */
 export function getCalendars({
     date,
     selected,
+    disabledDates,
     monthsToDisplay,
     offset,
     minDate,
     maxDate,
     firstDayOfWeek,
-    showOutsideDays
-}: { date: Date, selected: Date | Date[], monthsToDisplay: number, offset: number, minDate: Date, maxDate: Date, firstDayOfWeek: number, showOutsideDays: boolean }): Array<{ firstDayOfMonth: Date, lastDayOfMonth: Date, month: number, year: number, weeks: ReturnType<typeof getWeeks> }> {
-    const months = [];
-    const startDate = getStartDate(date, minDate, maxDate);
+    showOutsideDays,
+    adapter = defaultAdapter,
+    selectionMode = 'single'
+}: {
+    date: Date,
+    selected?: Date | Date[] | { start?: Date, end?: Date },
+    disabledDates?: Date[],
+    monthsToDisplay: number,
+    offset: number,
+    minDate?: Date,
+    maxDate?: Date,
+    firstDayOfWeek: number,
+    showOutsideDays: boolean,
+    adapter?: DateAdapter,
+    selectionMode?: 'single' | 'range' | 'multiple'
+}): Calendar[] {
+    const months: Calendar[] = [];
+    const startDate = getStartDate(date, minDate, maxDate, adapter);
     for (let i = 0; i < monthsToDisplay; i++) {
-        const calendarDates = getMonths({
-            month: startDate.getMonth() + i + offset,
-            year: startDate.getFullYear(),
+        const calendarDates = getMonthData({
+            month: adapter.get(startDate, 'month') + i + offset,
+            year: adapter.get(startDate, 'year'),
             selectedDates: selected,
+            disabledDates,
             minDate,
             maxDate,
             firstDayOfWeek,
-            showOutsideDays
+            showOutsideDays,
+            adapter,
+            selectionMode
         });
         months.push(calendarDates);
     }
     return months;
 }
 
-/**
- * Figures out the actual start date based on
- * the min and max dates available.
- * @param {Date} date The we want to start the calendar at
- * @param {Date} minDate The earliest date available to start at
- * @param {Date} maxDate The latest date available to start at
- * @returns {Date} The actual start date
- */
-function getStartDate(date: Date, minDate: Date, maxDate: Date): Date {
-    let startDate = dayjs(date).startOf("day").toDate();
+function getStartDate(date: Date, minDate?: Date, maxDate?: Date, adapter: DateAdapter = defaultAdapter): any {
+    let startDate = adapter.startOf(adapter.date(date), "day");
     if (minDate) {
-        const minDateNormalized = dayjs(minDate).startOf("day").toDate();
-        if (dayjs(startDate).isBefore(minDateNormalized)) {
+        const minDateNormalized = adapter.startOf(adapter.date(minDate), "day");
+        if (adapter.isBefore(startDate, minDateNormalized)) {
             startDate = minDateNormalized;
         }
     }
     if (maxDate) {
-        const maxDateNormalized = dayjs(maxDate).startOf("day").toDate();
-        if (dayjs(maxDateNormalized).isBefore(startDate)) {
+        const maxDateNormalized = adapter.startOf(adapter.date(maxDate), "day");
+        if (adapter.isBefore(maxDateNormalized, startDate)) {
             startDate = maxDateNormalized;
         }
     }
     return startDate;
 }
 
-/**
- * Figures what week/day data to return for the given month
- * and year. Adds flags to day data if found in the given selectedDates,
- * if is selectable inside the given min and max dates, or is today.
- * @param {Object} param The param object
- * @param {Number} param.month The month to grab data for
- * @param {Number} param.year The year to grab data for
- * @param {Array.<Date>} sparam.electedDates An array of dates currently selected
- * @param {Date} param.minDate The earliest date available
- * @param {Date} param.maxDate The furthest date available
- * @param {Number} param.firstDayOfWeek First day of week, 0-6 (Sunday to Saturday)
- * @param {Bool} param.showOutsideDays Flag to fill front and back weeks with dates from adjacent months
- * @returns {Object} The data for the selected month/year
- */
-function getMonths({
+function getMonthData({
     month,
     year,
     selectedDates,
+    disabledDates,
     minDate,
     maxDate,
     firstDayOfWeek,
-    showOutsideDays
-}: { month: number, year: number, selectedDates: Date | Date[], minDate: Date, maxDate: Date, firstDayOfWeek: number, showOutsideDays: boolean }): { firstDayOfMonth: Date, lastDayOfMonth: Date, month: number, year: number, weeks: ReturnType<typeof getWeeks> } {
-    // Get the normalized month and year, along with days in the month.
-    const daysMonthYear = getNumDaysMonthYear(month, year);
-    const daysInMonth = daysMonthYear.daysInMonth;
-    month = daysMonthYear.month;
-    year = daysMonthYear.year;
+    showOutsideDays,
+    adapter,
+    selectionMode
+}: {
+    month: number,
+    year: number,
+    selectedDates?: Date | Date[] | { start?: Date, end?: Date },
+    disabledDates?: Date[],
+    minDate?: Date,
+    maxDate?: Date,
+    firstDayOfWeek: number,
+    showOutsideDays: boolean,
+    adapter: DateAdapter,
+    selectionMode: 'single' | 'range' | 'multiple'
+}): Calendar {
+    let currentMonth = adapter.set(adapter.set(adapter.date(), 'year', year), 'month', month);
+    month = adapter.get(currentMonth, 'month');
+    year = adapter.get(currentMonth, 'year');
 
-    // Fill out the dates for the month.
-    const dates = [];
+    const daysInMonth = adapter.getDaysInMonth(currentMonth);
+    const dates: (DateObj | null)[] = [];
+
     for (let day = 1; day <= daysInMonth; day++) {
-        const date = new Date(year, month, day);
-        const dateObj = {
-            date,
-            selected: isSelected(selectedDates, date),
-            selectable: isSelectable(minDate, maxDate, date),
-            today: dayjs(date).isSame(dayjs(), "day"),
-            prevMonth: false,
-            nextMonth: false
-        };
+        const date = adapter.toDate(adapter.set(currentMonth, 'day', day));
+        const dateObj = createDateObj(date, selectedDates, disabledDates, minDate, maxDate, adapter, selectionMode);
         dates.push(dateObj);
     }
 
-    const firstDayOfMonth = new Date(year, month, 1);
-    const lastDayOfMonth = new Date(year, month, daysInMonth);
+    const firstDayOfMonth = adapter.toDate(adapter.startOf(currentMonth, 'month'));
+    const lastDayOfMonth = adapter.toDate(adapter.endOf(currentMonth, 'month'));
 
     const frontWeekBuffer = fillFrontWeek({
         firstDayOfMonth,
         minDate,
         maxDate,
         selectedDates,
+        disabledDates,
         firstDayOfWeek,
-        showOutsideDays
+        showOutsideDays,
+        adapter,
+        selectionMode
     });
 
     const backWeekBuffer = fillBackWeek({
@@ -241,17 +173,18 @@ function getMonths({
         minDate,
         maxDate,
         selectedDates,
+        disabledDates,
         firstDayOfWeek,
-        showOutsideDays
+        showOutsideDays,
+        adapter,
+        selectionMode
     });
 
     dates.unshift(...frontWeekBuffer);
     dates.push(...backWeekBuffer);
 
-    // Get the filled out weeks for the
-    // given dates.
     const weeks = getWeeks(dates);
-    // return the calendar data.
+
     return {
         firstDayOfMonth,
         lastDayOfMonth,
@@ -261,56 +194,66 @@ function getMonths({
     };
 }
 
-/**
- * Fill front week with either empty buffer or dates from previous month,
- * depending on showOutsideDays flag
- * @param {Object} param The param object
- * @param {Array.<Date>} param.selectedDates An array of dates currently selected
- * @param {Date} param.minDate The earliest date available
- * @param {Date} param.maxDate The furthest date available
- * @param {Date} param.firstDayOfMonth First day of the month
- * @param {Number} param.firstDayOfWeek First day of week, 0-6 (Sunday to Saturday)
- * @param {Bool} param.showOutsideDays Flag to fill front and back weeks with dates from adjacent months
- * @returns {Array.<Date>} Buffer to fill front week
- */
+function createDateObj(
+    date: Date,
+    selectedDates: Date | Date[] | { start?: Date, end?: Date } | undefined,
+    disabledDates: Date[] | undefined,
+    minDate: Date | undefined,
+    maxDate: Date | undefined,
+    adapter: DateAdapter,
+    selectionMode: 'single' | 'range' | 'multiple',
+    isOutside = false
+): DateObj {
+    const { selected, isRangeStart, isRangeEnd, isRangeBetween } = isSelected(selectedDates, date, adapter, selectionMode);
+    return {
+        date,
+        selected,
+        selectable: isSelectable(minDate, maxDate, disabledDates, date, adapter),
+        today: adapter.isSame(adapter.date(date), adapter.date(), "day"),
+        prevMonth: isOutside && adapter.isBefore(adapter.date(date), adapter.startOf(adapter.date(date), 'month')),
+        nextMonth: isOutside && adapter.isAfter(adapter.date(date), adapter.endOf(adapter.date(date), 'month')),
+        isRangeStart,
+        isRangeEnd,
+        isRangeBetween
+    };
+}
+
 function fillFrontWeek({
     firstDayOfMonth,
     minDate,
     maxDate,
     selectedDates,
+    disabledDates,
     firstDayOfWeek,
-    showOutsideDays
-}: { firstDayOfMonth: Date, minDate: Date, maxDate: Date, selectedDates: Date | Date[], firstDayOfWeek: number, showOutsideDays: boolean }): Array<DateObj | ""> {
-    const dates: Array<DateObj | ""> = [];
-    let firstDay = (firstDayOfMonth.getDay() + 7 - firstDayOfWeek) % 7;
+    showOutsideDays,
+    adapter,
+    selectionMode
+}: {
+    firstDayOfMonth: Date,
+    minDate?: Date,
+    maxDate?: Date,
+    selectedDates?: any,
+    disabledDates?: Date[],
+    firstDayOfWeek: number,
+    showOutsideDays: boolean,
+    adapter: DateAdapter,
+    selectionMode: any
+}): (DateObj | null)[] {
+    const dates: (DateObj | null)[] = [];
+    let firstDay = (adapter.toDate(adapter.date(firstDayOfMonth)).getDay() + 7 - firstDayOfWeek) % 7;
 
     if (showOutsideDays) {
-        const lastDayOfPrevMonth = dayjs(firstDayOfMonth).subtract(1, "day").toDate();
-        const prevDate = lastDayOfPrevMonth.getDate();
-        const prevDateMonth = lastDayOfPrevMonth.getMonth();
-        const prevDateYear = lastDayOfPrevMonth.getFullYear();
-
-        // Fill out front week for days from
-        // preceding month with dates from previous month.
-        let counter = 0;
-        while (counter < firstDay) {
-            const date = new Date(prevDateYear, prevDateMonth, prevDate - counter);
-            const dateObj = {
-                date,
-                selected: isSelected(selectedDates, date),
-                selectable: isSelectable(minDate, maxDate, date),
-                today: false,
-                prevMonth: true,
-                nextMonth: false
-            };
+        let current = adapter.subtract(adapter.date(firstDayOfMonth), 1, "day");
+        for (let i = 0; i < firstDay; i++) {
+            const date = adapter.toDate(current);
+            const dateObj = createDateObj(date, selectedDates, disabledDates, minDate, maxDate, adapter, selectionMode, true);
+            dateObj.prevMonth = true;
             dates.unshift(dateObj);
-            counter++;
+            current = adapter.subtract(current, 1, "day");
         }
     } else {
-        // Fill out front week for days from
-        // preceding month with buffer.
         while (firstDay > 0) {
-            dates.unshift('');
+            dates.unshift(null);
             firstDay--;
         }
     }
@@ -318,55 +261,42 @@ function fillFrontWeek({
     return dates;
 }
 
-/**
- * Fill back weeks with either empty buffer or dates from next month,
- * depending on showOutsideDays flag
- * @param {Object} param The param object
- * @param {Array.<Date>} param.selectedDates An array of dates currently selected
- * @param {Date} param.minDate The earliest date available
- * @param {Date} param.maxDate The furthest date available
- * @param {Date} param.lastDayOfMonth Last day of the month
- * @param {Number} param.firstDayOfWeek First day of week, 0-6 (Sunday to Saturday)
- * @param {Bool} param.showOutsideDays Flag to fill front and back weeks with dates from adjacent months
- * @returns {Array.<Date>} Buffer to fill back week
- */
 function fillBackWeek({
     lastDayOfMonth,
     minDate,
     maxDate,
     selectedDates,
+    disabledDates,
     firstDayOfWeek,
-    showOutsideDays
-}: { lastDayOfMonth: Date, minDate: Date, maxDate: Date, selectedDates: Date | Date[], firstDayOfWeek: number, showOutsideDays: boolean }): Array<DateObj | ""> {
-    const dates: Array<DateObj | ""> = [];
-    let lastDay = (lastDayOfMonth.getDay() + 7 - firstDayOfWeek) % 7;
+    showOutsideDays,
+    adapter,
+    selectionMode
+}: {
+    lastDayOfMonth: Date,
+    minDate?: Date,
+    maxDate?: Date,
+    selectedDates?: any,
+    disabledDates?: Date[],
+    firstDayOfWeek: number,
+    showOutsideDays: boolean,
+    adapter: DateAdapter,
+    selectionMode: any
+}): (DateObj | null)[] {
+    const dates: (DateObj | null)[] = [];
+    let lastDay = (adapter.toDate(adapter.date(lastDayOfMonth)).getDay() + 7 - firstDayOfWeek) % 7;
 
     if (showOutsideDays) {
-        const firstDayOfNextMonth = dayjs(lastDayOfMonth).add(1, "day").toDate();
-        const nextDateMonth = firstDayOfNextMonth.getMonth();
-        const nextDateYear = firstDayOfNextMonth.getFullYear();
-
-        // Fill out back week for days from
-        // following month with dates from next month.
-        let counter = 0;
-        while (counter < 6 - lastDay) {
-            const date = new Date(nextDateYear, nextDateMonth, 1 + counter);
-            const dateObj = {
-                date,
-                selected: isSelected(selectedDates, date),
-                selectable: isSelectable(minDate, maxDate, date),
-                today: false,
-                prevMonth: false,
-                nextMonth: true
-            };
+        let current = adapter.add(adapter.date(lastDayOfMonth), 1, "day");
+        for (let i = 0; i < 6 - lastDay; i++) {
+            const date = adapter.toDate(current);
+            const dateObj = createDateObj(date, selectedDates, disabledDates, minDate, maxDate, adapter, selectionMode, true);
+            dateObj.nextMonth = true;
             dates.push(dateObj);
-            counter++;
+            current = adapter.add(current, 1, "day");
         }
     } else {
-        // Fill out back week for days from
-        // following month with buffer.
         while (lastDay < 6) {
-            dates.push('');
+            dates.push(null);
             lastDay++;
         }
     }
@@ -374,40 +304,9 @@ function fillBackWeek({
     return dates;
 }
 
-/**
- * Normalizes month (could be overflow) and year pairs and returns the
- * normalized month and year along with the number of days in the month.
- * @param {Number} month The month to normalize
- * @param {Number} year The year to normalize
- * @returns {Object} The normalized month and year along with the number of days in the month
- */
-function getNumDaysMonthYear(month: number, year: number): { daysInMonth: number, month: number, year: number } {
-    // If a parameter you specify is outside of the expected range for Month or Day,
-    // JS Date attempts to update the date information in the Date object accordingly!
-    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/setMonth
-    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/setDate
-
-    // Let Date handle the overflow of the month,
-    // which should return the normalized month and year.
-    const normalizedMonthYear = new Date(year, month, 1);
-    month = normalizedMonthYear.getMonth();
-    year = normalizedMonthYear.getFullYear();
-    // Overflow the date to the next month, then subtract the difference
-    // to get the number of days in the previous month.
-    // This will also account for leap years!
-    const daysInMonth = 32 - new Date(year, month, 32).getDate();
-    return { daysInMonth, month, year };
-}
-
-/**
- * Takes an array of dates, and turns them into a multi dimensional
- * array with 7 entries for each week.
- * @param {Array.<Object>} dates An array of dates
- * @returns {Array} The weeks as a multi dimensional array
- */
-function getWeeks(dates: Object[]): Array<Array<Object>> {
+function getWeeks(dates: (DateObj | null)[]): (DateObj | null)[][] {
     const weeksLength = Math.ceil(dates.length / 7);
-    const weeks: Array<Array<Object>> = [];
+    const weeks: (DateObj | null)[][] = [];
     for (let i = 0; i < weeksLength; i++) {
         weeks[i] = [];
         for (let x = 0; x < 7; x++) {
@@ -417,31 +316,48 @@ function getWeeks(dates: Object[]): Array<Array<Object>> {
     return weeks;
 }
 
-/**
- * Normalizes dates to the beginning of the day,
- * then checks to see if the day given is found
- * in the selectedDates.
- * @param {Array.<Date>} selectedDates An array of dates currently selected
- * @param {Date} date The date to search with against selectedDates
- * @returns {Boolean} Whether day is found in selectedDates
- */
-function isSelected(selectedDates: Date | Date[], date: Date): boolean {
-    selectedDates = Array.isArray(selectedDates)
-        ? selectedDates
-        : [selectedDates];
-    return selectedDates.some(selectedDate => selectedDate instanceof Date && dayjs(selectedDate).isSame(dayjs(date), "day"));
+function isSelected(
+    selectedDates: Date | Date[] | { start?: Date, end?: Date } | undefined,
+    date: Date,
+    adapter: DateAdapter,
+    selectionMode: 'single' | 'range' | 'multiple'
+): { selected: boolean, isRangeStart?: boolean, isRangeEnd?: boolean, isRangeBetween?: boolean } {
+    if (!selectedDates) return { selected: false };
+
+    const d = adapter.date(date);
+
+    if (selectionMode === 'single' && selectedDates instanceof Date) {
+        return { selected: adapter.isSame(d, adapter.date(selectedDates), 'day') };
+    }
+
+    if (selectionMode === 'multiple' && Array.isArray(selectedDates)) {
+        return { selected: selectedDates.some(sd => adapter.isSame(d, adapter.date(sd), 'day')) };
+    }
+
+    if (selectionMode === 'range' && typeof selectedDates === 'object' && !Array.isArray(selectedDates)) {
+        const { start, end } = selectedDates;
+        const isStart = start ? adapter.isSame(d, adapter.date(start), 'day') : false;
+        const isEnd = end ? adapter.isSame(d, adapter.date(end), 'day') : false;
+        const isBetween = (start && end) ? (adapter.isAfter(d, adapter.date(start), 'day') && adapter.isBefore(d, adapter.date(end), 'day')) : false;
+        return {
+            selected: isStart || isEnd || isBetween,
+            isRangeStart: isStart,
+            isRangeEnd: isEnd,
+            isRangeBetween: isBetween
+        };
+    }
+
+    if (Array.isArray(selectedDates) && selectedDates.length === 1 && selectionMode === 'single') {
+         return { selected: adapter.isSame(d, adapter.date(selectedDates[0]), 'day') };
+    }
+
+    return { selected: false };
 }
 
-/**
- * Checks to see if the date given is
- * between the min and max dates.
- * @param {Date} minDate The earliest date available
- * @param {Date} maxDate The furthest date available
- * @param {Date} date The date to compare with
- * @returns {Boolean} Whether the date is between min and max date
- */
-function isSelectable(minDate: Date, maxDate: Date, date: Date): boolean {
-    const isMinDateInvalid = minDate && dayjs(date).isBefore(minDate)
-    const isMaxDateInvalid = maxDate && dayjs(maxDate).isBefore(date)
-    return !isMinDateInvalid && !isMaxDateInvalid;
+function isSelectable(minDate: Date | undefined, maxDate: Date | undefined, disabledDates: Date[] | undefined, date: Date, adapter: DateAdapter): boolean {
+    const d = adapter.date(date);
+    const isMinDateInvalid = minDate && adapter.isBefore(d, adapter.date(minDate), 'day');
+    const isMaxDateInvalid = maxDate && adapter.isAfter(d, adapter.date(maxDate), 'day');
+    const isDisabled = disabledDates?.some(disabledDate => adapter.isSame(d, adapter.date(disabledDate), 'day'));
+    return !isMinDateInvalid && !isMaxDateInvalid && !isDisabled;
 }
