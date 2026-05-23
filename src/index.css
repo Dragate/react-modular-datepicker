@@ -6,9 +6,3 @@
   --color-brand-gray-dark: #6c757d;
   --color-brand-text: #343a40;
 }
-
-@layer base {
-  button {
-    @apply cursor-pointer;
-  }
-}

@@ -6,5 +6,6 @@ export { Calendar } from './components/Calendar';
 export { Day } from './components/Day';
 export { DayjsAdapter, defaultAdapter } from './adapters/dayjs';
 export * from './i18n';
+export * from './classNames';
 import './index.css';
 export { CalendarHeader, ChevronLeftIcon, ChevronRightIcon } from './components/CalendarHeader';

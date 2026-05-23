@@ -1,5 +1,5 @@
 import React from 'react';
-import { Calendar } from '../types';
+import { Calendar, CalendarClassNames } from '../types';
 
 export interface HeaderProps {
   calendars: Calendar[];
@@ -8,11 +8,7 @@ export interface HeaderProps {
   setView: (view: 'days' | 'months' | 'years') => void;
   monthNames: string[];
   t: { back: string; forward: string };
-  classNames?: {
-    header?: string;
-    monthName?: string;
-    navButton?: string;
-  };
+  classNames: Required<CalendarClassNames>;
 }
 
 export const ChevronLeftIcon = () => (
@@ -37,30 +33,30 @@ export const CalendarHeader: React.FC<HeaderProps> = ({
   classNames
 }) => {
   return (
-    <div className={`flex items-center justify-between mb-6 ${classNames?.header || ''}`}>
+    <div className={classNames.header}>
       <button
         {...getBackProps({ calendars })}
         onMouseDown={(e) => e.preventDefault()}
-        className={`p-2 hover:bg-gray-100 rounded-full transition-colors ${classNames?.navButton || ''}`}
+        className={classNames.navButton}
         aria-label={t.back}
       >
         <ChevronLeftIcon />
       </button>
 
-      <div className="flex gap-8">
+      <div className={classNames.monthYearContainer}>
         {calendars.map((calendar) => (
-          <div key={`${calendar.month}-${calendar.year}`} className={`flex gap-1 items-center font-semibold text-brand-text ${classNames?.monthName || ''}`}>
+          <div key={`${calendar.month}-${calendar.year}`} className={classNames.monthYearLabel}>
             <button
               onMouseDown={(e) => e.preventDefault()}
               onClick={() => setView('months')}
-              className="hover:bg-gray-100 px-2 py-1 rounded"
+              className={classNames.monthYearButton}
             >
               {monthNames[calendar.month]}
             </button>
             <button
               onMouseDown={(e) => e.preventDefault()}
               onClick={() => setView('years')}
-              className="hover:bg-gray-100 px-2 py-1 rounded"
+              className={classNames.monthYearButton}
             >
               {calendar.year}
             </button>
@@ -71,7 +67,7 @@ export const CalendarHeader: React.FC<HeaderProps> = ({
       <button
         {...getForwardProps({ calendars })}
         onMouseDown={(e) => e.preventDefault()}
-        className={`p-2 hover:bg-gray-100 rounded-full transition-colors ${classNames?.navButton || ''}`}
+        className={classNames.navButton}
         aria-label={t.forward}
       >
         <ChevronRightIcon />

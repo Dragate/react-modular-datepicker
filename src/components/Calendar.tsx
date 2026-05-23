@@ -4,19 +4,11 @@ import { Day } from './Day';
 import { defaultAdapter } from '../adapters/dayjs';
 import { getTranslations, Translations } from '../i18n';
 import { CalendarHeader, ChevronLeftIcon } from './CalendarHeader';
-import { DateObj } from '../types';
+import { DateObj, CalendarClassNames } from '../types';
+import { mergeClassNames } from '../classNames';
 
 interface CalendarProps extends UseDatesProps {
-  classNames?: {
-    root?: string;
-    header?: string;
-    monthName?: string;
-    weekday?: string;
-    grid?: string;
-    day?: any;
-    navButton?: string;
-    monthYearSelectors?: string;
-  };
+  classNames?: CalendarClassNames;
   locale?: string;
   translations?: Partial<Translations>;
   header?: React.ReactNode | ((props: any) => React.ReactNode);
@@ -28,7 +20,7 @@ type CalendarView = 'days' | 'months' | 'years';
 
 export const Calendar: React.FC<CalendarProps> = (props) => {
   const {
-    classNames,
+    classNames: customClassNames,
     locale,
     translations: customTranslations,
     adapter = defaultAdapter,
@@ -38,6 +30,8 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
     renderDayTooltip,
     ...useDatesProps
   } = props;
+
+  const classNames = mergeClassNames(customClassNames);
 
   const [view, setView] = useState<CalendarView>('days');
   const yearListRef = useRef<HTMLDivElement>(null);
@@ -100,7 +94,7 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
   );
 
   const renderDays = () => (
-    <div className={`w-fit flex flex-col p-4 bg-white rounded-lg shadow-lg ${classNames?.root || ''}`}>
+    <div className={classNames.root}>
       {typeof header === 'function' ? header({
           calendars,
           getBackProps,
@@ -110,28 +104,28 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
           t
       }) : (header || renderDefaultHeader())}
 
-      <div className="flex flex-col md:flex-row gap-4">
+      <div className={classNames.calendarsContainer}>
         {calendars.map((calendar) => (
-          <div key={`${calendar.month}-${calendar.year}`} className="flex-1 min-w-[280px]">
-            <div className="grid grid-cols-7 gap-1 mb-2">
+          <div key={`${calendar.month}-${calendar.year}`} className={classNames.calendarContainer}>
+            <div className={classNames.weekdayGrid}>
               {sortedWeekdays.map((day) => (
                 <div
                   key={day}
-                  className={`text-center text-xs font-bold text-gray-400 py-2 ${classNames?.weekday || ''}`}
+                  className={classNames.weekday}
                 >
                   {day}
                 </div>
               ))}
             </div>
 
-            <div className={`grid grid-cols-7 gap-1 ${classNames?.grid || ''}`}>
+            <div className={classNames.daysGrid}>
               {calendar.weeks.map((week, wi) =>
                 week.map((dateObj, di) => (
                   <Day
                     key={`${wi}-${di}`}
                     dateObj={dateObj}
                     getDateProps={getDateProps}
-                    classNames={classNames?.day}
+                    classNames={classNames}
                     tooltip={dateObj && renderDayTooltip?.(dateObj)}
                   />
                 ))
@@ -140,30 +134,30 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
           </div>
         ))}
       </div>
-      {footer && <div className="mt-4">{footer}</div>}
+      {footer && <div className={classNames.footer}>{footer}</div>}
     </div>
   );
 
   const renderMonths = () => (
-      <div className="w-fit p-4 bg-white rounded-lg shadow-lg min-w-[280px]">
-          <div className="flex items-center justify-between mb-4">
+      <div className={classNames.monthsRoot}>
+          <div className={classNames.monthsHeader}>
               <button
                 onMouseDown={(e) => e.preventDefault()}
                 onClick={() => setView('days')}
-                className="p-2 hover:bg-gray-100 rounded-full"
+                className={classNames.monthsBackButton}
               >
                   <ChevronLeftIcon />
               </button>
-              <div className="font-semibold">{year}</div>
+              <div className={classNames.monthsYearLabel}>{year}</div>
               <div className="w-9" />
           </div>
-          <div className="grid grid-cols-3 gap-2">
+          <div className={classNames.monthsGrid}>
               {monthNames.map((name, idx) => (
                   <button
                     key={name}
                     onMouseDown={(e) => e.preventDefault()}
                     onClick={() => handleMonthSelect(idx)}
-                    className={`py-4 rounded-lg hover:bg-brand-gray-light transition-colors ${idx === month ? 'bg-brand-gold text-white' : 'text-brand-text'}`}
+                    className={`${classNames.monthButton} ${idx === month ? classNames.monthButtonSelected : classNames.monthButtonUnselected}`}
                   >
                       {name}
                   </button>
@@ -181,26 +175,26 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
       }
 
       return (
-          <div className="w-fit p-4 bg-white rounded-lg shadow-lg min-w-[280px]">
-               <div className="flex items-center justify-between mb-4">
+          <div className={classNames.yearsRoot}>
+               <div className={classNames.yearsHeader}>
                     <button
                         onMouseDown={(e) => e.preventDefault()}
                         onClick={() => setView('days')}
-                        className="p-2 hover:bg-gray-100 rounded-full"
+                        className={classNames.yearsBackButton}
                     >
                         <ChevronLeftIcon />
                     </button>
-                    <div className="font-semibold">Select Year</div>
+                    <div className={classNames.yearsTitle}>Select Year</div>
                     <div className="w-9" />
                 </div>
-                <div ref={yearListRef} className="grid grid-cols-3 gap-2 max-h-[300px] overflow-y-auto pr-2">
+                <div ref={yearListRef} className={classNames.yearsGrid}>
                     {years.map(y => (
                         <button
                             key={y}
                             data-selected={y === year}
                             onMouseDown={(e) => e.preventDefault()}
                             onClick={() => handleYearSelect(y)}
-                            className={`py-3 rounded-lg hover:bg-brand-gray-light transition-colors ${y === year ? 'bg-brand-gold text-white' : 'text-brand-text'}`}
+                            className={`${classNames.yearButton} ${y === year ? classNames.yearButtonSelected : classNames.yearButtonUnselected}`}
                         >
                             {y}
                         </button>

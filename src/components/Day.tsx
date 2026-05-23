@@ -1,21 +1,11 @@
 import React from 'react';
-import type { DateObj } from '../types';
+import type { DateObj, CalendarClassNames } from '../types';
 
 interface DayProps {
   dateObj: DateObj | null;
   getDateProps: (args: { dateObj: DateObj, [key: string]: any }) => any;
   tooltip?: React.ReactNode;
-  classNames?: {
-    day?: string;
-    today?: string;
-    selected?: string;
-    disabled?: string;
-    outside?: string;
-    rangeStart?: string;
-    rangeEnd?: string;
-    rangeBetween?: string;
-    rangeHovering?: string;
-  };
+  classNames: Required<CalendarClassNames>;
 }
 
 export const Day: React.FC<DayProps> = ({ dateObj, getDateProps, classNames, tooltip }) => {
@@ -25,43 +15,35 @@ export const Day: React.FC<DayProps> = ({ dateObj, getDateProps, classNames, too
 
   const { date, selected, selectable, today, prevMonth, nextMonth, isRangeStart, isRangeEnd, isRangeBetween, isRangeHovering, isRangeActive } = dateObj;
   const isOutside = prevMonth || nextMonth;
-
-  const baseClasses = "aspect-square flex items-center justify-center text-sm font-medium transition-all relative cursor-pointer group";
+  const dayClasses = classNames.day;
 
   let stateClasses = "rounded-full";
   if (isRangeStart && isRangeEnd) {
-    stateClasses = "bg-brand-gold text-white rounded-full";
+    stateClasses = `${dayClasses.selected} rounded-full`;
   } else if (isRangeStart) {
-    stateClasses = `bg-brand-gold text-white ${isRangeActive ? 'rounded-l-full rounded-r-none' : 'rounded-full'}`;
+    stateClasses = `${dayClasses.rangeStart} ${isRangeActive ? 'rounded-l-full rounded-r-none' : 'rounded-full'}`;
   } else if (isRangeEnd) {
-    stateClasses = `bg-brand-gold text-white ${isRangeActive ? 'rounded-r-full rounded-l-none' : 'rounded-full'}`;
-  } else if (isRangeBetween || isRangeHovering) {
-    stateClasses = "bg-brand-gray-light text-brand-text rounded-none";
+    stateClasses = `${dayClasses.rangeEnd} ${isRangeActive ? 'rounded-r-full rounded-l-none' : 'rounded-full'}`;
+  } else if (isRangeBetween) {
+    stateClasses = dayClasses.rangeBetween || '';
+  } else if (isRangeHovering) {
+    stateClasses = dayClasses.rangeHovering || '';
   } else if (selected) {
-    stateClasses = "bg-brand-gold text-white rounded-full";
+    stateClasses = dayClasses.selected || '';
   } else if (today) {
-    stateClasses = "text-brand-gold border border-brand-gold rounded-full";
+    stateClasses = dayClasses.today || '';
   } else if (!selectable) {
-    stateClasses = "text-gray-300 cursor-not-allowed";
+    stateClasses = dayClasses.disabled || '';
   } else if (isOutside) {
-    stateClasses = "text-gray-400 rounded-full";
+    stateClasses = dayClasses.outside || '';
   } else {
-    stateClasses = "hover:bg-brand-gray-light text-brand-text rounded-full";
+    stateClasses = dayClasses.unselected || '';
   }
 
   const className = [
-    baseClasses,
+    dayClasses.day,
     stateClasses,
-    classNames?.day,
-    today && classNames?.today,
-    selected && classNames?.selected,
-    !selectable && classNames?.disabled,
-    isOutside && classNames?.outside,
-    isRangeStart && classNames?.rangeStart,
-    isRangeEnd && classNames?.rangeEnd,
-    isRangeBetween && classNames?.rangeBetween,
-    isRangeHovering && classNames?.rangeHovering,
-    ...(dateObj.modifiers || []).map(m => classNames?.[m as keyof typeof classNames] || m)
+    ...(dateObj.modifiers || []).map(m => (dayClasses as any)[m] || m)
   ].filter(Boolean).join(' ');
 
   return (

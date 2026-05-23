@@ -1,3 +1,5 @@
+import type { CalendarClassNames } from './classNames';
+
 export interface DateAdapter<T = any> {
   date(value?: any): T;
   add(date: T, amount: number, unit: 'day' | 'month' | 'year'): T;
@@ -41,3 +43,5 @@ export interface Calendar {
   year: number;
   weeks: (DateObj | null)[][];
 }
+
+export type { CalendarClassNames };
