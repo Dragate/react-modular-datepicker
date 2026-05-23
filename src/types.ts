@@ -30,6 +30,7 @@ export interface DateObj {
   isRangeEnd?: boolean;
   isRangeBetween?: boolean;
   isRangeHovering?: boolean;
+  isRangeActive?: boolean;
   modifiers?: string[];
 }
 

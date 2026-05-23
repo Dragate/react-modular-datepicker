@@ -219,7 +219,7 @@ function createDateObj(
     isOutside = false,
     hoveredDate?: Date
 ): DateObj {
-    const { selected, isRangeStart, isRangeEnd, isRangeBetween, isRangeHovering } = isSelected(selectedDates, date, adapter, selectionMode, hoveredDate);
+    const { selected, isRangeStart, isRangeEnd, isRangeBetween, isRangeHovering, isRangeActive } = isSelected(selectedDates, date, adapter, selectionMode, hoveredDate);
     const isToday = adapter.isSame(adapter.date(date), adapter.date(), "day");
     const isPrevMonth = isOutside && adapter.isBefore(adapter.date(date), adapter.startOf(adapter.date(date), 'month'));
     const isNextMonth = isOutside && adapter.isAfter(adapter.date(date), adapter.endOf(adapter.date(date), 'month'));
@@ -244,7 +244,8 @@ function createDateObj(
         isRangeStart,
         isRangeEnd,
         isRangeBetween,
-        isRangeHovering
+        isRangeHovering,
+        isRangeActive
     };
 }
 
@@ -358,7 +359,7 @@ function isSelected(
     adapter: DateAdapter,
     selectionMode: 'single' | 'range' | 'multiple',
     hoveredDate?: Date
-): { selected: boolean, isRangeStart?: boolean, isRangeEnd?: boolean, isRangeBetween?: boolean, isRangeHovering?: boolean } {
+): { selected: boolean, isRangeStart?: boolean, isRangeEnd?: boolean, isRangeBetween?: boolean, isRangeHovering?: boolean, isRangeActive?: boolean } {
     if (!selectedDates && !hoveredDate) return { selected: false };
 
     const d = adapter.date(date);
@@ -398,12 +399,18 @@ function isSelected(
             }
         }
 
+                const isRangeActive = !!(
+            (start && end && !adapter.isSame(adapter.date(start), adapter.date(end), 'day')) ||
+            (start && !end && hoveredDate && !adapter.isSame(adapter.date(start), adapter.date(hoveredDate), 'day'))
+        );
+
         return {
             selected: isStart || isEnd || isBetween,
             isRangeStart: isStart,
             isRangeEnd: isEnd,
             isRangeBetween: isBetween,
-            isRangeHovering: isHovering
+            isRangeHovering: isHovering,
+            isRangeActive
         };
     }
 
