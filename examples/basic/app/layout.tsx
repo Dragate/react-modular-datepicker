@@ -9,6 +9,7 @@ export default function RootLayout({ children }) {
           <a href="/range" className="hover:underline">Range</a>
           <a href="/multiple" className="hover:underline">Multiple</a>
           <a href="/headless" className="hover:underline">Headless</a>
+          <a href="/events" className="hover:underline font-bold text-blue-600">Events (GCal style)</a>
           <a href="/styling" className="hover:underline">Custom Styling</a>
           <a href="/form" className="hover:underline">Form</a>
           <a href="/custom-header-footer" className="hover:underline">Header/Footer</a>
