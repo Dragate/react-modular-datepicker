@@ -9,7 +9,7 @@ test.describe('Datepicker E2E', () => {
     // Wait for the calendar to be visible
     await expect(page.getByRole('button', { name: 'Next month' })).toBeVisible();
     const today = new Date().getDate().toString();
-    await page.getByRole('button', { name: today, exact: true }).first().click();
+    await page.getByText(today, { exact: true }).first().click();
   });
 
   test('should navigate months', async ({ page }) => {
