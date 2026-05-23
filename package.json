@@ -5,8 +5,11 @@
   "scripts": {
     "dev": "pnpm run -p \"/^dev:.*/\"",
     "dev:watch": "bunchee -w",
+    "dev:css": "tailwindcss -i src/index.css -o dist/index.css --watch",
     "dev:example": "next dev examples/basic",
-    "build": "bunchee -m",
+    "build": "pnpm run build:js && pnpm run build:css",
+    "build:js": "bunchee -m",
+    "build:css": "tailwindcss -i src/index.css -o dist/index.css",
     "test:e2e": "playwright test"
   },
   "keywords": [],
