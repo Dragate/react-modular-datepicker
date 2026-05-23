@@ -27,7 +27,7 @@ switch (process.env.RELEASE_TYPE) {
         process.exit(1)
 }
 
-console.log(`::set-output name=version::${version}`);
+fs.appendFileSync(process.env.GITHUB_OUTPUT, `version=${version}\n`)
 
 if (process.env.DRY_RUN) {
     console.log(`pnpm version ${version}`)
