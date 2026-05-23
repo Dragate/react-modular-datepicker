@@ -13,6 +13,7 @@ interface DayProps {
     rangeStart?: string;
     rangeEnd?: string;
     rangeBetween?: string;
+    rangeHovering?: string;
   };
 }
 
@@ -21,7 +22,7 @@ export const Day: React.FC<DayProps> = ({ dateObj, getDateProps, classNames }) =
     return <div className="aspect-square" />;
   }
 
-  const { date, selected, selectable, today, prevMonth, nextMonth, isRangeStart, isRangeEnd, isRangeBetween } = dateObj;
+  const { date, selected, selectable, today, prevMonth, nextMonth, isRangeStart, isRangeEnd, isRangeBetween, isRangeHovering } = dateObj;
   const isOutside = prevMonth || nextMonth;
 
   const baseClasses = "aspect-square flex items-center justify-center text-sm font-medium transition-colors relative cursor-pointer rounded-full";
@@ -39,7 +40,7 @@ export const Day: React.FC<DayProps> = ({ dateObj, getDateProps, classNames }) =
     stateClasses = "hover:bg-brand-gray-light text-brand-text";
   }
 
-  if (isRangeBetween && !isRangeStart && !isRangeEnd) {
+  if ((isRangeBetween || isRangeHovering) && !isRangeStart && !isRangeEnd) {
       stateClasses = "bg-brand-gray-light text-brand-text rounded-none";
   }
   if (isRangeStart) {
@@ -63,6 +64,7 @@ export const Day: React.FC<DayProps> = ({ dateObj, getDateProps, classNames }) =
     isRangeStart && classNames?.rangeStart,
     isRangeEnd && classNames?.rangeEnd,
     isRangeBetween && classNames?.rangeBetween,
+    isRangeHovering && classNames?.rangeHovering,
     ...(dateObj.modifiers || [])
   ].filter(Boolean).join(' ');
 

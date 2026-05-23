@@ -3,9 +3,9 @@ import { useState } from 'react';
 import { useDates } from 'react-modular-datepicker';
 
 export default function HeadlessPage() {
-  const [selected, setSelected] = useState(new Date());
+  const [selected, setSelected] = useState<Date | Date[] | { start?: Date, end?: Date } | null>(new Date());
   const { calendars, getBackProps, getForwardProps, getDateProps } = useDates({
-    selected,
+    selected: selected as Date,
     onChange: setSelected,
   });
 
@@ -21,11 +21,11 @@ export default function HeadlessPage() {
           <div key={`${calendar.month}-${calendar.year}`}>
             <div className="font-bold mb-4 text-center">{calendar.month + 1} / {calendar.year}</div>
             <div className="grid grid-cols-7 gap-2">
-              {calendar.weeks.map(week => week.map((dateObj, i) => {
-                if (!dateObj) return <div key={i} />;
+              {calendar.weeks.map((week, wi) => week.map((dateObj, i) => {
+                if (!dateObj) return <div key={`${wi}-${i}`} />;
                 return (
                   <button
-                    key={i}
+                    key={`${wi}-${i}`}
                     {...getDateProps({ dateObj })}
                     className={`w-10 h-10 flex items-center justify-center rounded-lg transition-colors ${
                       dateObj.selected

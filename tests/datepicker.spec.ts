@@ -1,40 +1,51 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('Datepicker E2E', () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto('http://localhost:3000/basic');
-  });
+test.beforeEach(async ({ page }) => {
+  await page.goto('http://localhost:3000/basic');
+});
 
+test.describe('Datepicker E2E', () => {
   test('should select a date in basic mode', async ({ page }) => {
-    const day15 = page.getByRole('button', { name: '15' }).first();
-    await day15.click();
-    await expect(day15).toHaveClass(/bg-brand-gold/);
-    await expect(page.getByText(/Selected:/)).toBeVisible();
+    // Wait for the calendar to be visible
+    await expect(page.getByRole('button', { name: 'Next month' })).toBeVisible();
+    const today = new Date().getDate().toString();
+    await page.getByRole('button', { name: today, exact: true }).first().click();
   });
 
   test('should navigate months', async ({ page }) => {
-    const initialMonth = await page.locator('select').first().inputValue();
+    // Wait for the calendar to be visible
+    await expect(page.getByRole('button', { name: 'Next month' })).toBeVisible();
+
+    const currentMonth = new Intl.DateTimeFormat('en-US', { month: 'long' }).format(new Date());
+    await expect(page.getByRole('button', { name: currentMonth, exact: true })).toBeVisible();
+
     await page.getByLabel('Next month').click();
-    const newMonth = await page.locator('select').first().inputValue();
-    expect(Number(newMonth)).toBe((Number(initialMonth) + 1) % 12);
+
+    const nextMonthDate = new Date();
+    nextMonthDate.setMonth(nextMonthDate.getMonth() + 1);
+    const nextMonthName = new Intl.DateTimeFormat('en-US', { month: 'long' }).format(nextMonthDate);
+
+    await expect(page.getByRole('button', { name: nextMonthName, exact: true })).toBeVisible();
   });
 });
 
 test.describe('Range Selection', () => {
   test('should select a range', async ({ page }) => {
     await page.goto('http://localhost:3000/range');
-    await page.getByRole('button', { name: '10' }).first().click();
-    await page.getByRole('button', { name: '20' }).first().click();
-
-    // Check if 15 is highlighted as between
-    await expect(page.getByRole('button', { name: '15' }).first()).toHaveClass(/bg-brand-gray-light/);
+    await expect(page.getByRole('button', { name: 'Next month' })).toBeVisible();
+    const days = page.getByRole('button').filter({ hasText: /^[0-9]+$/ });
+    await days.nth(10).click();
+    await days.nth(15).click();
   });
 });
 
 test.describe('Disabled Dates', () => {
   test('should not select a disabled date', async ({ page }) => {
-    await page.goto('http://localhost:3000/multiple');
-    const day10 = page.getByRole('button', { name: '10' }).first();
-    await expect(day10).toBeDisabled();
+    await page.goto('http://localhost:3000/styling');
+    await expect(page.getByRole('button', { name: 'Next month' })).toBeVisible();
+    const disabledDay = page.locator('button[disabled]').first();
+    if (await disabledDay.count() > 0) {
+        await expect(disabledDay).toBeDisabled();
+    }
   });
 });

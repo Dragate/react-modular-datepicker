@@ -1,4 +1,4 @@
-export { default as useDates } from './useDates';
+export { useDates, Dates } from './useDates';
 export type { UseDatesProps } from './useDates';
 export * from './types';
 export * from './utils';
