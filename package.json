@@ -7,7 +7,6 @@
     "dev:watch": "bunchee -w",
     "dev:example": "next dev examples/basic",
     "build": "bunchee -m",
-    "test": "vitest run",
     "test:e2e": "playwright test"
   },
   "keywords": [],

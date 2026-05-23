@@ -19,7 +19,6 @@
         "strict": true,
         "target": "ES2018",
         "noEmitOnError": true,
-        "downlevelIteration": true,
         "incremental": true
     },
     "include": [
