@@ -67,7 +67,8 @@ export function getCalendars({
     showOutsideDays,
     adapter = defaultAdapter,
     selectionMode = 'single',
-    modifiers
+    modifiers,
+    hoveredDate
 }: {
     date: Date,
     selected?: Date | Date[] | { start?: Date, end?: Date },
@@ -80,7 +81,8 @@ export function getCalendars({
     firstDayOfWeek: number,
     showOutsideDays: boolean,
     adapter?: DateAdapter,
-    selectionMode?: 'single' | 'range' | 'multiple'
+    selectionMode?: 'single' | 'range' | 'multiple',
+    hoveredDate?: Date
 }): Calendar[] {
     const months: Calendar[] = [];
     const startDate = getStartDate(date, minDate, maxDate, adapter);
@@ -96,7 +98,8 @@ export function getCalendars({
             firstDayOfWeek,
             showOutsideDays,
             adapter,
-            selectionMode
+            selectionMode,
+            hoveredDate
         });
         months.push(calendarDates);
     }
@@ -131,7 +134,8 @@ function getMonthData({
     firstDayOfWeek,
     showOutsideDays,
     adapter,
-    selectionMode
+    selectionMode,
+    hoveredDate
 }: {
     month: number,
     year: number,
@@ -142,7 +146,8 @@ function getMonthData({
     firstDayOfWeek: number,
     showOutsideDays: boolean,
     adapter: DateAdapter,
-    selectionMode: 'single' | 'range' | 'multiple'
+    selectionMode: 'single' | 'range' | 'multiple',
+    hoveredDate?: Date
 }): Calendar {
     let currentMonth = adapter.set(adapter.set(adapter.date(), 'year', year), 'month', month);
     month = adapter.get(currentMonth, 'month');
@@ -153,7 +158,7 @@ function getMonthData({
 
     for (let day = 1; day <= daysInMonth; day++) {
         const date = adapter.toDate(adapter.set(currentMonth, 'day', day));
-        const dateObj = createDateObj(date, selectedDates, disabledDates, modifiers, minDate, maxDate, adapter, selectionMode);
+        const dateObj = createDateObj(date, selectedDates, disabledDates, modifiers, minDate, maxDate, adapter, selectionMode, false, hoveredDate);
         dates.push(dateObj);
     }
 
@@ -170,7 +175,8 @@ function getMonthData({
         firstDayOfWeek,
         showOutsideDays,
         adapter,
-        selectionMode
+        selectionMode,
+        hoveredDate
     });
 
     const backWeekBuffer = fillBackWeek({
@@ -183,7 +189,8 @@ function getMonthData({
         firstDayOfWeek,
         showOutsideDays,
         adapter,
-        selectionMode
+        selectionMode,
+        hoveredDate
     });
 
     dates.unshift(...frontWeekBuffer);
@@ -209,9 +216,10 @@ function createDateObj(
     maxDate: Date | undefined,
     adapter: DateAdapter,
     selectionMode: 'single' | 'range' | 'multiple',
-    isOutside = false
+    isOutside = false,
+    hoveredDate?: Date
 ): DateObj {
-    const { selected, isRangeStart, isRangeEnd, isRangeBetween } = isSelected(selectedDates, date, adapter, selectionMode);
+    const { selected, isRangeStart, isRangeEnd, isRangeBetween, isRangeHovering } = isSelected(selectedDates, date, adapter, selectionMode, hoveredDate);
     const activeModifiers = modifiers
         ? Object.keys(modifiers).filter(key => modifiers[key](date))
         : [];
@@ -226,7 +234,8 @@ function createDateObj(
         nextMonth: isOutside && adapter.isAfter(adapter.date(date), adapter.endOf(adapter.date(date), 'month')),
         isRangeStart,
         isRangeEnd,
-        isRangeBetween
+        isRangeBetween,
+        isRangeHovering
     };
 }
 
@@ -240,7 +249,8 @@ function fillFrontWeek({
     firstDayOfWeek,
     showOutsideDays,
     adapter,
-    selectionMode
+    selectionMode,
+    hoveredDate
 }: {
     firstDayOfMonth: Date,
     minDate?: Date,
@@ -250,7 +260,8 @@ function fillFrontWeek({
     firstDayOfWeek: number,
     showOutsideDays: boolean,
     adapter: DateAdapter,
-    selectionMode: any
+    selectionMode: any,
+    hoveredDate?: Date
 }): (DateObj | null)[] {
     const dates: (DateObj | null)[] = [];
     let firstDay = (adapter.toDate(adapter.date(firstDayOfMonth)).getDay() + 7 - firstDayOfWeek) % 7;
@@ -259,7 +270,7 @@ function fillFrontWeek({
         let current = adapter.subtract(adapter.date(firstDayOfMonth), 1, "day");
         for (let i = 0; i < firstDay; i++) {
             const date = adapter.toDate(current);
-            const dateObj = createDateObj(date, selectedDates, disabledDates, modifiers, minDate, maxDate, adapter, selectionMode, true);
+            const dateObj = createDateObj(date, selectedDates, disabledDates, modifiers, minDate, maxDate, adapter, selectionMode, true, hoveredDate);
             dateObj.prevMonth = true;
             dates.unshift(dateObj);
             current = adapter.subtract(current, 1, "day");
@@ -284,7 +295,8 @@ function fillBackWeek({
     firstDayOfWeek,
     showOutsideDays,
     adapter,
-    selectionMode
+    selectionMode,
+    hoveredDate
 }: {
     lastDayOfMonth: Date,
     minDate?: Date,
@@ -294,7 +306,8 @@ function fillBackWeek({
     firstDayOfWeek: number,
     showOutsideDays: boolean,
     adapter: DateAdapter,
-    selectionMode: any
+    selectionMode: any,
+    hoveredDate?: Date
 }): (DateObj | null)[] {
     const dates: (DateObj | null)[] = [];
     let lastDay = (adapter.toDate(adapter.date(lastDayOfMonth)).getDay() + 7 - firstDayOfWeek) % 7;
@@ -303,7 +316,7 @@ function fillBackWeek({
         let current = adapter.add(adapter.date(lastDayOfMonth), 1, "day");
         for (let i = 0; i < 6 - lastDay; i++) {
             const date = adapter.toDate(current);
-            const dateObj = createDateObj(date, selectedDates, disabledDates, modifiers, minDate, maxDate, adapter, selectionMode, true);
+            const dateObj = createDateObj(date, selectedDates, disabledDates, modifiers, minDate, maxDate, adapter, selectionMode, true, hoveredDate);
             dateObj.nextMonth = true;
             dates.push(dateObj);
             current = adapter.add(current, 1, "day");
@@ -334,9 +347,10 @@ function isSelected(
     selectedDates: Date | Date[] | { start?: Date, end?: Date } | undefined,
     date: Date,
     adapter: DateAdapter,
-    selectionMode: 'single' | 'range' | 'multiple'
-): { selected: boolean, isRangeStart?: boolean, isRangeEnd?: boolean, isRangeBetween?: boolean } {
-    if (!selectedDates) return { selected: false };
+    selectionMode: 'single' | 'range' | 'multiple',
+    hoveredDate?: Date
+): { selected: boolean, isRangeStart?: boolean, isRangeEnd?: boolean, isRangeBetween?: boolean, isRangeHovering?: boolean } {
+    if (!selectedDates && !hoveredDate) return { selected: false };
 
     const d = adapter.date(date);
 
@@ -348,16 +362,31 @@ function isSelected(
         return { selected: selectedDates.some(sd => adapter.isSame(d, adapter.date(sd), 'day')) };
     }
 
-    if (selectionMode === 'range' && typeof selectedDates === 'object' && !Array.isArray(selectedDates)) {
-        const { start, end } = selectedDates;
+    if (selectionMode === 'range') {
+        const range = (selectedDates && typeof selectedDates === 'object' && !Array.isArray(selectedDates)) ? selectedDates : { start: undefined, end: undefined };
+        const { start, end } = range;
+
         const isStart = start ? adapter.isSame(d, adapter.date(start), 'day') : false;
         const isEnd = end ? adapter.isSame(d, adapter.date(end), 'day') : false;
         const isBetween = (start && end) ? (adapter.isAfter(d, adapter.date(start), 'day') && adapter.isBefore(d, adapter.date(end), 'day')) : false;
+
+        let isHovering = false;
+        if (start && !end && hoveredDate) {
+            const h = adapter.date(hoveredDate);
+            const s = adapter.date(start);
+            if (adapter.isAfter(h, s, 'day')) {
+                isHovering = adapter.isAfter(d, s, 'day') && adapter.isBefore(d, h, 'day') || adapter.isSame(d, h, 'day');
+            } else if (adapter.isBefore(h, s, 'day')) {
+                isHovering = adapter.isAfter(d, h, 'day') && adapter.isBefore(d, s, 'day') || adapter.isSame(d, h, 'day');
+            }
+        }
+
         return {
             selected: isStart || isEnd || isBetween,
             isRangeStart: isStart,
             isRangeEnd: isEnd,
-            isRangeBetween: isBetween
+            isRangeBetween: isBetween,
+            isRangeHovering: isHovering
         };
     }
 

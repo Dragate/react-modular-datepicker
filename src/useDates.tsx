@@ -117,6 +117,7 @@ export function useDates({
     onYearChange
 }: UseDatesProps) {
     const [stateOffset, setStateOffset] = useState(0);
+    const [hoveredDate, setHoveredDate] = useState<Date | undefined>(undefined);
     const offsetMonth = getOffset(offset, stateOffset);
 
     const handleOffsetChanged = useCallback((newOffset: number) => {
@@ -171,12 +172,24 @@ export function useDates({
         firstDayOfWeek,
         showOutsideDays,
         adapter,
-        selectionMode
+        selectionMode,
+        hoveredDate
     });
 
     return {
         calendars,
-        getDateProps: getDateProps.bind(null, handleDateSelected),
+        getDateProps: (args: { onClick?: (event: any) => void, dateObj: DateObj, [key: string]: any }) => {
+            const props = getDateProps(handleDateSelected, args);
+            return {
+                ...props,
+                onMouseEnter: composeEventHandlers(args.onMouseEnter, () => {
+                    setHoveredDate(args.dateObj.date);
+                }),
+                onMouseLeave: composeEventHandlers(args.onMouseLeave, () => {
+                    setHoveredDate(undefined);
+                })
+            };
+        },
         getBackProps: getBackProps.bind(null, {
             minDate,
             offsetMonth,
@@ -193,11 +206,9 @@ export function useDates({
     };
 }
 
-function Component(props: UseDatesProps & { render?: (props: any) => any, children?: (props: any) => any }) {
+export function Dates(props: UseDatesProps & { render?: (props: any) => any, children?: (props: any) => any }) {
     const ComponentCalendar = useDates(props);
     const children = unwrapChildrenForPreact(props.render || props.children);
     //@ts-ignore
     return children(ComponentCalendar);
 }
-
-export default Component;

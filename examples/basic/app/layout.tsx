@@ -10,6 +10,7 @@ export default function RootLayout({ children }) {
           <a href="/multiple" className="hover:underline">Multiple</a>
           <a href="/headless" className="hover:underline">Headless</a>
           <a href="/styling" className="hover:underline">Custom Styling</a>
+          <a href="/form" className="hover:underline">Form</a>
         </nav>
         {children}
       </body>
