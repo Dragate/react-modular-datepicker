@@ -1,3 +1,9 @@
-export { default as test } from './test';
-export { default, useDates } from './useDates';
-
+export { default as useDates } from './useDates';
+export type { UseDatesProps } from './useDates';
+export * from './types';
+export * from './utils';
+export { Calendar } from './components/Calendar';
+export { Day } from './components/Day';
+export { DayjsAdapter, defaultAdapter } from './adapters/dayjs';
+export * from './i18n';
+import './index.css';
