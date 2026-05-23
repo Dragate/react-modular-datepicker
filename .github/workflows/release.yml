@@ -41,6 +41,8 @@ jobs:
         registry-url: 'https://registry.npmjs.org'
     - name: Install dependencies
       run: pnpm i --frozen-lockfile
+    - name: Build package
+      run: pnpm run build
     - name: Configure git
       run: |
         git config user.name "dragate"
