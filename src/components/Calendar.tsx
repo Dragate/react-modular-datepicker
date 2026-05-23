@@ -80,13 +80,14 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
   }, [view]);
 
   const renderDays = () => (
-    <div className={`flex flex-col md:flex-row gap-4 p-4 bg-white rounded-lg shadow-lg ${classNames?.root || ''}`}>
+    <div className={`w-fit flex flex-col md:flex-row gap-4 p-4 bg-white rounded-lg shadow-lg ${classNames?.root || ''}`}>
       {calendars.map((calendar, i) => (
         <div key={`${calendar.month}-${calendar.year}`} className="flex-1 min-w-[280px]">
           <div className="flex items-center justify-between mb-6">
             {i === 0 ? (
               <button
                 {...getBackProps({ calendars })}
+                onMouseDown={(e) => e.preventDefault()}
                 className={`p-2 hover:bg-gray-100 rounded-full transition-colors ${classNames?.navButton || ''}`}
                 aria-label={t.back}
               >
@@ -95,10 +96,18 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
             ) : <div className="w-9" />}
 
             <div className={`flex gap-1 items-center font-semibold text-brand-text ${classNames?.monthName || ''}`}>
-                <button onClick={() => setView('months')} className="hover:bg-gray-100 px-2 py-1 rounded">
+                <button
+                    onMouseDown={(e) => e.preventDefault()}
+                    onClick={() => setView('months')}
+                    className="hover:bg-gray-100 px-2 py-1 rounded"
+                >
                     {monthNames[calendar.month]}
                 </button>
-                <button onClick={() => setView('years')} className="hover:bg-gray-100 px-2 py-1 rounded">
+                <button
+                    onMouseDown={(e) => e.preventDefault()}
+                    onClick={() => setView('years')}
+                    className="hover:bg-gray-100 px-2 py-1 rounded"
+                >
                     {calendar.year}
                 </button>
             </div>
@@ -106,6 +115,7 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
             {i === calendars.length - 1 ? (
               <button
                 {...getForwardProps({ calendars })}
+                onMouseDown={(e) => e.preventDefault()}
                 className={`p-2 hover:bg-gray-100 rounded-full transition-colors ${classNames?.navButton || ''}`}
                 aria-label={t.forward}
               >
@@ -143,9 +153,13 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
   );
 
   const renderMonths = () => (
-      <div className="p-4 bg-white rounded-lg shadow-lg min-w-[280px]">
+      <div className="w-fit p-4 bg-white rounded-lg shadow-lg min-w-[280px]">
           <div className="flex items-center justify-between mb-4">
-              <button onClick={() => setView('days')} className="p-2 hover:bg-gray-100 rounded-full">
+              <button
+                onMouseDown={(e) => e.preventDefault()}
+                onClick={() => setView('days')}
+                className="p-2 hover:bg-gray-100 rounded-full"
+              >
                   <ChevronLeftIcon />
               </button>
               <div className="font-semibold">{year}</div>
@@ -155,6 +169,7 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
               {monthNames.map((name, idx) => (
                   <button
                     key={name}
+                    onMouseDown={(e) => e.preventDefault()}
                     onClick={() => handleMonthSelect(idx)}
                     className={`py-4 rounded-lg hover:bg-brand-gray-light transition-colors ${idx === month ? 'bg-brand-gold text-white' : 'text-brand-text'}`}
                   >
@@ -174,9 +189,13 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
       }
 
       return (
-          <div className="p-4 bg-white rounded-lg shadow-lg min-w-[280px]">
+          <div className="w-fit p-4 bg-white rounded-lg shadow-lg min-w-[280px]">
                <div className="flex items-center justify-between mb-4">
-                    <button onClick={() => setView('days')} className="p-2 hover:bg-gray-100 rounded-full">
+                    <button
+                        onMouseDown={(e) => e.preventDefault()}
+                        onClick={() => setView('days')}
+                        className="p-2 hover:bg-gray-100 rounded-full"
+                    >
                         <ChevronLeftIcon />
                     </button>
                     <div className="font-semibold">Select Year</div>
@@ -187,6 +206,7 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
                         <button
                             key={y}
                             data-selected={y === year}
+                            onMouseDown={(e) => e.preventDefault()}
                             onClick={() => handleYearSelect(y)}
                             className={`py-3 rounded-lg hover:bg-brand-gray-light transition-colors ${y === year ? 'bg-brand-gold text-white' : 'text-brand-text'}`}
                         >

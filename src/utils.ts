@@ -220,18 +220,27 @@ function createDateObj(
     hoveredDate?: Date
 ): DateObj {
     const { selected, isRangeStart, isRangeEnd, isRangeBetween, isRangeHovering } = isSelected(selectedDates, date, adapter, selectionMode, hoveredDate);
+    const isToday = adapter.isSame(adapter.date(date), adapter.date(), "day");
+    const isPrevMonth = isOutside && adapter.isBefore(adapter.date(date), adapter.startOf(adapter.date(date), 'month'));
+    const isNextMonth = isOutside && adapter.isAfter(adapter.date(date), adapter.endOf(adapter.date(date), 'month'));
+
     const activeModifiers = modifiers
         ? Object.keys(modifiers).filter(key => modifiers[key](date))
         : [];
+
+    if (isToday) activeModifiers.push('today');
+    if (isOutside) activeModifiers.push('outside');
+    if (isPrevMonth) activeModifiers.push('prev-month');
+    if (isNextMonth) activeModifiers.push('next-month');
 
     return {
         date,
         selected,
         modifiers: activeModifiers,
         selectable: isSelectable(minDate, maxDate, disabledDates, date, adapter),
-        today: adapter.isSame(adapter.date(date), adapter.date(), "day"),
-        prevMonth: isOutside && adapter.isBefore(adapter.date(date), adapter.startOf(adapter.date(date), 'month')),
-        nextMonth: isOutside && adapter.isAfter(adapter.date(date), adapter.endOf(adapter.date(date), 'month')),
+        today: isToday,
+        prevMonth: isPrevMonth,
+        nextMonth: isNextMonth,
         isRangeStart,
         isRangeEnd,
         isRangeBetween,
@@ -366,8 +375,8 @@ function isSelected(
         const range = (selectedDates && typeof selectedDates === 'object' && !Array.isArray(selectedDates)) ? selectedDates : { start: undefined, end: undefined };
         const { start, end } = range;
 
-        const isStart = start ? adapter.isSame(d, adapter.date(start), 'day') : false;
-        const isEnd = end ? adapter.isSame(d, adapter.date(end), 'day') : false;
+        let isStart = start ? adapter.isSame(d, adapter.date(start), 'day') : false;
+        let isEnd = end ? adapter.isSame(d, adapter.date(end), 'day') : false;
         const isBetween = (start && end) ? (adapter.isAfter(d, adapter.date(start), 'day') && adapter.isBefore(d, adapter.date(end), 'day')) : false;
 
         let isHovering = false;
@@ -375,9 +384,17 @@ function isSelected(
             const h = adapter.date(hoveredDate);
             const s = adapter.date(start);
             if (adapter.isAfter(h, s, 'day')) {
-                isHovering = adapter.isAfter(d, s, 'day') && adapter.isBefore(d, h, 'day') || adapter.isSame(d, h, 'day');
+                isHovering = (adapter.isAfter(d, s, 'day') && adapter.isBefore(d, h, 'day')) || adapter.isSame(d, h, 'day');
+                if (adapter.isSame(d, h, 'day')) isEnd = true;
             } else if (adapter.isBefore(h, s, 'day')) {
-                isHovering = adapter.isAfter(d, h, 'day') && adapter.isBefore(d, s, 'day') || adapter.isSame(d, h, 'day');
+                isHovering = (adapter.isAfter(d, h, 'day') && adapter.isBefore(d, s, 'day')) || adapter.isSame(d, h, 'day');
+                if (adapter.isSame(d, h, 'day')) {
+                    isStart = true;
+                }
+                if (adapter.isSame(d, s, 'day')) {
+                    isStart = false;
+                    isEnd = true;
+                }
             }
         }
 
