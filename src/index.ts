@@ -4,6 +4,8 @@ export * from './types';
 export * from './utils';
 export { Calendar } from './components/Calendar';
 export { Day } from './components/Day';
+export { MonthSelection } from './components/MonthSelection';
+export { YearSelection } from './components/YearSelection';
 export { DayjsAdapter, defaultAdapter } from './adapters/dayjs';
 export * from './i18n';
 export * from './classNames';

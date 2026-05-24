@@ -1,11 +1,13 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useDates, UseDatesProps } from '../useDates';
 import { Day } from './Day';
 import { defaultAdapter } from '../adapters/dayjs';
 import { getTranslations, Translations } from '../i18n';
-import { CalendarHeader, ChevronLeftIcon } from './CalendarHeader';
+import { CalendarHeader } from './CalendarHeader';
 import { DateObj, CalendarClassNames } from '../types';
 import { mergeClassNames } from '../classNames';
+import { MonthSelection } from './MonthSelection';
+import { YearSelection } from './YearSelection';
 
 interface CalendarProps extends UseDatesProps {
   classNames?: CalendarClassNames;
@@ -34,7 +36,6 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
   const classNames = mergeClassNames(customClassNames);
 
   const [view, setView] = useState<CalendarView>('days');
-  const yearListRef = useRef<HTMLDivElement>(null);
 
   const t = getTranslations(adapter, locale, customTranslations);
   const weekdayNames = t.weekdays;
@@ -71,15 +72,6 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
     setOffset(newOffset);
     setView('days');
   };
-
-  useEffect(() => {
-    if (view === 'years' && yearListRef.current) {
-        const selectedYearBtn = yearListRef.current.querySelector('[data-selected="true"]');
-        if (selectedYearBtn) {
-            selectedYearBtn.scrollIntoView({ block: 'center' });
-        }
-    }
-  }, [view]);
 
   const renderDefaultHeader = () => (
     <CalendarHeader
@@ -138,75 +130,30 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
     </div>
   );
 
-  const renderMonths = () => (
-      <div className={classNames.monthsRoot}>
-          <div className={classNames.monthsHeader}>
-              <button
-                onMouseDown={(e) => e.preventDefault()}
-                onClick={() => setView('days')}
-                className={classNames.monthsBackButton}
-              >
-                  <ChevronLeftIcon />
-              </button>
-              <div className={classNames.monthsYearLabel}>{year}</div>
-              <div className="w-9" />
-          </div>
-          <div className={classNames.monthsGrid}>
-              {monthNames.map((name, idx) => (
-                  <button
-                    key={name}
-                    onMouseDown={(e) => e.preventDefault()}
-                    onClick={() => handleMonthSelect(idx)}
-                    className={`${classNames.monthButton} ${idx === month ? classNames.monthButtonSelected : classNames.monthButtonUnselected}`}
-                  >
-                      {name}
-                  </button>
-              ))}
-          </div>
-      </div>
-  );
-
-  const renderYears = () => {
-      const startYear = props.minDate ? adapter.get(adapter.date(props.minDate), 'year') : year - 50;
-      const endYear = props.maxDate ? adapter.get(adapter.date(props.maxDate), 'year') : year + 50;
-      const years = [];
-      for (let y = startYear; y <= endYear; y++) {
-          years.push(y);
-      }
-
-      return (
-          <div className={classNames.yearsRoot}>
-               <div className={classNames.yearsHeader}>
-                    <button
-                        onMouseDown={(e) => e.preventDefault()}
-                        onClick={() => setView('days')}
-                        className={classNames.yearsBackButton}
-                    >
-                        <ChevronLeftIcon />
-                    </button>
-                    <div className={classNames.yearsTitle}>Select Year</div>
-                    <div className="w-9" />
-                </div>
-                <div ref={yearListRef} className={classNames.yearsGrid}>
-                    {years.map(y => (
-                        <button
-                            key={y}
-                            data-selected={y === year}
-                            onMouseDown={(e) => e.preventDefault()}
-                            onClick={() => handleYearSelect(y)}
-                            className={`${classNames.yearButton} ${y === year ? classNames.yearButtonSelected : classNames.yearButtonUnselected}`}
-                        >
-                            {y}
-                        </button>
-                    ))}
-                </div>
-          </div>
-      );
-  };
-
   switch (view) {
-      case 'months': return renderMonths();
-      case 'years': return renderYears();
+      case 'months':
+          return (
+              <MonthSelection
+                year={year}
+                month={month}
+                monthNames={monthNames}
+                onMonthSelect={handleMonthSelect}
+                onBack={() => setView('days')}
+                classNames={classNames}
+              />
+          );
+      case 'years':
+          return (
+              <YearSelection
+                year={year}
+                minDate={props.minDate}
+                maxDate={props.maxDate}
+                adapter={adapter}
+                onYearSelect={handleYearSelect}
+                onBack={() => setView('days')}
+                classNames={classNames}
+              />
+          );
       default: return renderDays();
   }
 };
