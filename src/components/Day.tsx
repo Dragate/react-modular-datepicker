@@ -1,5 +1,5 @@
 import React from 'react';
-import type { DateObj, CalendarClassNames } from '../types';
+import type { CalendarClassNames, DateObj } from '../types';
 
 interface DayProps {
   dateObj: DateObj | null;
@@ -10,7 +10,7 @@ interface DayProps {
 
 export const Day: React.FC<DayProps> = ({ dateObj, getDateProps, classNames, tooltip }) => {
   if (!dateObj) {
-    return <div className="aspect-square" />;
+    return <div className="aspect-square bg-white" />;
   }
 
   const { date, selected, selectable, today, prevMonth, nextMonth, isRangeStart, isRangeEnd, isRangeBetween, isRangeHovering, isRangeActive } = dateObj;

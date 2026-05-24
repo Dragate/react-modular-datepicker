@@ -11,55 +11,14 @@ export interface DayClassNames {
   rangeHovering?: string;
 }
 
-export interface CalendarClassNames {
-  // Main Calendar
-  root?: string;
-  header?: string;
-  calendarsContainer?: string;
-  calendarContainer?: string;
-  weekdayGrid?: string;
-  weekday?: string;
-  daysGrid?: string;
-  footer?: string;
-
-  // Header
-  navButton?: string;
-  monthYearContainer?: string;
-  monthYearLabel?: string;
-  monthYearButton?: string;
-
-  // Day
-  day?: DayClassNames;
-
-  // Months View
-  monthsRoot?: string;
-  monthsHeader?: string;
-  monthsBackButton?: string;
-  monthsYearLabel?: string;
-  monthsGrid?: string;
-  monthButton?: string;
-  monthButtonSelected?: string;
-  monthButtonUnselected?: string;
-
-  // Years View
-  yearsRoot?: string;
-  yearsHeader?: string;
-  yearsBackButton?: string;
-  yearsTitle?: string;
-  yearsGrid?: string;
-  yearButton?: string;
-  yearButtonSelected?: string;
-  yearButtonUnselected?: string;
-}
-
-export const defaultClassNames: Required<CalendarClassNames> = {
+export const defaultClassNames = {
   root: "w-fit flex flex-col p-4 bg-white rounded-lg shadow-lg",
-  header: "flex items-center justify-between mb-6",
+  header: "flex items-center justify-between border-b-2 border-brand-gray-light/40",
   calendarsContainer: "flex flex-col md:flex-row gap-4",
   calendarContainer: "flex-1 min-w-[280px]",
-  weekdayGrid: "grid grid-cols-7 gap-1 mb-2",
-  weekday: "text-center text-xs font-bold text-gray-400 py-2",
-  daysGrid: "grid grid-cols-7 gap-1",
+  weekdayGrid: "grid grid-cols-7 gap-1 mb-1 border-b border-brand-gray-light/40",
+  weekday: "text-center text-xs text-gray-400 py-2",
+  daysGrid: "grid grid-cols-7 gap-px bg-brand-gray-light/20",
   footer: "mt-4",
 
   navButton: "p-2 hover:bg-gray-100 rounded-full transition-colors cursor-pointer",
@@ -68,16 +27,16 @@ export const defaultClassNames: Required<CalendarClassNames> = {
   monthYearButton: "hover:bg-gray-100 px-2 py-1 rounded cursor-pointer",
 
   day: {
-    day: "aspect-square flex items-center justify-center text-sm font-medium transition-all relative group cursor-pointer",
-    today: "text-brand-gold border border-brand-gold rounded-full",
+    day: "aspect-square flex items-center justify-center text-sm font-medium transition-all relative group cursor-pointer bg-white p-px",
+    today: "text-brand-gold border border-brand-gold",
     selected: "bg-brand-gold text-white rounded-full",
-    unselected: "hover:bg-brand-gray-light text-brand-text rounded-full",
+    unselected: "hover:bg-brand-gray-light text-brand-text",
     disabled: "text-gray-300 cursor-not-allowed",
-    outside: "text-gray-400 rounded-full",
+    outside: "text-gray-400",
     rangeStart: "bg-brand-gold text-white",
     rangeEnd: "bg-brand-gold text-white",
-    rangeBetween: "bg-brand-gray-light text-brand-text rounded-none",
-    rangeHovering: "bg-brand-gray-light text-brand-text rounded-none",
+    rangeBetween: "bg-brand-gray-light text-brand-text",
+    rangeHovering: "bg-brand-gray-light text-brand-text",
   },
 
   monthsRoot: "w-fit p-4 bg-white rounded-lg shadow-lg min-w-[280px]",
@@ -97,7 +56,9 @@ export const defaultClassNames: Required<CalendarClassNames> = {
   yearButton: "py-3 rounded-lg hover:bg-brand-gray-light transition-colors cursor-pointer",
   yearButtonSelected: "bg-brand-gold text-white",
   yearButtonUnselected: "text-brand-text",
-};
+}
+
+export type CalendarClassNames = typeof defaultClassNames;
 
 export const mergeClassNames = (custom?: CalendarClassNames): Required<CalendarClassNames> => {
   const result = { ...defaultClassNames };
