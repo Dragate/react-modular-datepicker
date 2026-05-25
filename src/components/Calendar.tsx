@@ -61,8 +61,7 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
     const targetMonth = adapter.set(currentMonth, 'month', newMonth);
     const baseMonth = adapter.startOf(adapter.date(props.date || new Date()), 'month');
     const newOffset = adapter.diff(targetMonth, baseMonth, 'month');
-    if (adapter.isAfter(targetMonth, currentMonth, 'month')) setSlideDirection('right');
-    else if (adapter.isBefore(targetMonth, currentMonth, 'month')) setSlideDirection('left');
+    setSlideDirection(null);
     setOffset(newOffset);
     setView('days');
   };
@@ -72,8 +71,7 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
     const targetMonth = adapter.set(currentMonth, 'year', newYear);
     const baseMonth = adapter.startOf(adapter.date(props.date || new Date()), 'month');
     const newOffset = adapter.diff(targetMonth, baseMonth, 'month');
-    if (adapter.isAfter(targetMonth, currentMonth, 'month')) setSlideDirection('right');
-    else if (adapter.isBefore(targetMonth, currentMonth, 'month')) setSlideDirection('left');
+    setSlideDirection(null);
     setOffset(newOffset);
     setView('days');
   };
@@ -110,10 +108,11 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
         t={t}
         classNames={classNames}
         slideDirection={slideDirection}
+        currentView={view}
     />
   );
 
-  const renderDays = () => (
+  return (
     <div className={classNames.root}>
       {typeof header === 'function' ? header({
           calendars,
@@ -122,23 +121,43 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
           setView,
           monthNames,
           t,
-          slideDirection
+          slideDirection,
+          currentView: view
       }) : (header || renderDefaultHeader())}
 
       <div className={classNames.calendarsContainer}>
-        {calendars.map((calendar) => (
+        {view === 'months' && calendars.map((calendar) => (
+          <div key={`months-${calendar.year}`} className={classNames.calendarContainer}>
+            <MonthSelection
+              year={calendar.year}
+              month={calendar.month}
+              monthNames={monthNames}
+              minDate={props.minDate}
+              maxDate={props.maxDate}
+              onMonthSelect={handleMonthSelect}
+              classNames={classNames}
+            />
+          </div>
+        ))}
+        {view === 'years' && calendars.map((calendar) => (
+          <div key={`years-${calendar.year}`} className={classNames.calendarContainer}>
+            <YearSelection
+              year={calendar.year}
+              minDate={props.minDate}
+              maxDate={props.maxDate}
+              adapter={adapter}
+              onYearSelect={handleYearSelect}
+              classNames={classNames}
+            />
+          </div>
+        ))}
+        {view === 'days' && calendars.map((calendar) => (
           <div key={`${calendar.month}-${calendar.year}`} className={classNames.calendarContainer}>
             <div className={classNames.weekdayGrid}>
               {sortedWeekdays.map((day) => (
-                <div
-                  key={day}
-                  className={classNames.weekday}
-                >
-                  {day}
-                </div>
+                <div key={day} className={classNames.weekday}>{day}</div>
               ))}
             </div>
-
             <div className={`${classNames.daysGrid} ${slideDirection === 'left' ? 'animate-slide-in-left' : slideDirection === 'right' ? 'animate-slide-in-right' : ''}`}>
               {calendar.weeks.map((week, wi) =>
                 week.map((dateObj, di) => (
@@ -158,31 +177,4 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
       {footer && <div className={classNames.footer}>{footer}</div>}
     </div>
   );
-
-  switch (view) {
-      case 'months':
-          return (
-              <MonthSelection
-                year={year}
-                month={month}
-                monthNames={monthNames}
-                onMonthSelect={handleMonthSelect}
-                onBack={() => setView('days')}
-                classNames={classNames}
-              />
-          );
-      case 'years':
-          return (
-              <YearSelection
-                year={year}
-                minDate={props.minDate}
-                maxDate={props.maxDate}
-                adapter={adapter}
-                onYearSelect={handleYearSelect}
-                onBack={() => setView('days')}
-                classNames={classNames}
-              />
-          );
-      default: return renderDays();
-  }
 };

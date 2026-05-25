@@ -10,6 +10,7 @@ export interface HeaderProps {
   t: { back: string; forward: string };
   classNames: Required<CalendarClassNames>;
   slideDirection?: 'left' | 'right' | null;
+  currentView?: 'days' | 'months' | 'years';
 }
 
 export const ChevronLeftIcon = () => (
@@ -32,14 +33,15 @@ export const CalendarHeader: React.FC<HeaderProps> = ({
   monthNames,
   t,
   classNames,
-  slideDirection
+  slideDirection,
+  currentView
 }) => {
   return (
     <div className={classNames.header}>
       <button
         {...getBackProps({ calendars })}
         onMouseDown={(e) => e.preventDefault()}
-        className={classNames.navButton}
+        className={`${classNames.navButton} ${currentView && currentView !== 'days' ? 'invisible pointer-events-none' : ''}`}
         aria-label={t.back}
       >
         <ChevronLeftIcon />
@@ -50,14 +52,14 @@ export const CalendarHeader: React.FC<HeaderProps> = ({
           <div key={`${calendar.month}-${calendar.year}`} className={`${classNames.monthYearLabel} ${slideDirection === 'left' ? 'animate-slide-in-left' : slideDirection === 'right' ? 'animate-slide-in-right' : ''}`}>
             <button
               onMouseDown={(e) => e.preventDefault()}
-              onClick={() => setView('months')}
+              onClick={() => setView(currentView === 'months' ? 'days' : 'months')}
               className={classNames.monthYearButton}
             >
               {monthNames[calendar.month]}
             </button>
             <button
               onMouseDown={(e) => e.preventDefault()}
-              onClick={() => setView('years')}
+              onClick={() => setView(currentView === 'years' ? 'days' : 'years')}
               className={classNames.monthYearButton}
             >
               {calendar.year}
@@ -69,7 +71,7 @@ export const CalendarHeader: React.FC<HeaderProps> = ({
       <button
         {...getForwardProps({ calendars })}
         onMouseDown={(e) => e.preventDefault()}
-        className={classNames.navButton}
+        className={`${classNames.navButton} ${currentView && currentView !== 'days' ? 'invisible pointer-events-none' : ''}`}
         aria-label={t.forward}
       >
         <ChevronRightIcon />

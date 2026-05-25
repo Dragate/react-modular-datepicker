@@ -8,7 +8,6 @@ interface YearSelectionProps {
   maxDate?: Date | null;
   adapter: DateAdapter;
   onYearSelect: (year: number) => void;
-  onBack: () => void;
   classNames: Required<CalendarClassNames>;
 }
 
@@ -18,7 +17,6 @@ export const YearSelection: React.FC<YearSelectionProps> = ({
   maxDate,
   adapter,
   onYearSelect,
-  onBack,
   classNames,
 }) => {
   const yearListRef = useRef<HTMLDivElement>(null);
@@ -40,31 +38,18 @@ export const YearSelection: React.FC<YearSelectionProps> = ({
   }
 
   return (
-    <div className={classNames.yearsRoot}>
-      <div className={classNames.yearsHeader}>
+    <div ref={yearListRef} className={classNames.yearsGrid}>
+      {years.map((y) => (
         <button
+          key={y}
+          data-selected={y === year}
           onMouseDown={(e) => e.preventDefault()}
-          onClick={onBack}
-          className={classNames.yearsBackButton}
+          onClick={() => onYearSelect(y)}
+          className={`${classNames.yearButton} ${y === year ? classNames.yearButtonSelected : classNames.yearButtonUnselected}`}
         >
-          <ChevronLeftIcon />
+          {y}
         </button>
-        <div className={classNames.yearsTitle}>Select Year</div>
-        <div className="w-9" />
-      </div>
-      <div ref={yearListRef} className={classNames.yearsGrid}>
-        {years.map((y) => (
-          <button
-            key={y}
-            data-selected={y === year}
-            onMouseDown={(e) => e.preventDefault()}
-            onClick={() => onYearSelect(y)}
-            className={`${classNames.yearButton} ${y === year ? classNames.yearButtonSelected : classNames.yearButtonUnselected}`}
-          >
-            {y}
-          </button>
-        ))}
-      </div>
+      ))}
     </div>
   );
 };

@@ -15,7 +15,7 @@ export const defaultClassNames = {
   root: "w-fit flex flex-col p-4 bg-white rounded-lg shadow-lg",
   header: "flex items-center justify-between border-b-2 border-brand-gray-light/40",
   calendarsContainer: "flex flex-col md:flex-row gap-4",
-  calendarContainer: "flex-1 min-w-[280px]",
+  calendarContainer: "flex-1 min-w-[280px] min-h-[260px]",
   weekdayGrid: "grid grid-cols-7 gap-1 mb-1 border-b border-brand-gray-light/40",
   weekday: "text-center text-xs text-gray-400 py-2",
   daysGrid: "grid grid-cols-7 gap-px bg-brand-gray-light/20",
