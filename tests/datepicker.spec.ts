@@ -51,3 +51,16 @@ test.describe('Disabled Dates', () => {
     }
   });
 });
+
+test.describe('Custom Modifiers', () => {
+  test('should provide month and year to modifiers', async ({ page }) => {
+    await page.goto('http://localhost:3000/modifiers-test');
+    await expect(page.getByRole('button', { name: 'Next month' })).toBeVisible();
+
+    const greenDays = page.locator('.bg-green-200');
+    const redDays = page.locator('.bg-red-200');
+
+    await expect(greenDays.first()).toBeVisible();
+    await expect(redDays.first()).toBeVisible();
+  });
+});

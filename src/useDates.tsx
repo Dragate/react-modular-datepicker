@@ -89,7 +89,7 @@ export interface UseDatesProps {
     onDateSelected?: (dateObj: DateObj, event: any) => void;
     onOffsetChanged?: (newOffset: number) => void;
     selected?: Date | Date[] | { start?: Date, end?: Date };
-    modifiers?: Record<string, (date: Date) => boolean>;
+    modifiers?: Record<string, (date: Date, month: number, year: number) => boolean>;
     selectionMode?: SelectionMode;
     adapter?: DateAdapter;
     onChange?: (selected: Date | Date[] | { start?: Date, end?: Date } | null) => void;
