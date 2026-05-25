@@ -32,10 +32,10 @@ export const Day: React.FC<DayProps> = ({ dateObj, getDateProps, classNames, too
     stateClasses = dayClasses.selected || '';
   } else if (today) {
     stateClasses = dayClasses.today || '';
-  } else if (!selectable) {
-    stateClasses = dayClasses.disabled || '';
   } else if (isOutside) {
     stateClasses = dayClasses.outside || '';
+  } else if (!selectable) {
+    stateClasses = dayClasses.disabled || '';
   } else {
     stateClasses = dayClasses.unselected || '';
   }

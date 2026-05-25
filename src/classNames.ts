@@ -33,7 +33,7 @@ export const defaultClassNames = {
     selected: "bg-brand-gold text-white rounded-full",
     unselected: "hover:bg-brand-gray-light text-brand-text",
     disabled: "text-gray-300 cursor-not-allowed",
-    outside: "text-gray-400",
+    outside: "text-gray-400 opacity-50",
     rangeStart: "bg-brand-gold text-white",
     rangeEnd: "bg-brand-gold text-white",
     rangeBetween: "bg-brand-gray-light text-brand-text",

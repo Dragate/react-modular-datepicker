@@ -1,73 +1,69 @@
-import { defaultAdapter } from "./adapters/dayjs";
-import type { DateAdapter, DateObj, Calendar } from "./types";
+import { DateAdapter, DateObj, SelectionMode, Calendar } from './types';
 
-export function composeEventHandlers(...fns: Array<((event: any, ...args: unknown[]) => void) | undefined>): (event: any, ...args: unknown[]) => boolean {
-    return (event, ...args) =>
-        fns.some(fn => {
-            fn && fn(event, ...args);
-            return event.defaultPrevented;
+export function addMonth({ calendars, offset, maxDate, adapter }: { calendars: Calendar[], offset: number, maxDate?: Date, adapter: DateAdapter }): number {
+    const lastCalendar = calendars[calendars.length - 1];
+    const nextMonth = adapter.add(adapter.set(adapter.set(adapter.date(), 'year', lastCalendar.year), 'month', lastCalendar.month), offset, 'month');
+
+    if (maxDate && adapter.isAfter(adapter.startOf(nextMonth, 'month'), adapter.date(maxDate), 'month')) {
+        return 0;
+    }
+    return offset;
+}
+
+export function subtractMonth({ calendars, offset, minDate, adapter }: { calendars: Calendar[], offset: number, minDate?: Date, adapter: DateAdapter }): number {
+    const firstCalendar = calendars[0];
+    const prevMonth = adapter.subtract(adapter.set(adapter.set(adapter.date(), 'year', firstCalendar.year), 'month', firstCalendar.month), offset, 'month');
+
+    if (minDate && adapter.isBefore(adapter.startOf(prevMonth, 'month'), adapter.date(minDate), 'month')) {
+        return 0;
+    }
+    return offset;
+}
+
+export function isBackDisabled({ calendars, minDate, adapter }: { calendars: Calendar[], minDate?: Date, adapter: DateAdapter }): boolean {
+    if (!minDate) return false;
+    const firstCalendar = calendars[0];
+    const currentMonth = adapter.set(adapter.set(adapter.date(), 'year', firstCalendar.year), 'month', firstCalendar.month);
+    return adapter.isSame(adapter.startOf(currentMonth, 'month'), adapter.date(minDate), 'month') ||
+        adapter.isBefore(adapter.startOf(currentMonth, 'month'), adapter.date(minDate), 'month');
+}
+
+export function isForwardDisabled({ calendars, maxDate, adapter }: { calendars: Calendar[], maxDate?: Date, adapter: DateAdapter }): boolean {
+    if (!maxDate) return false;
+    const lastCalendar = calendars[calendars.length - 1];
+    const currentMonth = adapter.set(adapter.set(adapter.date(), 'year', lastCalendar.year), 'month', lastCalendar.month);
+    return adapter.isSame(adapter.startOf(currentMonth, 'month'), adapter.date(maxDate), 'month') ||
+        adapter.isAfter(adapter.startOf(currentMonth, 'month'), adapter.date(maxDate), 'month');
+}
+
+export function composeEventHandlers(...fns: (any | undefined)[]) {
+    return (event: any, ...args: any[]) => {
+        return fns.some(fn => {
+            if (fn) {
+                fn(event, ...args);
+            }
+            return event && event.defaultPrevented;
         });
+    };
 }
 
-export function unwrapChildrenForPreact<T>(arg: T | T[]): T | typeof noop {
-    arg = Array.isArray(arg) ? /* istanbul ignore next (preact) */ arg[0] : arg;
-    return arg || noop;
-}
-function noop() { }
-
-export function subtractMonth({ calendars, offset, minDate, adapter = defaultAdapter }: { calendars: Calendar[], offset: number, minDate?: Date, adapter?: DateAdapter }): number {
-    if (offset > 1 && minDate) {
-        const { firstDayOfMonth } = calendars[0];
-        const diffInMonths = adapter.diff(adapter.date(firstDayOfMonth), adapter.date(minDate), "month");
-        if (diffInMonths < offset) {
-            offset = diffInMonths;
-        }
-    }
-    return offset;
-}
-
-export function addMonth({ calendars, offset, maxDate, adapter = defaultAdapter }: { calendars: Calendar[], offset: number, maxDate?: Date, adapter?: DateAdapter }): number {
-    if (offset > 1 && maxDate) {
-        const { lastDayOfMonth } = calendars[calendars.length - 1];
-        const diffInMonths = adapter.diff(adapter.date(maxDate), adapter.date(lastDayOfMonth), "month");
-        if (diffInMonths < offset) {
-            offset = diffInMonths;
-        }
-    }
-    return offset;
-}
-
-export function isBackDisabled({ calendars, minDate, adapter = defaultAdapter }: { calendars: Calendar[], minDate?: Date, adapter?: DateAdapter }): boolean {
-    if (!minDate) {
-        return false;
-    }
-    const { firstDayOfMonth } = calendars[0];
-    const firstDayOfMonthMinusOne = adapter.subtract(adapter.date(firstDayOfMonth), 1, "day");
-    return adapter.isBefore(firstDayOfMonthMinusOne, adapter.date(minDate));
-}
-
-export function isForwardDisabled({ calendars, maxDate, adapter = defaultAdapter }: { calendars: Calendar[], maxDate?: Date, adapter?: DateAdapter }): boolean {
-    if (!maxDate) {
-        return false;
-    }
-    const { lastDayOfMonth } = calendars[calendars.length - 1];
-    const lastDayOfMonthPlusOne = adapter.add(adapter.date(lastDayOfMonth), 1, "day");
-    return adapter.isBefore(adapter.date(maxDate), lastDayOfMonthPlusOne);
+export function unwrapChildrenForPreact(children: any) {
+    return typeof children === 'function' ? children : () => children;
 }
 
 export function getCalendars({
     date,
     selected,
     disabledDates,
+    modifiers,
     monthsToDisplay,
-    offset,
     minDate,
     maxDate,
+    offset,
     firstDayOfWeek,
     showOutsideDays,
-    adapter = defaultAdapter,
-    selectionMode = 'single',
-    modifiers,
+    adapter,
+    selectionMode,
     hoveredDate
 }: {
     date: Date,
@@ -75,21 +71,23 @@ export function getCalendars({
     disabledDates?: Date[],
     modifiers?: Record<string, (date: Date) => boolean>,
     monthsToDisplay: number,
-    offset: number,
     minDate?: Date,
     maxDate?: Date,
+    offset: number,
     firstDayOfWeek: number,
     showOutsideDays: boolean,
-    adapter?: DateAdapter,
-    selectionMode?: 'single' | 'range' | 'multiple',
+    adapter: DateAdapter,
+    selectionMode: SelectionMode,
     hoveredDate?: Date
 }): Calendar[] {
-    const months: Calendar[] = [];
-    const startDate = getStartDate(date, minDate, maxDate, adapter);
+    const calendars: Calendar[] = [];
+    const startDate = adapter.add(adapter.startOf(adapter.date(date), 'month'), offset, 'month');
+
     for (let i = 0; i < monthsToDisplay; i++) {
-        const calendarDates = getMonthData({
-            month: adapter.get(startDate, 'month') + i + offset,
-            year: adapter.get(startDate, 'year'),
+        const currentMonth = adapter.add(startDate, i, 'month');
+        calendars.push(getMonthData({
+            month: adapter.get(currentMonth, 'month'),
+            year: adapter.get(currentMonth, 'year'),
             selectedDates: selected,
             disabledDates,
             modifiers,
@@ -100,27 +98,10 @@ export function getCalendars({
             adapter,
             selectionMode,
             hoveredDate
-        });
-        months.push(calendarDates);
+        }));
     }
-    return months;
-}
 
-function getStartDate(date: Date, minDate?: Date, maxDate?: Date, adapter: DateAdapter = defaultAdapter): any {
-    let startDate = adapter.startOf(adapter.date(date), "day");
-    if (minDate) {
-        const minDateNormalized = adapter.startOf(adapter.date(minDate), "day");
-        if (adapter.isBefore(startDate, minDateNormalized)) {
-            startDate = minDateNormalized;
-        }
-    }
-    if (maxDate) {
-        const maxDateNormalized = adapter.startOf(adapter.date(maxDate), "day");
-        if (adapter.isBefore(maxDateNormalized, startDate)) {
-            startDate = maxDateNormalized;
-        }
-    }
-    return startDate;
+    return calendars;
 }
 
 function getMonthData({
@@ -276,20 +257,16 @@ function fillFrontWeek({
     const dates: (DateObj | null)[] = [];
     let firstDay = (adapter.toDate(adapter.date(firstDayOfMonth)).getDay() + 7 - firstDayOfWeek) % 7;
 
-    if (showOutsideDays) {
-        let current = adapter.subtract(adapter.date(firstDayOfMonth), 1, "day");
-        for (let i = 0; i < firstDay; i++) {
-            const date = adapter.toDate(current);
-            const dateObj = createDateObj(date, selectedDates, disabledDates, modifiers, minDate, maxDate, adapter, selectionMode, true, hoveredDate);
-            dateObj.prevMonth = true;
-            dates.unshift(dateObj);
-            current = adapter.subtract(current, 1, "day");
+    let current = adapter.subtract(adapter.date(firstDayOfMonth), 1, "day");
+    for (let i = 0; i < firstDay; i++) {
+        const date = adapter.toDate(current);
+        const dateObj = createDateObj(date, selectedDates, disabledDates, modifiers, minDate, maxDate, adapter, selectionMode, true, hoveredDate);
+        dateObj.prevMonth = true;
+        if (!showOutsideDays) {
+            dateObj.selectable = false;
         }
-    } else {
-        while (firstDay > 0) {
-            dates.unshift(null);
-            firstDay--;
-        }
+        dates.unshift(dateObj);
+        current = adapter.subtract(current, 1, "day");
     }
 
     return dates;
@@ -322,20 +299,16 @@ function fillBackWeek({
     const dates: (DateObj | null)[] = [];
     let lastDay = (adapter.toDate(adapter.date(lastDayOfMonth)).getDay() + 7 - firstDayOfWeek) % 7;
 
-    if (showOutsideDays) {
-        let current = adapter.add(adapter.date(lastDayOfMonth), 1, "day");
-        for (let i = 0; i < 6 - lastDay; i++) {
-            const date = adapter.toDate(current);
-            const dateObj = createDateObj(date, selectedDates, disabledDates, modifiers, minDate, maxDate, adapter, selectionMode, true, hoveredDate);
-            dateObj.nextMonth = true;
-            dates.push(dateObj);
-            current = adapter.add(current, 1, "day");
+    let current = adapter.add(adapter.date(lastDayOfMonth), 1, "day");
+    for (let i = 0; i < 6 - lastDay; i++) {
+        const date = adapter.toDate(current);
+        const dateObj = createDateObj(date, selectedDates, disabledDates, modifiers, minDate, maxDate, adapter, selectionMode, true, hoveredDate);
+        dateObj.nextMonth = true;
+        if (!showOutsideDays) {
+            dateObj.selectable = false;
         }
-    } else {
-        while (lastDay < 6) {
-            dates.push(null);
-            lastDay++;
-        }
+        dates.push(dateObj);
+        current = adapter.add(current, 1, "day");
     }
 
     return dates;
