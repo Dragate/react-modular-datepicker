@@ -13,6 +13,7 @@ export default function RootLayout({ children }) {
           <a href="/styling" className="hover:underline">Custom Styling</a>
           <a href="/form" className="hover:underline">Form</a>
           <a href="/custom-header-footer" className="hover:underline">Header/Footer</a>
+          <a href="/min-max-disabled" className="hover:underline">Min/Max/Disabled</a>
         </nav>
         {children}
       </body>
