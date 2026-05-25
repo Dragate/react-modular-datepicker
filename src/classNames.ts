@@ -9,6 +9,7 @@ export interface DayClassNames {
   rangeEnd?: string;
   rangeBetween?: string;
   rangeHovering?: string;
+  [key: string]: string | undefined;
 }
 
 export const defaultClassNames = {

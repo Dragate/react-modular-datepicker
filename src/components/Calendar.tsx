@@ -153,6 +153,11 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
         ))}
         {view === 'days' && calendars.map((calendar) => (
           <div key={`${calendar.month}-${calendar.year}`} className={classNames.calendarContainer}>
+            {calendars.length > 1 && (
+              <div className="text-center font-semibold mb-2 text-brand-text">
+                {monthNames[calendar.month]} {calendars[0].year !== calendars[calendars.length - 1].year ? calendar.year : ''}
+              </div>
+            )}
             <div className={classNames.weekdayGrid}>
               {sortedWeekdays.map((day) => (
                 <div key={day} className={classNames.weekday}>{day}</div>

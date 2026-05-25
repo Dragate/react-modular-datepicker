@@ -14,6 +14,8 @@ export default function RootLayout({ children }) {
           <a href="/form" className="hover:underline">Form</a>
           <a href="/custom-header-footer" className="hover:underline">Header/Footer</a>
           <a href="/min-max-disabled" className="hover:underline">Min/Max/Disabled</a>
+          <a href="/yearly" className="hover:underline">Yearly</a>
+          <a href="/availability" className="hover:underline">Availability</a>
         </nav>
         {children}
       </body>

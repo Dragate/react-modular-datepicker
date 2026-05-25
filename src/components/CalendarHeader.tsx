@@ -48,24 +48,40 @@ export const CalendarHeader: React.FC<HeaderProps> = ({
       </button>
 
       <div className={classNames.monthYearContainer}>
-        {calendars.map((calendar) => (
-          <div key={`${calendar.month}-${calendar.year}`} className={`${classNames.monthYearLabel} ${slideDirection === 'left' ? 'animate-slide-in-left' : slideDirection === 'right' ? 'animate-slide-in-right' : ''}`}>
+        {calendars.length === 1 ? (
+          <div key={`${calendars[0].month}-${calendars[0].year}`} className={`${classNames.monthYearLabel} ${slideDirection === 'left' ? 'animate-slide-in-left' : slideDirection === 'right' ? 'animate-slide-in-right' : ''}`}>
             <button
               onMouseDown={(e) => e.preventDefault()}
               onClick={() => setView(currentView === 'months' ? 'days' : 'months')}
               className={classNames.monthYearButton}
             >
-              {monthNames[calendar.month]}
+              {monthNames[calendars[0].month]}
             </button>
             <button
               onMouseDown={(e) => e.preventDefault()}
               onClick={() => setView(currentView === 'years' ? 'days' : 'years')}
               className={classNames.monthYearButton}
             >
-              {calendar.year}
+              {calendars[0].year}
             </button>
           </div>
-        ))}
+        ) : (
+          <div className={`${classNames.monthYearLabel} ${slideDirection === 'left' ? 'animate-slide-in-left' : slideDirection === 'right' ? 'animate-slide-in-right' : ''}`}>
+            {(() => {
+              const first = calendars[0];
+              const last = calendars[calendars.length - 1];
+              const isFullYear = calendars.length === 12 && first.month === 0 && last.month === 11 && first.year === last.year;
+              
+              if (isFullYear) {
+                return <span>{first.year}</span>;
+              } else if (first.year === last.year) {
+                return <span>{monthNames[first.month]} - {monthNames[last.month]} {first.year}</span>;
+              } else {
+                return <span>{monthNames[first.month]} {first.year} - {monthNames[last.month]} {last.year}</span>;
+              }
+            })()}
+          </div>
+        )}
       </div>
 
       <button
