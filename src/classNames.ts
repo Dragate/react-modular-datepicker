@@ -21,7 +21,7 @@ export const defaultClassNames = {
   daysGrid: "grid grid-cols-7 gap-px bg-brand-gray-light/20",
   footer: "mt-4",
 
-  navButton: "p-2 hover:bg-gray-100 rounded-full transition-colors cursor-pointer",
+  navButton: "p-2 hover:bg-gray-100 rounded-full transition-colors cursor-pointer disabled:opacity-30 disabled:pointer-events-none",
   monthYearContainer: "flex gap-8",
   monthYearLabel: "flex gap-1 items-center font-semibold text-brand-text",
   monthYearButton: "hover:bg-gray-100 px-2 py-1 rounded cursor-pointer",
@@ -44,7 +44,7 @@ export const defaultClassNames = {
   monthsBackButton: "p-2 hover:bg-gray-100 rounded-full cursor-pointer",
   monthsYearLabel: "font-semibold",
   monthsGrid: "grid grid-cols-3 gap-2",
-  monthButton: "py-4 rounded-lg hover:bg-brand-gray-light transition-colors cursor-pointer",
+  monthButton: "py-4 rounded-lg hover:bg-brand-gray-light transition-colors cursor-pointer disabled:opacity-30 disabled:pointer-events-none",
   monthButtonSelected: "bg-brand-gold text-white",
   monthButtonUnselected: "text-brand-text",
 
@@ -53,7 +53,7 @@ export const defaultClassNames = {
   yearsBackButton: "p-2 hover:bg-gray-100 rounded-full cursor-pointer",
   yearsTitle: "font-semibold",
   yearsGrid: "grid grid-cols-3 gap-2 max-h-[300px] overflow-y-auto pr-2",
-  yearButton: "py-3 rounded-lg hover:bg-brand-gray-light transition-colors cursor-pointer",
+  yearButton: "py-3 rounded-lg hover:bg-brand-gray-light transition-colors cursor-pointer disabled:opacity-30 disabled:pointer-events-none",
   yearButtonSelected: "bg-brand-gold text-white",
   yearButtonUnselected: "text-brand-text",
 }
