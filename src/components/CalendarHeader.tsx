@@ -9,6 +9,7 @@ export interface HeaderProps {
   monthNames: string[];
   t: { back: string; forward: string };
   classNames: Required<CalendarClassNames>;
+  slideDirection?: 'left' | 'right' | null;
 }
 
 export const ChevronLeftIcon = () => (
@@ -30,7 +31,8 @@ export const CalendarHeader: React.FC<HeaderProps> = ({
   setView,
   monthNames,
   t,
-  classNames
+  classNames,
+  slideDirection
 }) => {
   return (
     <div className={classNames.header}>
@@ -45,7 +47,7 @@ export const CalendarHeader: React.FC<HeaderProps> = ({
 
       <div className={classNames.monthYearContainer}>
         {calendars.map((calendar) => (
-          <div key={`${calendar.month}-${calendar.year}`} className={classNames.monthYearLabel}>
+          <div key={`${calendar.month}-${calendar.year}`} className={`${classNames.monthYearLabel} ${slideDirection === 'left' ? 'animate-slide-in-left' : slideDirection === 'right' ? 'animate-slide-in-right' : ''}`}>
             <button
               onMouseDown={(e) => e.preventDefault()}
               onClick={() => setView('months')}

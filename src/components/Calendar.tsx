@@ -36,6 +36,7 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
   const classNames = mergeClassNames(customClassNames);
 
   const [view, setView] = useState<CalendarView>('days');
+  const [slideDirection, setSlideDirection] = useState<'left' | 'right' | null>(null);
 
   const t = getTranslations(adapter, locale, customTranslations);
   const weekdayNames = t.weekdays;
@@ -60,6 +61,8 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
     const targetMonth = adapter.set(currentMonth, 'month', newMonth);
     const baseMonth = adapter.startOf(adapter.date(props.date || new Date()), 'month');
     const newOffset = adapter.diff(targetMonth, baseMonth, 'month');
+    if (adapter.isAfter(targetMonth, currentMonth, 'month')) setSlideDirection('right');
+    else if (adapter.isBefore(targetMonth, currentMonth, 'month')) setSlideDirection('left');
     setOffset(newOffset);
     setView('days');
   };
@@ -69,19 +72,44 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
     const targetMonth = adapter.set(currentMonth, 'year', newYear);
     const baseMonth = adapter.startOf(adapter.date(props.date || new Date()), 'month');
     const newOffset = adapter.diff(targetMonth, baseMonth, 'month');
+    if (adapter.isAfter(targetMonth, currentMonth, 'month')) setSlideDirection('right');
+    else if (adapter.isBefore(targetMonth, currentMonth, 'month')) setSlideDirection('left');
     setOffset(newOffset);
     setView('days');
+  };
+
+  const wrappedGetBackProps = (args: any) => {
+    const props = getBackProps(args);
+    return {
+      ...props,
+      onClick: (e: any) => {
+        setSlideDirection('left');
+        props.onClick?.(e);
+      }
+    };
+  };
+
+  const wrappedGetForwardProps = (args: any) => {
+    const props = getForwardProps(args);
+    return {
+      ...props,
+      onClick: (e: any) => {
+        setSlideDirection('right');
+        props.onClick?.(e);
+      }
+    };
   };
 
   const renderDefaultHeader = () => (
     <CalendarHeader
         calendars={calendars}
-        getBackProps={getBackProps}
-        getForwardProps={getForwardProps}
+        getBackProps={wrappedGetBackProps}
+        getForwardProps={wrappedGetForwardProps}
         setView={setView}
         monthNames={monthNames}
         t={t}
         classNames={classNames}
+        slideDirection={slideDirection}
     />
   );
 
@@ -89,11 +117,12 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
     <div className={classNames.root}>
       {typeof header === 'function' ? header({
           calendars,
-          getBackProps,
-          getForwardProps,
+          getBackProps: wrappedGetBackProps,
+          getForwardProps: wrappedGetForwardProps,
           setView,
           monthNames,
-          t
+          t,
+          slideDirection
       }) : (header || renderDefaultHeader())}
 
       <div className={classNames.calendarsContainer}>
@@ -110,7 +139,7 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
               ))}
             </div>
 
-            <div className={classNames.daysGrid}>
+            <div className={`${classNames.daysGrid} ${slideDirection === 'left' ? 'animate-slide-in-left' : slideDirection === 'right' ? 'animate-slide-in-right' : ''}`}>
               {calendar.weeks.map((week, wi) =>
                 week.map((dateObj, di) => (
                   <Day
