@@ -103,7 +103,6 @@ function BasicExample() {
 }
 ```
 
-https://github.com/Dragate/react-modular-datepicker/tree/test/docs/videos/basic.webm
 </details>
 
 <details>
@@ -118,7 +117,6 @@ Select a start and end date with a beautiful hover preview.
 />
 ```
 
-https://github.com/Dragate/react-modular-datepicker/tree/test/docs/videos/range.webm
 </details>
 
 <details>
@@ -132,7 +130,6 @@ Select as many dates as you want.
 />
 ```
 
-https://github.com/Dragate/react-modular-datepicker/tree/test/docs/videos/multiple.webm
 </details>
 
 <details>
@@ -155,7 +152,6 @@ return (
 );
 ```
 
-https://github.com/Dragate/react-modular-datepicker/tree/test/docs/videos/headless.webm 
 </details>
 
 <details>
@@ -174,7 +170,6 @@ Easily customize the look and feel using the `classNames` prop.
 />
 ```
 
-https://github.com/Dragate/react-modular-datepicker/tree/test/docs/videos/styling.webm
 </details>
 
 ---
