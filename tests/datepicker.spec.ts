@@ -5,11 +5,15 @@ test.beforeEach(async ({ page }) => {
 });
 
 test.describe('Datepicker E2E', () => {
-  test('should select a date in basic mode', async ({ page }) => {
+  test('should select a date in basic mode and have visible selected styling', async ({ page }) => {
     // Wait for the calendar to be visible
     await expect(page.getByRole('button', { name: 'Next month' })).toBeVisible();
     const today = new Date().getDate().toString();
-    await page.getByText(today, { exact: true }).first().click();
+    const dayBtn = page.getByText(today, { exact: true }).first();
+    await dayBtn.click();
+    await expect(dayBtn).toHaveClass(/bg-brand-gold/);
+    await expect(dayBtn).toHaveClass(/text-white/);
+    await expect(dayBtn).not.toHaveClass(/\bbg-white\b/);
   });
 
   test('should navigate months', async ({ page }) => {
