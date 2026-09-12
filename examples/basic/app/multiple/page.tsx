@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Calendar } from 'react-modular-datepicker';
 
 export default function MultiplePage() {
-  const [selected, setSelected] = useState([]);
+  const [selected, setSelected] = useState<Date[]>([]);
   const disabledDates = [new Date(new Date().getFullYear(), new Date().getMonth(), 10)];
 
   return (
@@ -12,7 +12,7 @@ export default function MultiplePage() {
       <Calendar
         selectionMode="multiple"
         selected={selected}
-        onChange={setSelected}
+        onChange={(val) => setSelected((val as Date[]) || [])}
         disabledDates={disabledDates}
       />
       <p className="mt-4">Selected count: {selected.length}</p>

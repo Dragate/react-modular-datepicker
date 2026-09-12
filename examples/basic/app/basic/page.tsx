@@ -7,7 +7,7 @@ export default function BasicPage() {
   return (
     <div>
       <h1 className="text-2xl font-bold mb-4">Basic Selection</h1>
-      <Calendar selected={selected} onChange={setSelected} />
+      <Calendar selected={selected} onChange={(val) => setSelected(val as Date)} />
       <p className="mt-4">Selected: {selected?.toDateString()}</p>
     </div>
   );

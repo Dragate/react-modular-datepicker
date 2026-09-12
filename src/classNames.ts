@@ -26,10 +26,10 @@ export const defaultClassNames = {
   monthYearButton: "hover:bg-gray-100 px-2 py-1 rounded cursor-pointer",
 
   day: {
-    day: "aspect-square flex items-center justify-center text-sm font-medium transition-all relative group cursor-pointer bg-white p-px",
+    day: "aspect-square flex items-center justify-center text-sm font-medium transition-all relative group cursor-pointer p-px",
     selected: "bg-brand-gold text-white rounded-full",
-    unselected: "hover:bg-brand-gray-light text-brand-text",
-    disabled: "text-gray-300 cursor-not-allowed",
+    unselected: "bg-white hover:bg-brand-gray-light text-brand-text",
+    disabled: "bg-white text-gray-300 cursor-not-allowed",
     rangeStart: "bg-brand-gold text-white",
     rangeEnd: "bg-brand-gold text-white",
     rangeBetween: "bg-brand-gray-light text-brand-text",
@@ -47,7 +47,33 @@ export const defaultClassNames = {
   yearButtonUnselected: "text-brand-text",
 }
 
-export type CalendarClassNames = typeof defaultClassNames;
+export interface CalendarClassNames {
+  root?: string;
+  header?: string;
+  calendarsContainer?: string;
+  calendarContainer?: string;
+  weekdayGrid?: string;
+  weekday?: string;
+  daysGrid?: string;
+  footer?: string;
+
+  navButton?: string;
+  monthYearContainer?: string;
+  monthYearLabel?: string;
+  monthYearButton?: string;
+
+  day?: DayClassNames;
+
+  monthsGrid?: string;
+  monthButton?: string;
+  monthButtonSelected?: string;
+  monthButtonUnselected?: string;
+
+  yearsGrid?: string;
+  yearButton?: string;
+  yearButtonSelected?: string;
+  yearButtonUnselected?: string;
+}
 
 export const mergeClassNames = (custom?: CalendarClassNames): Required<CalendarClassNames> => {
   const result = { ...defaultClassNames };
