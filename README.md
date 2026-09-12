@@ -103,11 +103,15 @@ function BasicExample() {
 }
 ```
 
+<br />
+
+<img src="./docs/images/basic.png" alt="Basic Selection" width="500" />
+
 </details>
 
 <details>
 <summary><b>Range Selection</b></summary>
-Select a start and end date with a beautiful hover preview.
+Select a start and end date with a hover preview.
 
 ```tsx
 <Calendar
@@ -116,6 +120,10 @@ Select a start and end date with a beautiful hover preview.
   onChange={(range) => console.log(range)}
 />
 ```
+
+<br />
+
+<img src="./docs/images/range.png" alt="Range Selection" width="500" />
 
 </details>
 
@@ -129,6 +137,10 @@ Select as many dates as you want.
   onChange={(dates) => console.log(dates)}
 />
 ```
+
+<br />
+
+<img src="./docs/images/multiple.png" alt="Multiple Selection" width="500" />
 
 </details>
 
@@ -152,6 +164,10 @@ return (
 );
 ```
 
+<br />
+
+<img src="./docs/images/headless.png" alt="Headless Usage" width="500" />
+
 </details>
 
 <details>
@@ -169,6 +185,156 @@ Easily customize the look and feel using the `classNames` prop.
   }}
 />
 ```
+
+<br />
+
+<img src="./docs/images/custom-styling.png" alt="Custom Styling" width="500" />
+
+</details>
+
+<details>
+<summary><b>Form Integration</b></summary>
+Integrate the calendar into a form or popup.
+
+```tsx
+const [date, setDate] = useState<Date | null>(null);
+
+<div className="relative group">
+  <input
+    type="text"
+    readOnly
+    value={date ? date.toLocaleDateString() : ''}
+    placeholder="Pick a date"
+  />
+  <div className="absolute top-full left-0 mt-2 z-50 invisible group-focus-within:visible">
+    <Calendar
+      selected={date}
+      onChange={(d) => setDate(d as Date)}
+    />
+  </div>
+</div>
+```
+
+<br />
+
+<img src="./docs/images/form-integration.png" alt="Form Integration" width="500" />
+
+</details>
+
+<details>
+<summary><b>Custom Header & Footer</b></summary>
+Customize header, footer, and day tooltips.
+
+```tsx
+<Calendar
+  selected={selected}
+  onChange={(val) => setSelected(val as Date)}
+  monthsToDisplay={2}
+  header={<div className="p-2 bg-blue-100 text-blue-800 font-bold text-center rounded-t-lg">My Header</div>}
+  footer={<div className="p-2 bg-gray-100 text-gray-600 text-sm text-center rounded-b-lg border-t">My Custom Footer</div>}
+  renderDayTooltip={(dateObj) => (
+    dateObj.date.getDate() === 15 ? 'Middle of the month!' : null
+  )}
+/>
+```
+
+<br />
+
+<img src="./docs/images/custom-header-footer.png" alt="Custom Header & Footer" width="500" />
+
+</details>
+
+<details>
+<summary><b>Min, Max & Disabled Dates</b></summary>
+Restrict date selection with min/max bounds or specific disabled dates.
+
+```tsx
+<Calendar
+  selected={selected}
+  onChange={(val) => setSelected(val as Date)}
+  minDate={minDate}
+  maxDate={maxDate}
+  disabledDates={[disabledDate1, disabledDate2]}
+/>
+```
+
+<br />
+
+<img src="./docs/images/min-max-disabled.png" alt="Min, Max & Disabled Dates" width="500" />
+
+</details>
+
+<details>
+<summary><b>Yearly View</b></summary>
+Display an entire year at once by customizing the grid and `monthsToDisplay`.
+
+```tsx
+<Calendar
+  selected={selected}
+  onChange={(val) => setSelected(val as Date)}
+  monthsToDisplay={12}
+  classNames={{
+    calendarsContainer: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+  }}
+/>
+```
+
+<br />
+
+<img src="./docs/images/yearly.png" alt="Yearly View" width="500" />
+
+</details>
+
+<details>
+<summary><b>Availability & Async Data</b></summary>
+Fetch and display availability dynamically when the month changes.
+
+```tsx
+<Calendar
+  selected={selected}
+  onChange={(val) => setSelected(val as Date)}
+  onMonthChange={(date) => fetchAvailabilities(date)}
+  modifiers={{
+    available: (date) => availabilities[date.toDateString()] === true,
+    unavailable: (date) => availabilities[date.toDateString()] === false,
+  }}
+  disabledDates={
+    Object.keys(availabilities)
+      .filter(key => !availabilities[key])
+      .map(key => new Date(key))
+  }
+  classNames={{
+    day: {
+      available: "bg-green-100 text-green-800 hover:bg-green-200",
+      unavailable: "bg-red-50 text-red-300 line-through cursor-not-allowed",
+    }
+  }}
+/>
+```
+
+<br />
+
+<img src="./docs/images/availability.png" alt="Availability Demo" width="500" />
+
+</details>
+
+<details>
+<summary><b>Full-Featured / Events Calendar (Google Calendar style)</b></summary>
+Build a full-page events calendar using the `useDates` hook.
+
+```tsx
+const { calendars, getBackProps, getForwardProps, getDateProps } = useDates({
+  showOutsideDays: true,
+  selected: selectedDate,
+  onChange: (d) => setSelectedDate(d as Date),
+});
+
+// Render custom full-grid layout with event badges...
+```
+
+<br />
+
+<img src="./docs/images/events.png" alt="Events Calendar" width="500" />
 
 </details>
 
