@@ -40,7 +40,9 @@ jobs:
         cache: 'pnpm'
         registry-url: 'https://registry.npmjs.org'
     - name: Install dependencies
-      run: pnpm i --frozen-lockfile
+      run: pnpm i --frozen-lockfile --ignore-scripts
+    - name: Build package
+      run: pnpm run build
     - name: Configure git
       run: |
         git config user.name "dragate"
