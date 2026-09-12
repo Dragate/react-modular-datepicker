@@ -59,4 +59,4 @@ jobs:
       env:
         GH_TOKEN: ${{ github.token }}
     - name: Publish package
-      run: pnpm publish --no-git-checks --access public --tag ${{ github.event.inputs.releaseType }}
+      run: pnpm publish --no-git-checks --access public ${{ github.event.inputs.releaseType != 'stable' && format('--tag {0}', github.event.inputs.releaseType) || '' }}
