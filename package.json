@@ -12,7 +12,11 @@
     "build:css": "tailwindcss -i src/index.css -o dist/index.css",
     "test:e2e": "playwright test"
   },
-  "keywords": [],
+  "keywords": [
+    "calendar",
+    "date-picker",
+    "react"
+  ],
   "author": "",
   "license": "MIT",
   "peerDependencies": {
