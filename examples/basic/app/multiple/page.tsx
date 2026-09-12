@@ -3,8 +3,14 @@ import { useState } from 'react';
 import { Calendar } from 'react-modular-datepicker';
 
 export default function MultiplePage() {
-  const [selected, setSelected] = useState<Date[]>([]);
-  const disabledDates = [new Date(new Date().getFullYear(), new Date().getMonth(), 10)];
+  const now = new Date();
+  const [selected, setSelected] = useState<Date[]>([
+    new Date(now.getFullYear(), now.getMonth(), 5),
+    new Date(now.getFullYear(), now.getMonth(), 12),
+    new Date(now.getFullYear(), now.getMonth(), 18),
+    new Date(now.getFullYear(), now.getMonth(), 25),
+  ]);
+  const disabledDates = [new Date(now.getFullYear(), now.getMonth(), 10)];
 
   return (
     <div>

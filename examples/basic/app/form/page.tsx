@@ -7,9 +7,7 @@ export default function FormExample() {
   const [date, setDate] = useState<Date | null>(null);
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-white rounded-xl shadow-sm border border-gray-100">
-      <h1 className="text-2xl font-bold mb-6 text-gray-800">Form Integration</h1>
-
+    <div className="max-w-md mx-auto p-6 bg-white rounded-xl shadow-sm border border-gray-100" style={{ minHeight: '420px' }}>
       <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
         <div>
           <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
