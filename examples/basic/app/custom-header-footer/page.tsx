@@ -14,8 +14,8 @@ export default function CustomHeaderFooterPage() {
         classNames={{
           calendarsContainer: "flex flex-row gap-6"
         }}
-        header={<div className="p-3 bg-blue-600 text-white font-bold text-center rounded-t-xl shadow-md">My Custom Unified Header</div>}
-        footer={<div className="p-3 bg-gray-100 text-gray-700 text-sm font-medium text-center rounded-b-xl border-t border-gray-200">My Custom Footer — Showing 2 Months Side-by-Side</div>}
+        header={<div className="p-3 mb-4 bg-blue-600 text-white font-bold text-center rounded-t-xl shadow-md">My Custom Unified Header</div>}
+        footer={<div className="p-3 mt-4 bg-gray-100 text-gray-700 text-sm font-medium text-center rounded-b-xl border-t border-gray-200">My Custom Footer — Showing 2 Months Side-by-Side</div>}
         renderDayTooltip={(dateObj) => (
             dateObj.date.getDate() === 15 ? 'Middle of the month!' : null
         )}
