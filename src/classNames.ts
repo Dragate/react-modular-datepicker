@@ -12,7 +12,7 @@ export interface DayClassNames {
 
 export const defaultClassNames = {
   root: "w-fit flex flex-col p-4 bg-white rounded-lg shadow-lg",
-  header: "flex items-center justify-between border-b-2 border-brand-gray-light/40",
+  header: "flex items-center justify-between border-b-2 border-brand-gray-light/40 pb-2 mb-3",
   calendarsContainer: "flex flex-col md:flex-row gap-4",
   calendarContainer: "flex-1 min-w-[280px] min-h-[260px]",
   weekdayGrid: "grid grid-cols-7 gap-1 mb-1 border-b border-brand-gray-light/40",
@@ -32,8 +32,8 @@ export const defaultClassNames = {
     disabled: "bg-white text-gray-300 cursor-not-allowed",
     rangeStart: "bg-brand-gold text-white",
     rangeEnd: "bg-brand-gold text-white",
-    rangeBetween: "bg-brand-gray-light text-brand-text",
-    rangeHovering: "bg-brand-gray-light text-brand-text",
+    rangeBetween: "bg-brand-gold/25 text-brand-text",
+    rangeHovering: "bg-brand-gold/25 text-brand-text",
   },
 
   monthsGrid: "grid grid-cols-3 gap-2 animate-slide-in-top",
