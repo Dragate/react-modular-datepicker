@@ -14,7 +14,7 @@ export default defineConfig({
   ],
   build: {
     outDir: 'dist',
-    emptyOutDir: true,
+    emptyOutDir: false,
     sourcemap: true,
     lib: {
       entry: {
@@ -33,6 +33,9 @@ export default defineConfig({
         'dayjs',
         /^dayjs\/.*/,
       ],
+      output: {
+        assetFileNames: 'index.[ext]',
+      },
     },
   },
 });
