@@ -181,10 +181,11 @@ Easily customize the look and feel using the `classNames` prop.
 ```tsx
 <Calendar
   classNames={{
-    root: 'bg-indigo-900 text-white',
+    root: 'bg-stone-50 p-6 rounded-2xl border border-stone-200 shadow-lg text-stone-800',
+    monthYearLabel: 'font-serif text-stone-900 text-lg font-bold',
     day: {
-      selected: 'bg-pink-500 text-white',
-      today: 'border-pink-500 text-pink-500',
+      unselected: 'bg-white border border-stone-200 hover:bg-amber-100/50 text-stone-800',
+      selected: 'bg-amber-800 text-amber-50 font-bold',
     }
   }}
 />
@@ -193,6 +194,26 @@ Easily customize the look and feel using the `classNames` prop.
 <br />
 
 <img src="./docs/images/custom-styling.png" alt="Custom Styling" width="500" />
+
+</details>
+
+<details>
+<summary><b>Localization & i18n</b></summary>
+Easily customize language, month/weekday labels, and the first day of week.
+
+```tsx
+<Calendar
+  firstDayOfWeek={1} // Start week on Monday
+  translations={{
+    months: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+    weekdays: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
+  }}
+/>
+```
+
+<br />
+
+<img src="./docs/images/localization.png" alt="Localization & i18n" width="500" />
 
 </details>
 

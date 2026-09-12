@@ -11,6 +11,7 @@ export default function RootLayout({ children }) {
           <a href="/headless" className="hover:underline">Headless</a>
           <a href="/events" className="hover:underline font-bold text-blue-600">Events (GCal style)</a>
           <a href="/styling" className="hover:underline">Custom Styling</a>
+          <a href="/localization" className="hover:underline">Localization</a>
           <a href="/form" className="hover:underline">Form</a>
           <a href="/custom-header-footer" className="hover:underline">Header/Footer</a>
           <a href="/min-max-disabled" className="hover:underline">Min/Max/Disabled</a>

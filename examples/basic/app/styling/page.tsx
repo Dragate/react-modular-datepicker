@@ -10,24 +10,26 @@ export default function StylingPage() {
       </p>
 
       <div className="flex flex-wrap gap-8 items-start justify-center">
-        {/* Theme 1: Sharp Monospace Tech */}
+        {/* Theme 1: Sharp Cyber Neon Tech */}
         <div data-testid="neon-theme">
           <Calendar
             classNames={{
-              root: 'bg-black p-5 border-2 border-cyan-400 font-mono text-cyan-400 shadow-[4px_4px_0px_0px_rgba(6,182,212,1)] rounded-none',
+              root: 'bg-black p-5 border-2 border-cyan-400 font-mono text-cyan-400 shadow-[6px_6px_0px_0px_rgba(6,182,212,1)] rounded-none w-[320px]',
               calendarContainer: 'min-h-0 flex flex-col',
               header: 'flex items-center justify-between pb-3 border-b-2 border-cyan-400 mb-3',
-              monthYearLabel: 'flex gap-2 items-center font-bold text-sm tracking-widest uppercase',
-              monthYearButton: 'hover:bg-cyan-950 px-2 py-0.5 border border-cyan-400/50 rounded-none transition-colors text-cyan-300 text-xs',
-              weekday: 'text-cyan-600 font-bold text-xs uppercase',
+              monthYearLabel: 'flex gap-2 items-center font-extrabold text-sm tracking-widest uppercase text-cyan-300',
+              monthYearButton: 'hover:bg-cyan-950 px-2 py-0.5 transition-colors text-cyan-300 text-xs rounded-none',
+              weekdayGrid: 'grid grid-cols-7 gap-1 mb-1 border-b border-cyan-900',
+              weekday: 'text-cyan-500 font-bold text-xs uppercase text-center',
+              daysGrid: 'grid grid-cols-7 gap-1 bg-transparent',
               day: {
-                day: 'rounded-none border border-transparent font-bold text-xs transition-colors',
-                unselected: 'hover:border-cyan-400 hover:bg-cyan-950/80 text-cyan-300',
-                selected: 'bg-cyan-400 text-black font-black border-2 border-cyan-300 scale-100',
-                today: 'text-yellow-400 font-extrabold border-b-2 border-yellow-400',
-                outside: 'text-cyan-900 opacity-40',
+                day: 'rounded-none border border-cyan-950 font-bold text-xs transition-all aspect-square flex items-center justify-center',
+                unselected: 'bg-slate-950 hover:border-cyan-400 hover:bg-cyan-950 text-cyan-300',
+                selected: 'bg-cyan-400 text-black font-black border-2 border-cyan-300',
+                today: 'text-yellow-400 font-extrabold border-yellow-400 bg-yellow-950/30',
+                outside: 'text-cyan-900 opacity-30 bg-transparent border-transparent',
               },
-              navButton: 'p-1 hover:bg-cyan-400 hover:text-black border border-cyan-400 text-cyan-400 transition-colors rounded-none'
+              navButton: 'p-1 hover:bg-cyan-400 hover:text-black text-cyan-400 transition-colors rounded-none'
             }}
           />
         </div>
@@ -36,42 +38,46 @@ export default function StylingPage() {
         <div data-testid="violet-theme">
           <Calendar
             classNames={{
-              root: 'bg-gradient-to-br from-indigo-900 via-purple-900 to-slate-900 p-6 rounded-3xl border border-purple-400/20 shadow-xl shadow-purple-950/20 text-purple-100',
+              root: 'bg-gradient-to-br from-indigo-950 via-purple-950 to-slate-950 p-6 rounded-3xl border border-purple-400/20 shadow-2xl shadow-purple-950/40 text-purple-100 w-[320px]',
               calendarContainer: 'min-h-0 flex flex-col',
               header: 'flex items-center justify-between mb-4',
               monthYearLabel: 'flex gap-2 items-center font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-300 to-purple-200 text-base',
               monthYearButton: 'hover:bg-purple-800/40 px-3 py-1 rounded-full transition-colors text-purple-200',
-              weekday: 'text-purple-400/80 font-semibold text-xs tracking-wider uppercase',
+              weekdayGrid: 'grid grid-cols-7 gap-1 mb-2',
+              weekday: 'text-purple-400/80 font-semibold text-xs tracking-wider uppercase text-center',
+              daysGrid: 'grid grid-cols-7 gap-1 bg-transparent',
               day: {
-                day: 'rounded-full transition-all duration-200 font-semibold text-purple-200',
-                unselected: 'hover:bg-purple-500/20 hover:text-white',
-                selected: 'bg-gradient-to-r from-pink-500 to-purple-600 text-white shadow-md shadow-pink-500/30 scale-105',
+                day: 'rounded-full transition-all duration-200 font-semibold text-purple-200 aspect-square flex items-center justify-center',
+                unselected: 'bg-purple-900/20 hover:bg-purple-500/30 hover:text-white',
+                selected: 'bg-gradient-to-r from-pink-500 to-purple-600 text-white shadow-lg shadow-pink-500/40 scale-105',
                 today: 'text-pink-300 ring-2 ring-pink-400 ring-offset-2 ring-offset-purple-950',
-                outside: 'text-purple-950 opacity-40',
+                outside: 'text-purple-900/40 bg-transparent',
               },
               navButton: 'p-2 hover:bg-purple-800/40 rounded-full text-purple-300 transition-transform hover:scale-110'
             }}
           />
         </div>
 
-        {/* Theme 3: Minimalist Modern */}
+        {/* Theme 3: Warm Editorial Luxury */}
         <div data-testid="emerald-theme">
           <Calendar
             classNames={{
-              root: 'bg-transparent p-4 text-slate-800',
+              root: 'bg-stone-50 p-6 rounded-2xl border border-stone-200 shadow-lg text-stone-800 w-[320px]',
               calendarContainer: 'min-h-0 flex flex-col',
-              header: 'flex items-center justify-between mb-3 border-b border-slate-200 pb-2',
-              monthYearLabel: 'flex gap-2 items-center font-light text-slate-900 text-base tracking-tight',
-              monthYearButton: 'hover:bg-slate-100 px-2 py-0.5 rounded transition-colors text-slate-700',
-              weekday: 'text-slate-400 font-normal text-xs uppercase',
+              header: 'flex items-center justify-between mb-4 border-b border-stone-200 pb-3',
+              monthYearLabel: 'flex gap-2 items-center font-serif text-stone-900 text-lg font-bold tracking-tight',
+              monthYearButton: 'hover:bg-stone-200/60 px-2 py-0.5 rounded transition-colors text-stone-700',
+              weekdayGrid: 'grid grid-cols-7 gap-1 mb-2 border-b border-stone-200 pb-1',
+              weekday: 'text-amber-900/60 font-serif font-bold text-xs uppercase text-center',
+              daysGrid: 'grid grid-cols-7 gap-1 bg-transparent',
               day: {
-                day: 'rounded transition-colors font-normal text-slate-700 text-sm',
-                unselected: 'hover:bg-emerald-50 hover:text-emerald-700',
-                selected: 'bg-emerald-700 text-white font-medium rounded-full',
-                today: 'text-emerald-700 font-bold underline underline-offset-4 decoration-2',
-                outside: 'text-slate-300',
+                day: 'rounded-lg transition-all font-sans text-xs font-medium aspect-square flex items-center justify-center',
+                unselected: 'bg-white border border-stone-200/80 hover:bg-amber-100/50 hover:border-amber-400 text-stone-800 shadow-sm',
+                selected: 'bg-amber-800 text-amber-50 font-bold border border-amber-900 shadow-md scale-105',
+                today: 'text-amber-800 font-extrabold ring-1 ring-amber-700 bg-amber-50',
+                outside: 'bg-stone-100/50 text-stone-300 border-transparent',
               },
-              navButton: 'p-1.5 hover:bg-slate-100 rounded text-slate-400 hover:text-slate-800 transition-colors'
+              navButton: 'p-1.5 hover:bg-stone-200/80 rounded-lg text-stone-600 hover:text-stone-950 transition-colors'
             }}
           />
         </div>
