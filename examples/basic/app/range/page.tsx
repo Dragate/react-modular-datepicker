@@ -3,7 +3,11 @@ import { useState } from 'react';
 import { Calendar } from 'react-modular-datepicker';
 
 export default function RangePage() {
-  const [range, setRange] = useState<{ start?: Date; end?: Date }>({ start: new Date(), end: undefined });
+  const now = new Date();
+  const [range, setRange] = useState<{ start?: Date; end?: Date }>({
+    start: new Date(now.getFullYear(), now.getMonth(), 10),
+    end: new Date(now.getFullYear(), now.getMonth(), 22),
+  });
   return (
     <div>
       <h1 className="text-2xl font-bold mb-4">Range Selection</h1>
