@@ -64,8 +64,17 @@
     "vite": "^8.3.0",
     "vite-plugin-dts": "^5.1.0"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dragate/react-modular-datepicker.git"
+  },
+  "homepage": "https://github.com/Dragate/react-modular-datepicker#readme",
+  "bugs": {
+    "url": "https://github.com/Dragate/react-modular-datepicker/issues"
+  },
   "files": [
-    "dist"
+    "dist",
+    "docs"
   ],
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
