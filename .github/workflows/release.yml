@@ -60,7 +60,5 @@ jobs:
         GH_TOKEN: ${{ github.token }}
     - name: Prepare README for npm publish
       run: node ./scripts/prepare-readme.js
-      env:
-        PACKAGE_VERSION: ${{ steps.bump.outputs.version }}
     - name: Publish package
       run: pnpm publish --no-git-checks --access public ${{ github.event.inputs.releaseType != 'stable' && format('--tag {0}', github.event.inputs.releaseType) || '' }}

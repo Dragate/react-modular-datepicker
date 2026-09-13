@@ -73,8 +73,7 @@
     "url": "https://github.com/Dragate/react-modular-datepicker/issues"
   },
   "files": [
-    "dist",
-    "docs"
+    "dist"
   ],
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
