@@ -17,6 +17,7 @@ export default function RootLayout({ children }) {
           <a href="/min-max-disabled" className="hover:underline">Min/Max/Disabled</a>
           <a href="/yearly" className="hover:underline">Yearly</a>
           <a href="/availability" className="hover:underline">Availability</a>
+          <a href="/custom-adapter" className="hover:underline">Custom Adapter</a>
         </nav>
         {children}
       </body>

@@ -68,3 +68,15 @@ test.describe('Custom Modifiers', () => {
     await expect(redDays.first()).toBeVisible();
   });
 });
+
+test.describe('Custom Adapter', () => {
+  test('should render calendar and select date with custom date-fns adapter', async ({ page }) => {
+    await page.goto('http://localhost:3000/custom-adapter');
+    await expect(page.getByRole('button', { name: 'Next month' })).toBeVisible();
+
+    const today = new Date().getDate().toString();
+    const dayBtn = page.getByText(today, { exact: true }).first();
+    await dayBtn.click();
+    await expect(dayBtn).toHaveClass(/bg-brand-gold/);
+  });
+});
