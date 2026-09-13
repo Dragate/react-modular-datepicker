@@ -17,6 +17,20 @@ A modular, lightweight, and type-safe React datepicker library. Whether you need
 
 ---
 
+## Installation
+
+```bash
+npm install react-modular-datepicker dayjs
+# or
+pnpm add react-modular-datepicker dayjs
+# or
+yarn add react-modular-datepicker dayjs
+```
+
+> **Note on Peer Dependencies**: `dayjs` is configured as an optional peer dependency. By default, `react-modular-datepicker` uses the built-in `DayjsAdapter`, so `dayjs` must be installed in your project. However, if you bring your own date management library (such as `date-fns` or Luxon), you can implement a custom `DateAdapter` and pass it to the `adapter` prop without needing `dayjs`.
+
+---
+
 ## API Reference
 
 ### Imports
@@ -89,6 +103,29 @@ Represents a month grid.
 - `month`: `number` (0-11)
 - `year`: `number`
 - `weeks`: `(DateObj | null)[][]`
+
+#### `DateAdapter`
+Pluggable interface for date operations:
+```typescript
+export interface DateAdapter<T = any> {
+  date(value?: any): T;
+  add(date: T, amount: number, unit: 'day' | 'month' | 'year'): T;
+  subtract(date: T, amount: number, unit: 'day' | 'month' | 'year'): T;
+  startOf(date: T, unit: 'day' | 'month' | 'year'): T;
+  endOf(date: T, unit: 'day' | 'month' | 'year'): T;
+  isBefore(date: T, comparison: T, unit?: 'day' | 'month' | 'year'): boolean;
+  isAfter(date: T, comparison: T, unit?: 'day' | 'month' | 'year'): boolean;
+  isSame(date: T, comparison: T, unit?: 'day' | 'month' | 'year'): boolean;
+  set(date: T, unit: 'day' | 'month' | 'year', value: number): T;
+  get(date: T, unit: 'day' | 'month' | 'year'): number;
+  format(date: T, formatStr: string, locale?: string): string;
+  getDaysInMonth(date: T): number;
+  toDate(date: T): Date;
+  diff(date: T, comparison: T, unit: 'month' | 'year'): number;
+  getMonths(locale?: string): string[];
+  getWeekdays(locale?: string): string[];
+}
+```
 
 ---
 
@@ -360,6 +397,101 @@ const { calendars, getBackProps, getForwardProps, getDateProps } = useDates({
 <br />
 
 <img src="./docs/images/events.png" alt="Events Calendar" width="500" />
+
+</details>
+
+<details>
+<summary><b>Custom Date Adapter (e.g. date-fns)</b></summary>
+Replace the default `DayjsAdapter` with a custom adapter using `date-fns` (or any date library).
+
+```tsx
+import { Calendar, DateAdapter } from 'react-modular-datepicker';
+import {
+  addDays, addMonths, addYears,
+  subDays, subMonths, subYears,
+  startOfDay, startOfMonth, startOfYear,
+  endOfDay, endOfMonth, endOfYear,
+  isBefore, isAfter, isSameDay, isSameMonth, isSameYear,
+  setDate, setMonth, setYear,
+  getDate, getMonth, getYear,
+  format, getDaysInMonth,
+  differenceInCalendarMonths, differenceInCalendarYears
+} from 'date-fns';
+
+class DateFnsAdapter implements DateAdapter<Date> {
+  date(value?: any): Date { return value ? new Date(value) : new Date(); }
+  add(date: Date, amount: number, unit: 'day' | 'month' | 'year'): Date {
+    if (unit === 'day') return addDays(date, amount);
+    if (unit === 'month') return addMonths(date, amount);
+    return addYears(date, amount);
+  }
+  subtract(date: Date, amount: number, unit: 'day' | 'month' | 'year'): Date {
+    if (unit === 'day') return subDays(date, amount);
+    if (unit === 'month') return subMonths(date, amount);
+    return subYears(date, amount);
+  }
+  startOf(date: Date, unit: 'day' | 'month' | 'year'): Date {
+    if (unit === 'day') return startOfDay(date);
+    if (unit === 'month') return startOfMonth(date);
+    return startOfYear(date);
+  }
+  endOf(date: Date, unit: 'day' | 'month' | 'year'): Date {
+    if (unit === 'day') return endOfDay(date);
+    if (unit === 'month') return endOfMonth(date);
+    return endOfYear(date);
+  }
+  isBefore(date: Date, comparison: Date, unit?: 'day' | 'month' | 'year'): boolean {
+    if (unit === 'day') return startOfDay(date) < startOfDay(comparison);
+    if (unit === 'month') return startOfMonth(date) < startOfMonth(comparison);
+    if (unit === 'year') return startOfYear(date) < startOfYear(comparison);
+    return date < comparison;
+  }
+  isAfter(date: Date, comparison: Date, unit?: 'day' | 'month' | 'year'): boolean {
+    if (unit === 'day') return startOfDay(date) > startOfDay(comparison);
+    if (unit === 'month') return startOfMonth(date) > startOfMonth(comparison);
+    if (unit === 'year') return startOfYear(date) > startOfYear(comparison);
+    return date > comparison;
+  }
+  isSame(date: Date, comparison: Date, unit?: 'day' | 'month' | 'year'): boolean {
+    if (unit === 'day') return isSameDay(date, comparison);
+    if (unit === 'month') return isSameMonth(date, comparison);
+    if (unit === 'year') return isSameYear(date, comparison);
+    return date.getTime() === comparison.getTime();
+  }
+  set(date: Date, unit: 'day' | 'month' | 'year', value: number): Date {
+    if (unit === 'day') return setDate(date, value);
+    if (unit === 'month') return setMonth(date, value);
+    return setYear(date, value);
+  }
+  get(date: Date, unit: 'day' | 'month' | 'year'): number {
+    if (unit === 'day') return getDate(date);
+    if (unit === 'month') return getMonth(date);
+    return getYear(date);
+  }
+  format(date: Date, formatStr: string): string {
+    const f = formatStr.replace(/YYYY/g, 'yyyy').replace(/YY/g, 'yy').replace(/D/g, 'd');
+    return format(date, f);
+  }
+  getDaysInMonth(date: Date): number { return getDaysInMonth(date); }
+  toDate(date: Date): Date { return date; }
+  diff(date: Date, comparison: Date, unit: 'month' | 'year'): number {
+    if (unit === 'month') return differenceInCalendarMonths(date, comparison);
+    return differenceInCalendarYears(date, comparison);
+  }
+  getMonths(): string[] {
+    return ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  }
+  getWeekdays(): string[] {
+    return ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+  }
+}
+
+const customAdapter = new DateFnsAdapter();
+
+function CustomAdapterExample() {
+  return <Calendar adapter={customAdapter} onChange={(date) => console.log(date)} />;
+}
+```
 
 </details>
 
