@@ -1,7 +1,7 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
-import dts from 'vite-plugin-dts';
+import react from '@vitejs/plugin-react';
+import dts from 'unplugin-dts/vite';
+import { defineConfig } from 'vite';
 
 export default defineConfig({
   plugins: [
@@ -14,7 +14,6 @@ export default defineConfig({
   ],
   build: {
     outDir: 'dist',
-    emptyOutDir: false,
     sourcemap: true,
     lib: {
       entry: {
@@ -23,7 +22,6 @@ export default defineConfig({
         utils: 'src/utils.ts',
       },
       formats: ['es', 'cjs'],
-      fileName: (format, entryName) => `${entryName}.${format === 'es' ? 'mjs' : 'js'}`,
     },
     rollupOptions: {
       external: [
