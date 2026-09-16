@@ -27,7 +27,6 @@ function getDateProps(
             onDateSelected(dateObj, event);
         }),
         disabled: !dateObj.selectable,
-        'aria-label': dateObj.date.toDateString(),
         'aria-pressed': dateObj.selected,
         role: 'button',
         ...rest
@@ -50,7 +49,6 @@ function getBackProps(
             );
         }),
         disabled: isBackDisabled({ calendars, minDate, adapter }),
-        'aria-label': `Go back ${offset} month${offset === 1 ? '' : 's'}`,
         ...rest
     };
 }
@@ -71,7 +69,6 @@ function getForwardProps(
             );
         }),
         disabled: isForwardDisabled({ calendars, maxDate, adapter }),
-        'aria-label': `Go forward ${offset} month${offset === 1 ? '' : 's'}`,
         ...rest
     };
 }

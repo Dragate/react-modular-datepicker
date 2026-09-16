@@ -23,6 +23,7 @@ export default defineConfig({
   ],
   webServer: {
     command: 'pnpm --filter example-app-router dev',
+    env: { PLAYWRIGHT_TEST: '1' },
     url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
   },

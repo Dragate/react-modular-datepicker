@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import type { CalendarClassNames, DateObj } from '../types';
 
 interface DayProps {
@@ -9,6 +9,8 @@ interface DayProps {
 }
 
 export const Day: React.FC<DayProps> = ({ dateObj, getDateProps, classNames, tooltip }) => {
+  const [isHovered, setIsHovered] = useState(false);
+
   if (!dateObj) {
     return <div className="aspect-square bg-white" />;
   }
@@ -43,11 +45,15 @@ export const Day: React.FC<DayProps> = ({ dateObj, getDateProps, classNames, too
 
   return (
     <button
-      {...getDateProps({ dateObj })}
+      {...getDateProps({
+        dateObj,
+        onMouseEnter: () => setIsHovered(true),
+        onMouseLeave: () => setIsHovered(false)
+      })}
       className={className}
     >
       {date.getDate()}
-      {tooltip && (
+      {tooltip && isHovered && (
         <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block z-10">
           <div className="bg-gray-800 text-white text-xs py-1 px-2 rounded whitespace-nowrap shadow-lg">
             {tooltip}

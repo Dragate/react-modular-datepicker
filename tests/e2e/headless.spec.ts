@@ -8,8 +8,9 @@ test.describe('Headless Usage Page (/headless)', () => {
   test('should render custom UI with useDates hook and select dates', async ({ page }) => {
     await expect(page.getByRole('heading', { name: 'Headless Usage' })).toBeVisible();
 
-    const prevBtn = page.getByRole('button', { name: 'Prev' });
-    const nextBtn = page.getByRole('button', { name: 'Next' });
+    const demo = page.getByTestId('demo-container');
+    const prevBtn = demo.getByRole('button', { name: 'Prev' });
+    const nextBtn = demo.getByRole('button', { name: 'Next' });
     await expect(prevBtn).toBeVisible();
     await expect(nextBtn).toBeVisible();
 
@@ -22,4 +23,3 @@ test.describe('Headless Usage Page (/headless)', () => {
     await expect(dayBtn).toHaveClass(/bg-amber-500/);
   });
 });
-

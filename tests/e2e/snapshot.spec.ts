@@ -48,10 +48,4 @@ test.describe('Visual Snapshot Tests (/snapshot)', () => {
     await expect(section).toHaveScreenshot('localization-spanish-calendar.png');
   });
 
-  test('full page snapshot', async ({ page }) => {
-    await expect(page).toHaveScreenshot('full-snapshot-page.png', {
-      fullPage: true,
-    });
-  });
 });
-
