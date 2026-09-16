@@ -15,9 +15,8 @@
         "react-modular-datepicker": "workspace:*"
     },
     "devDependencies": {
-        "@tailwindcss/postcss": "^4.0.0",
+        "@tailwindcss/webpack": "^4.3.3",
         "@types/node": "25.9.1",
-        "postcss": "^8.4.0",
-        "tailwindcss": "^4.0.0"
+        "tailwindcss": "^4.3.3"
     }
 }
