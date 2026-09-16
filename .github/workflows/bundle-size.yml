@@ -1,0 +1,143 @@
+name: Bundle Size
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  bundle-size:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v6
+
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 11
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm i --frozen-lockfile --ignore-scripts
+
+      - name: Build PR branch
+        run: pnpm run build
+
+      - name: Capture PR bundle sizes
+        run: |
+          echo "## PR Branch" >> $GITHUB_STEP_SUMMARY
+          mkdir -p /tmp/bundle-sizes
+          node -e "
+            const fs = require('fs');
+            const path = require('path');
+            const dist = './dist';
+            const sizes = {};
+            for (const file of fs.readdirSync(dist)) {
+              if (/\.(js|mjs|css)$/.test(file) && !file.endsWith('.map')) {
+                const stat = fs.statSync(path.join(dist, file));
+                sizes[file] = stat.size;
+              }
+            }
+            fs.writeFileSync('/tmp/bundle-sizes/pr.json', JSON.stringify(sizes, null, 2));
+          "
+
+      - name: Checkout main branch
+        uses: actions/checkout@v6
+        with:
+          ref: main
+          clean: false
+
+      - name: Install main dependencies
+        run: pnpm i --frozen-lockfile --ignore-scripts
+
+      - name: Build main branch
+        run: pnpm run build
+
+      - name: Capture main bundle sizes
+        run: |
+          node -e "
+            const fs = require('fs');
+            const path = require('path');
+            const dist = './dist';
+            const sizes = {};
+            for (const file of fs.readdirSync(dist)) {
+              if (/\.(js|mjs|css)$/.test(file) && !file.endsWith('.map')) {
+                const stat = fs.statSync(path.join(dist, file));
+                sizes[file] = stat.size;
+              }
+            }
+            fs.writeFileSync('/tmp/bundle-sizes/main.json', JSON.stringify(sizes, null, 2));
+          "
+
+      - name: Compare and comment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+
+            const pr = JSON.parse(fs.readFileSync('/tmp/bundle-sizes/pr.json', 'utf8'));
+            const main = JSON.parse(fs.readFileSync('/tmp/bundle-sizes/main.json', 'utf8'));
+
+            const formatBytes = (b) => {
+              if (b < 1024) return b + ' B';
+              return (b / 1024).toFixed(2) + ' kB';
+            };
+
+            const allFiles = [...new Set([...Object.keys(pr), ...Object.keys(main)])].sort();
+
+            let table = '| File | main | PR | Diff |\n|------|-----:|---:|------|\n';
+            let totalMain = 0, totalPR = 0;
+
+            for (const file of allFiles) {
+              const mainSize = main[file] || 0;
+              const prSize = pr[file] || 0;
+              totalMain += mainSize;
+              totalPR += prSize;
+              const diff = prSize - mainSize;
+              const sign = diff > 0 ? '+' : '';
+              const emoji = diff > 0 ? '🔺' : diff < 0 ? '🔽' : '✅';
+
+              // Skip chunk files with hashes — compare only stable entry files
+              table += `| \`${file}\` | ${formatBytes(mainSize)} | ${formatBytes(prSize)} | ${emoji} ${sign}${formatBytes(diff)} |\n`;
+            }
+
+            const totalDiff = totalPR - totalMain;
+            const totalSign = totalDiff > 0 ? '+' : '';
+            const totalEmoji = totalDiff > 0 ? '🔺' : totalDiff < 0 ? '🔽' : '✅';
+            table += `| **Total** | **${formatBytes(totalMain)}** | **${formatBytes(totalPR)}** | ${totalEmoji} **${totalSign}${formatBytes(totalDiff)}** |\n`;
+
+            const body = `## 📦 Bundle Size Report\n\n${table}`;
+
+            // Find existing comment
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+
+            const existing = comments.find(c =>
+              c.user.type === 'Bot' && c.body.includes('📦 Bundle Size Report')
+            );
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              });
+            }
+

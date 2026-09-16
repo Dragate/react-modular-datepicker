@@ -50,7 +50,9 @@
     "build": "pnpm run build:js && pnpm run build:css",
     "build:js": "vite build",
     "build:css": "tailwindcss -i src/index.css -o dist/index.css",
-    "test:e2e": "playwright test"
+    "test": "playwright test",
+    "test:unit": "playwright test --project=unit",
+    "test:e2e": "playwright test --project=e2e"
   },
   "peerDependencies": {
     "dayjs": "^1.11.20",
