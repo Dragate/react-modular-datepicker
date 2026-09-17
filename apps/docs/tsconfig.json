@@ -15,7 +15,9 @@
     "jsx": "react-jsx",
     "incremental": true,
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "react-modular-datepicker": ["../../src/index.ts"],
+      "react-modular-datepicker/*": ["../../src/*"]
     },
     "plugins": [
       {

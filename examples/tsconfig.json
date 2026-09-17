@@ -17,6 +17,10 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "react-jsx",
+    "paths": {
+      "react-modular-datepicker": ["../src/index.ts"],
+      "react-modular-datepicker/*": ["../src/*"]
+    },
     "plugins": [
       {
         "name": "next"
