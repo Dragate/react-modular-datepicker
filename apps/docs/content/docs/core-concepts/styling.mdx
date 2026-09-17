@@ -1,0 +1,91 @@
+---
+title: Styling & Customization
+description: Learn how to customize class names, override themes, and integrate Tailwind CSS v4.
+---
+
+# Styling & Customization
+
+`react-modular-datepicker` provides a centralized class name system with deep merging capabilities for fine-grained styling control.
+
+---
+
+## Import Built-in Styles
+
+To use the default theme, import the compiled Tailwind CSS file:
+
+```tsx
+import 'react-modular-datepicker/dist/index.css';
+```
+
+---
+
+## The `classNames` Prop
+
+The `Calendar` component accepts a `classNames` prop of type `CalendarClassNames` allowing you to target specific component sections:
+
+```typescript
+export interface CalendarClassNames {
+  root?: string;
+  calendarsContainer?: string;
+  calendarHeader?: string;
+  monthYearLabel?: string;
+  monthYearSelect?: string;
+  navButton?: string;
+  weekdaysHeader?: string;
+  weekdayCell?: string;
+  weeksContainer?: string;
+  weekRow?: string;
+  day?: DayClassNames;
+  monthSelectionRoot?: string;
+  monthSelectionGrid?: string;
+  monthSelectionCell?: string;
+  yearSelectionRoot?: string;
+  yearSelectionList?: string;
+  yearSelectionItem?: string;
+}
+```
+
+---
+
+## `DayClassNames` Nested States
+
+The `day` property under `classNames` allows customizing specific date cell states:
+
+```typescript
+export interface DayClassNames {
+  cell?: string;
+  day?: string;
+  unselected?: string;
+  selected?: string;
+  today?: string;
+  disabled?: string;
+  outside?: string;
+  rangeStart?: string;
+  rangeEnd?: string;
+  rangeBetween?: string;
+  rangeHovering?: string;
+  [key: string]: string | undefined; // Custom modifier classes
+}
+```
+
+---
+
+## Deep Merging Behavior
+
+The library automatically merges your custom class names with `defaultClassNames` using the internal `mergeClassNames` utility.
+
+```tsx
+<Calendar
+  classNames={{
+    root: 'bg-stone-900 text-stone-100 p-4 rounded-xl shadow-2xl',
+    monthYearLabel: 'text-amber-400 font-bold',
+    day: {
+      unselected: 'bg-stone-800 text-stone-200 hover:bg-amber-900/50',
+      selected: 'bg-amber-500 text-stone-950 font-bold',
+      today: 'border-2 border-amber-400',
+    }
+  }}
+/>
+```
+
+<CustomStylingDemo />

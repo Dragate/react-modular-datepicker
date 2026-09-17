@@ -1,0 +1,33 @@
+---
+title: Localization & i18n
+description: Switch languages, custom month/weekday labels, and first day of the week.
+---
+
+# Localization & i18n
+
+Customize the starting day of the week with `firstDayOfWeek` and pass localized month and weekday arrays via `translations`.
+
+<LocalizationDemo />
+
+---
+
+## Code Example
+
+```tsx
+import { Calendar } from 'react-modular-datepicker';
+
+export function SpanishCalendarExample() {
+  return (
+    <Calendar
+      firstDayOfWeek={1} // Start week on Monday
+      translations={{
+        months: [
+          'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+          'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+        ],
+        weekdays: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
+      }}
+    />
+  );
+}
+```

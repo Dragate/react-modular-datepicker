@@ -1,0 +1,76 @@
+---
+title: Introduction & Getting Started
+description: Overview, installation, and quick start guide for react-modular-datepicker.
+---
+
+# `react-modular-datepicker`
+
+A modular, lightweight, and type-safe React datepicker library. Whether you need a fully-featured calendar component or a headless hook to build custom UI layouts, `react-modular-datepicker` has you covered.
+
+<BasicDemo />
+
+---
+
+## Key Features
+
+- 🏗️ **Headless & Modular**: Use the `useDates` hook for complete layout control, or the `Calendar` component for ready-to-use UI.
+- 🪶 **Lightweight Footprint**: Small bundle size with a pluggable adapter system (defaults to Day.js).
+- 🛡️ **Type-safe**: Built 100% in TypeScript with comprehensive interfaces.
+- 🎨 **Fully Customizable**: Style everything via Tailwind CSS or custom class names with state deep merging.
+- 🌍 **Localized**: Full internationalization support with custom translations and `firstDayOfWeek` control.
+- ⚡ **Feature-rich**: Single, multiple, and range selection modes, hover preview, min/max bounds, disabled dates, and tooltips.
+
+---
+
+## Installation
+
+Install `react-modular-datepicker` and `dayjs` using your package manager of choice:
+
+```bash tab="npm"
+npm install react-modular-datepicker dayjs
+```
+
+```bash tab="pnpm"
+pnpm add react-modular-datepicker dayjs
+```
+
+```bash tab="yarn"
+yarn add react-modular-datepicker dayjs
+```
+
+```bash tab="bun"
+bun add react-modular-datepicker dayjs
+```
+
+> **Note on Peer Dependencies**: `dayjs` is configured as an optional peer dependency. By default, `react-modular-datepicker` uses the built-in `DayjsAdapter`. If you use another library (such as `date-fns`), you can pass a custom `DateAdapter` to the `adapter` prop without needing `dayjs`.
+
+---
+
+## Quick Start
+
+Import the `Calendar` component and its CSS:
+
+```tsx
+import { useState } from 'react';
+import { Calendar } from 'react-modular-datepicker';
+import 'react-modular-datepicker/dist/index.css';
+
+export function QuickStartExample() {
+  const [selected, setSelected] = useState<Date | null>(new Date());
+
+  return (
+    <Calendar
+      selected={selected}
+      onChange={(date) => setSelected(date as Date)}
+    />
+  );
+}
+```
+
+---
+
+## Next Steps
+
+- Explore [Core Concepts](/docs/core-concepts/architecture) to learn about `useDates` and the component architecture.
+- Check out the [API Reference](/docs/api-reference/calendar) for complete component and hook options.
+- Browse [Recipes](/docs/recipes/basic) for interactive demos of range selection, custom styling, localization, forms, and custom adapters.

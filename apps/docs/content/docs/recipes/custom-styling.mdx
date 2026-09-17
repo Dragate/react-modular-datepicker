@@ -1,0 +1,33 @@
+---
+title: Custom Styling & Themes
+description: Deep theme overrides using the classNames prop.
+---
+
+# Custom Styling & Themes
+
+Easily override colors, borders, typography, and states using the `classNames` prop.
+
+<CustomStylingDemo />
+
+---
+
+## Code Example
+
+```tsx
+import { Calendar } from 'react-modular-datepicker';
+
+export function CustomThemeExample() {
+  return (
+    <Calendar
+      classNames={{
+        root: 'bg-amber-500/10 p-6 rounded-2xl border border-amber-500/30 shadow-lg',
+        monthYearLabel: 'font-serif text-amber-900 text-lg font-bold',
+        day: {
+          unselected: 'bg-white border border-amber-200 hover:bg-amber-200/50 text-amber-900',
+          selected: 'bg-amber-800 text-amber-50 font-bold',
+        }
+      }}
+    />
+  );
+}
+```

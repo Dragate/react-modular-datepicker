@@ -1,0 +1,33 @@
+---
+title: Range Selection
+description: Select start and end dates with interactive hover preview and directional rounding.
+---
+
+# Range Selection
+
+Set `selectionMode="range"` to allow users to select start and end dates. As the user moves their mouse, an interactive hover preview indicates the range.
+
+<RangeDemo />
+
+---
+
+## Code Example
+
+```tsx
+import { useState } from 'react';
+import { Calendar } from 'react-modular-datepicker';
+import 'react-modular-datepicker/dist/index.css';
+
+export function RangeExample() {
+  const [range, setRange] = useState<{ start?: Date; end?: Date }>({});
+
+  return (
+    <Calendar
+      selectionMode="range"
+      monthsToDisplay={2}
+      selected={range}
+      onChange={(selectedRange) => setRange(selectedRange as { start?: Date; end?: Date })}
+    />
+  );
+}
+```

@@ -1,0 +1,58 @@
+---
+title: Date Adapters
+description: Understand how react-modular-datepicker abstracts date operations to support Day.js, date-fns, Luxon, or native dates.
+---
+
+# Date Adapters
+
+`react-modular-datepicker` uses a pluggable adapter pattern to perform all date operations (such as adding months, checking boundaries, and formatting strings).
+
+---
+
+## Default Day.js Adapter
+
+By default, the library includes `DayjsAdapter`. When `dayjs` is installed in your project, `DayjsAdapter` handles date calculations seamlessly.
+
+```tsx
+import { Calendar, DayjsAdapter } from 'react-modular-datepicker';
+
+// Used automatically by default:
+<Calendar adapter={new DayjsAdapter()} />
+```
+
+---
+
+## Custom Adapter Interface
+
+If your project uses another date utility (such as `date-fns`, Luxon, or native JavaScript `Date`), you can implement the `DateAdapter<T>` interface:
+
+```typescript
+export interface DateAdapter<T = any> {
+  date(value?: any): T;
+  add(date: T, amount: number, unit: 'day' | 'month' | 'year'): T;
+  subtract(date: T, amount: number, unit: 'day' | 'month' | 'year'): T;
+  startOf(date: T, unit: 'day' | 'month' | 'year'): T;
+  endOf(date: T, unit: 'day' | 'month' | 'year'): T;
+  isBefore(date: T, comparison: T, unit?: 'day' | 'month' | 'year'): boolean;
+  isAfter(date: T, comparison: T, unit?: 'day' | 'month' | 'year'): boolean;
+  isSame(date: T, comparison: T, unit?: 'day' | 'month' | 'year'): boolean;
+  set(date: T, unit: 'day' | 'month' | 'year', value: number): T;
+  get(date: T, unit: 'day' | 'month' | 'year'): number;
+  format(date: T, formatStr: string, locale?: string): string;
+  getDaysInMonth(date: T): number;
+  toDate(date: T): Date;
+  diff(date: T, comparison: T, unit: 'month' | 'year'): number;
+  getMonths(locale?: string): string[];
+  getWeekdays(locale?: string): string[];
+}
+```
+
+---
+
+## Interactive Custom Adapter Example
+
+Below is a live demo using a custom `date-fns` adapter:
+
+<CustomAdapterDemo />
+
+See the full implementation code in our [Custom Adapter Recipe](/docs/recipes/custom-adapter).
