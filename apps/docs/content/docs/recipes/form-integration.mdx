@@ -1,0 +1,49 @@
+---
+title: Form Integration
+description: Integrate the calendar with text inputs and dropdown popovers.
+---
+
+# Form & Popover Integration
+
+Embed `<Calendar />` inside popovers or form fields.
+
+<FormIntegrationDemo />
+
+---
+
+## Code Example
+
+```tsx
+import { useState } from 'react';
+import { Calendar } from 'react-modular-datepicker';
+
+export function PopoverDatePicker() {
+  const [date, setDate] = useState<Date | null>(null);
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div className="relative inline-block">
+      <input
+        type="text"
+        readOnly
+        value={date ? date.toLocaleDateString() : ''}
+        placeholder="Select date..."
+        onClick={() => setIsOpen(!isOpen)}
+        className="px-3 py-2 border rounded cursor-pointer"
+      />
+
+      {isOpen && (
+        <div className="absolute top-full left-0 mt-2 z-50 bg-white border rounded shadow-lg p-2">
+          <Calendar
+            selected={date}
+            onChange={(d) => {
+              setDate(d as Date);
+              setIsOpen(false);
+            }}
+          />
+        </div>
+      )}
+    </div>
+  );
+}
+```

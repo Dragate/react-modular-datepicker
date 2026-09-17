@@ -1,0 +1,72 @@
+---
+title: useDates Hook API
+description: Complete options and return signature for the headless useDates hook.
+---
+
+# `useDates` Hook API
+
+The `useDates` hook is the core headless logic controller for grid generation, selection tracking, navigation offsets, and date calculations.
+
+---
+
+## Parameters: `UseDatesProps`
+
+Accepts all selection and boundary props supported by `Calendar` (except layout props `classNames`, `locale`, `translations`), plus:
+
+- `onDateSelected`: `(dateObj: DateObj, event: React.SyntheticEvent) => void`
+- `onOffsetChanged`: `(newOffset: number) => void`
+- `modifiers`: `Record<string, (date: Date, month: number, year: number) => boolean>`
+
+---
+
+## Return Signature
+
+```typescript
+const {
+  calendars,
+  getDateProps,
+  getBackProps,
+  getForwardProps,
+  setOffset,
+  activeMonth,
+  activeYear,
+} = useDates(props);
+```
+
+### Returned Properties
+
+| Property | Type | Description |
+| :--- | :--- | :--- |
+| `calendars` | `CalendarSheet[]` | Array of generated month sheet objects containing weeks and date cells. |
+| `getDateProps` | `(options: { dateObj: DateObj }) => ButtonProps` | Returns accessibility, click handler, and mouse enter props for a day cell. |
+| `getBackProps` | `() => ButtonProps` | Returns click handler and disability props for navigation back. |
+| `getForwardProps` | `() => ButtonProps` | Returns click handler and disability props for navigation forward. |
+| `setOffset` | `(offset: number) => void` | Directly sets month navigation offset. |
+
+---
+
+## Headless Example
+
+```tsx
+import { useDates } from 'react-modular-datepicker';
+
+function HeadlessGrid() {
+  const { calendars, getDateProps } = useDates({
+    selectionMode: 'single',
+  });
+
+  return (
+    <div className="grid grid-cols-7 gap-1">
+      {calendars[0].weeks.flat().map((dateObj, i) => (
+        dateObj ? (
+          <button key={i} {...getDateProps({ dateObj })}>
+            {dateObj.date.getDate()}
+          </button>
+        ) : <div key={i} />
+      ))}
+    </div>
+  );
+}
+```
+
+<HeadlessDemo />

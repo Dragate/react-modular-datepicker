@@ -5,6 +5,7 @@ on:
     branches: [main]
 
 permissions:
+  contents: read
   pull-requests: write
 
 jobs:
@@ -51,7 +52,6 @@ jobs:
         uses: actions/checkout@v6
         with:
           ref: main
-          clean: false
 
       - name: Install main dependencies
         run: pnpm i --frozen-lockfile --ignore-scripts

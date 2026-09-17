@@ -1,0 +1,31 @@
+---
+title: Multiple Selection
+description: Allow users to pick multiple arbitrary dates.
+---
+
+# Multiple Date Selection
+
+Set `selectionMode="multiple"` to allow selecting or deselecting any number of individual dates.
+
+<MultipleDemo />
+
+---
+
+## Code Example
+
+```tsx
+import { useState } from 'react';
+import { Calendar } from 'react-modular-datepicker';
+
+export function MultipleExample() {
+  const [dates, setDates] = useState<Date[]>([]);
+
+  return (
+    <Calendar
+      selectionMode="multiple"
+      selected={dates}
+      onChange={(selectedDates) => setDates(selectedDates as Date[])}
+    />
+  );
+}
+```

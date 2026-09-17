@@ -1,0 +1,58 @@
+---
+title: Calendar Component API
+description: Complete props and API reference for the Calendar component.
+---
+
+# `Calendar` Component API
+
+The `<Calendar />` component renders a full datepicker UI with single, multiple, or range selection modes.
+
+---
+
+## Props Reference
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `date` | `Date` | `new Date()` | Initial date/sheet context. |
+| `selected` | `Date \| Date[] \| { start?: Date; end?: Date }` | `undefined` | Currently selected date value. |
+| `selectionMode` | `'single' \| 'range' \| 'multiple'` | `'single'` | Date selection behavior. |
+| `onChange` | `(selected: any) => void` | `undefined` | Callback invoked on date selection changes. |
+| `minDate` | `Date` | `undefined` | Earliest selectable date bound. |
+| `maxDate` | `Date` | `undefined` | Latest selectable date bound. |
+| `disabledDates` | `Date[]` | `undefined` | Array of specific dates to disable. |
+| `monthsToDisplay` | `number` | `1` | Number of concurrent month sheets to display. |
+| `firstDayOfWeek` | `number` | `0` | Starting day of the week (0 = Sunday, 1 = Monday). |
+| `showOutsideDays` | `boolean` | `false` | Whether to display buffer days from adjacent months. |
+| `classNames` | `CalendarClassNames` | `undefined` | Custom CSS class overrides. |
+| `locale` | `string` | `undefined` | Locale string for date formatting. |
+| `translations` | `Partial<Translations>` | `undefined` | Custom month and weekday name translations. |
+| `adapter` | `DateAdapter` | `defaultAdapter` | Date management adapter implementation. |
+| `header` | `React.ReactNode` | `undefined` | Custom header content placed above month sheet headers. |
+| `footer` | `React.ReactNode` | `undefined` | Custom footer content placed below calendar sheets. |
+| `renderDayTooltip` | `(dateObj: DateObj) => React.ReactNode` | `undefined` | Tooltip callback function for date cells. |
+| `onMonthChange` | `(date: Date) => void` | `undefined` | Callback fired when month navigation occurs. |
+| `modifiers` | `Record<string, (date: Date, month: number, year: number) => boolean>` | `undefined` | Custom modifier rules. |
+
+---
+
+## Example Usage
+
+```tsx
+import { useState } from 'react';
+import { Calendar } from 'react-modular-datepicker';
+
+export function CalendarExample() {
+  const [range, setRange] = useState({});
+
+  return (
+    <Calendar
+      selectionMode="range"
+      monthsToDisplay={2}
+      selected={range}
+      onChange={(r) => setRange(r)}
+    />
+  );
+}
+```
+
+<RangeDemo />

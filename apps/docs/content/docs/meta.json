@@ -1,0 +1,26 @@
+{
+  "title": "Documentation",
+  "pages": [
+    "index",
+    "---Core Concepts---",
+    "core-concepts/architecture",
+    "core-concepts/adapters",
+    "core-concepts/styling",
+    "---API Reference---",
+    "api-reference/calendar",
+    "api-reference/use-dates",
+    "api-reference/types",
+    "---Recipes & Demos---",
+    "recipes/basic",
+    "recipes/range",
+    "recipes/multiple",
+    "recipes/headless",
+    "recipes/custom-styling",
+    "recipes/localization",
+    "recipes/form-integration",
+    "recipes/custom-header-footer",
+    "recipes/min-max-disabled",
+    "recipes/yearly",
+    "recipes/custom-adapter"
+  ]
+}

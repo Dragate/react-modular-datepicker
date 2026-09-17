@@ -1,0 +1,35 @@
+---
+title: Custom Header, Footer & Tooltips
+description: Pass custom banner nodes and tooltips to calendar cells.
+---
+
+# Custom Header, Footer & Tooltips
+
+Use `header`, `footer`, and `renderDayTooltip` props to add custom contextual information.
+
+<HeaderFooterDemo />
+
+---
+
+## Code Example
+
+```tsx
+import { useState } from 'react';
+import { Calendar } from 'react-modular-datepicker';
+
+export function HeaderFooterExample() {
+  const [selected, setSelected] = useState<Date | null>(new Date());
+
+  return (
+    <Calendar
+      selected={selected}
+      onChange={(val) => setSelected(val as Date)}
+      header={<div className="p-2 bg-blue-100 text-blue-800 font-bold text-center">Header Banner</div>}
+      footer={<div className="p-2 bg-gray-100 text-gray-600 text-xs text-center">Footer text</div>}
+      renderDayTooltip={(dateObj) => (
+        dateObj.date.getDate() === 15 ? 'Middle of the month!' : null
+      )}
+    />
+  );
+}
+```

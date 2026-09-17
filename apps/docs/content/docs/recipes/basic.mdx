@@ -1,0 +1,31 @@
+---
+title: Basic Selection
+description: Simple single-date selection calendar example.
+---
+
+# Basic Selection
+
+The default mode of `<Calendar />` provides a single date picker experience.
+
+<BasicDemo />
+
+---
+
+## Code Example
+
+```tsx
+import { useState } from 'react';
+import { Calendar } from 'react-modular-datepicker';
+import 'react-modular-datepicker/dist/index.css';
+
+export function BasicExample() {
+  const [selected, setSelected] = useState<Date | null>(new Date());
+
+  return (
+    <Calendar
+      selected={selected}
+      onChange={(date) => setSelected(date as Date)}
+    />
+  );
+}
+```

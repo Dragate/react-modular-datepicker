@@ -1,0 +1,102 @@
+---
+title: Custom Date Adapter (date-fns)
+description: Create and plug a custom DateAdapter using date-fns or any date library.
+---
+
+# Custom Date Adapter (`date-fns`)
+
+Replace the default `DayjsAdapter` with `date-fns` (or Luxon / native `Date`) by implementing the `DateAdapter<T>` interface.
+
+<CustomAdapterDemo />
+
+---
+
+## Code Example
+
+```tsx
+import { Calendar, DateAdapter } from 'react-modular-datepicker';
+import {
+  addDays, addMonths, addYears,
+  subDays, subMonths, subYears,
+  startOfDay, startOfMonth, startOfYear,
+  endOfDay, endOfMonth, endOfYear,
+  setDate, setMonth, setYear,
+  getDate, getMonth, getYear,
+  format, getDaysInMonth,
+  differenceInCalendarMonths, differenceInCalendarYears
+} from 'date-fns';
+
+class DateFnsAdapter implements DateAdapter<Date> {
+  date(value?: any): Date { return value ? new Date(value) : new Date(); }
+  add(date: Date, amount: number, unit: 'day' | 'month' | 'year'): Date {
+    if (unit === 'day') return addDays(date, amount);
+    if (unit === 'month') return addMonths(date, amount);
+    return addYears(date, amount);
+  }
+  subtract(date: Date, amount: number, unit: 'day' | 'month' | 'year'): Date {
+    if (unit === 'day') return subDays(date, amount);
+    if (unit === 'month') return subMonths(date, amount);
+    return subYears(date, amount);
+  }
+  startOf(date: Date, unit: 'day' | 'month' | 'year'): Date {
+    if (unit === 'day') return startOfDay(date);
+    if (unit === 'month') return startOfMonth(date);
+    return startOfYear(date);
+  }
+  endOf(date: Date, unit: 'day' | 'month' | 'year'): Date {
+    if (unit === 'day') return endOfDay(date);
+    if (unit === 'month') return endOfMonth(date);
+    return endOfYear(date);
+  }
+  isBefore(date: Date, comparison: Date, unit?: 'day' | 'month' | 'year'): boolean {
+    if (unit === 'day') return startOfDay(date) < startOfDay(comparison);
+    if (unit === 'month') return startOfMonth(date) < startOfMonth(comparison);
+    if (unit === 'year') return startOfYear(date) < startOfYear(comparison);
+    return date < comparison;
+  }
+  isAfter(date: Date, comparison: Date, unit?: 'day' | 'month' | 'year'): boolean {
+    if (unit === 'day') return startOfDay(date) > startOfDay(comparison);
+    if (unit === 'month') return startOfMonth(date) > startOfMonth(comparison);
+    if (unit === 'year') return startOfYear(date) > startOfYear(comparison);
+    return date > comparison;
+  }
+  isSame(date: Date, comparison: Date, unit?: 'day' | 'month' | 'year'): boolean {
+    if (unit === 'day') return startOfDay(date).getTime() === startOfDay(comparison).getTime();
+    if (unit === 'month') return startOfMonth(date).getTime() === startOfMonth(comparison).getTime();
+    if (unit === 'year') return startOfYear(date).getTime() === startOfYear(comparison).getTime();
+    return date.getTime() === comparison.getTime();
+  }
+  set(date: Date, unit: 'day' | 'month' | 'year', value: number): Date {
+    if (unit === 'day') return setDate(date, value);
+    if (unit === 'month') return setMonth(date, value);
+    return setYear(date, value);
+  }
+  get(date: Date, unit: 'day' | 'month' | 'year'): number {
+    if (unit === 'day') return getDate(date);
+    if (unit === 'month') return getMonth(date);
+    return getYear(date);
+  }
+  format(date: Date, formatStr: string): string {
+    const f = formatStr.replace(/YYYY/g, 'yyyy').replace(/YY/g, 'yy').replace(/D/g, 'd');
+    return format(date, f);
+  }
+  getDaysInMonth(date: Date): number { return getDaysInMonth(date); }
+  toDate(date: Date): Date { return date; }
+  diff(date: Date, comparison: Date, unit: 'month' | 'year'): number {
+    if (unit === 'month') return differenceInCalendarMonths(date, comparison);
+    return differenceInCalendarYears(date, comparison);
+  }
+  getMonths(): string[] {
+    return ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  }
+  getWeekdays(): string[] {
+    return ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+  }
+}
+
+const customAdapter = new DateFnsAdapter();
+
+export function CustomAdapterExample() {
+  return <Calendar adapter={customAdapter} onChange={(date) => console.log(date)} />;
+}
+```

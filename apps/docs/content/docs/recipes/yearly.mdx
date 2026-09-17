@@ -1,0 +1,29 @@
+---
+title: Multi-Month Grid
+description: Display multiple concurrent months in grid views.
+---
+
+# Multi-Month Grid
+
+Set `monthsToDisplay` to 2, 3, 4, or 12 to display multiple months simultaneously.
+
+<YearlyDemo />
+
+---
+
+## Code Example
+
+```tsx
+import { Calendar } from 'react-modular-datepicker';
+
+export function MultiMonthExample() {
+  return (
+    <Calendar
+      monthsToDisplay={3}
+      classNames={{
+        calendarsContainer: 'grid grid-cols-1 md:grid-cols-3 gap-4'
+      }}
+    />
+  );
+}
+```

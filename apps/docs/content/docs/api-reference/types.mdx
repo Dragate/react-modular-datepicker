@@ -1,0 +1,113 @@
+---
+title: Types Reference
+description: Essential TypeScript types and interfaces exported by react-modular-datepicker.
+---
+
+# Types Reference
+
+`react-modular-datepicker` exports comprehensive TypeScript interfaces for date objects, adapters, class names, and translations.
+
+---
+
+## `DateObj`
+
+Represents an individual day cell in the calendar grid.
+
+```typescript
+export interface DateObj {
+  date: Date;
+  selected: boolean;
+  selectable: boolean;
+  today: boolean;
+  prevMonth: boolean;
+  nextMonth: boolean;
+  isRangeStart?: boolean;
+  isRangeEnd?: boolean;
+  isRangeBetween?: boolean;
+  isRangeHovering?: boolean;
+  isRangeActive?: boolean;
+  modifiers: string[];
+}
+```
+
+---
+
+## `CalendarSheet`
+
+Represents a single month sheet in the calendar view.
+
+```typescript
+export interface CalendarSheet {
+  month: number; // 0 - 11
+  year: number;
+  weeks: (DateObj | null)[][];
+}
+```
+
+---
+
+## `DateAdapter<T>`
+
+Pluggable date calculation adapter interface.
+
+```typescript
+export interface DateAdapter<T = any> {
+  date(value?: any): T;
+  add(date: T, amount: number, unit: 'day' | 'month' | 'year'): T;
+  subtract(date: T, amount: number, unit: 'day' | 'month' | 'year'): T;
+  startOf(date: T, unit: 'day' | 'month' | 'year'): T;
+  endOf(date: T, unit: 'day' | 'month' | 'year'): T;
+  isBefore(date: T, comparison: T, unit?: 'day' | 'month' | 'year'): boolean;
+  isAfter(date: T, comparison: T, unit?: 'day' | 'month' | 'year'): boolean;
+  isSame(date: T, comparison: T, unit?: 'day' | 'month' | 'year'): boolean;
+  set(date: T, unit: 'day' | 'month' | 'year', value: number): T;
+  get(date: T, unit: 'day' | 'month' | 'year'): number;
+  format(date: T, formatStr: string, locale?: string): string;
+  getDaysInMonth(date: T): number;
+  toDate(date: T): Date;
+  diff(date: T, comparison: T, unit: 'month' | 'year'): number;
+  getMonths(locale?: string): string[];
+  getWeekdays(locale?: string): string[];
+}
+```
+
+---
+
+## `CalendarClassNames` & `DayClassNames`
+
+```typescript
+export interface DayClassNames {
+  cell?: string;
+  day?: string;
+  unselected?: string;
+  selected?: string;
+  today?: string;
+  disabled?: string;
+  outside?: string;
+  rangeStart?: string;
+  rangeEnd?: string;
+  rangeBetween?: string;
+  rangeHovering?: string;
+  [key: string]: string | undefined;
+}
+
+export interface CalendarClassNames {
+  root?: string;
+  calendarsContainer?: string;
+  calendarHeader?: string;
+  monthYearLabel?: string;
+  monthYearSelect?: string;
+  navButton?: string;
+  weekdaysHeader?: string;
+  weekdayCell?: string;
+  weeksContainer?: string;
+  weekRow?: string;
+  day?: DayClassNames;
+  monthSelectionRoot?: string;
+  monthSelectionGrid?: string;
+  monthSelectionCell?: string;
+  yearSelectionRoot?: string;
+  yearSelectionList?: string;
+  yearSelectionItem?: string;
+}
+```

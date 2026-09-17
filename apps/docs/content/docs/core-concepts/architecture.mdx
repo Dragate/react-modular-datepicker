@@ -1,0 +1,78 @@
+---
+title: Headless Architecture
+description: Learn how react-modular-datepicker separates date calculation logic from UI rendering.
+---
+
+# Headless Architecture
+
+`react-modular-datepicker` is built around a headless-first philosophy. The core selection logic, month generation, grid calculations, navigation states, and date formatting are completely decoupled from the UI rendering layer.
+
+---
+
+## Two Ways to Use
+
+### 1. Ready-to-use `<Calendar />` Component
+If you want a polished, pre-styled datepicker out of the box, use the `<Calendar />` component. It handles navigation buttons, month headers, weekday grids, state styling, tooltips, and month/year pickers automatically.
+
+```tsx
+import { Calendar } from 'react-modular-datepicker';
+
+<Calendar
+  selectionMode="range"
+  monthsToDisplay={2}
+  onChange={(range) => console.log(range)}
+/>
+```
+
+### 2. Headless `useDates()` Hook
+If you need complete design freedom—for instance, building a full-page Google Calendar-style event planner, custom popover pickers, or proprietary design systems—use the `useDates` hook.
+
+```tsx
+import { useDates } from 'react-modular-datepicker';
+
+function CustomCalendar() {
+  const { calendars, getDateProps, getBackProps, getForwardProps } = useDates({
+    selectionMode: 'single',
+    showOutsideDays: true,
+  });
+
+  const calendar = calendars[0];
+
+  return (
+    <div>
+      <div className="header">
+        <button {...getBackProps()}>Prev</button>
+        <span>{calendar.year} - {calendar.month + 1}</span>
+        <button {...getForwardProps()}>Next</button>
+      </div>
+
+      <div className="grid grid-cols-7">
+        {calendar.weeks.flat().map((dateObj, idx) => (
+          dateObj ? (
+            <button key={idx} {...getDateProps({ dateObj })}>
+              {dateObj.date.getDate()}
+            </button>
+          ) : <div key={idx} />
+        ))}
+      </div>
+    </div>
+  );
+}
+```
+
+<HeadlessDemo />
+
+---
+
+## How Date Objects Work
+
+The `useDates` hook generates a matrix of `DateObj` instances representing each day cell in the calendar grid. Each `DateObj` contains normalized boolean states:
+
+- `selected`: `boolean` — Whether this date is currently selected.
+- `selectable`: `boolean` — Whether this date can be clicked (respects min/max bounds and disabled dates).
+- `today`: `boolean` — Whether this date is today.
+- `prevMonth` / `nextMonth`: `boolean` — Indicates buffer days outside the current sheet.
+- `isRangeStart` / `isRangeEnd` / `isRangeBetween` / `isRangeHovering`: `boolean` — Range selection state flags.
+- `modifiers`: `string[]` — Custom modifier tags assigned via callback props.
+
+This data structure allows custom components to apply styles without recalculating date logic.
