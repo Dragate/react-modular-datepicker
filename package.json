@@ -42,6 +42,15 @@
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./dist/*": "./dist/*",
+    "./package.json": "./package.json"
+  },
   "scripts": {
     "dev": "pnpm run -p \"/^dev:.*/\"",
     "dev:watch": "vite build --watch",
@@ -49,7 +58,7 @@
     "dev:example": "pnpm --filter example-app-router dev",
     "dev:docs": "pnpm --filter docs dev",
     "build": "pnpm run build:js && pnpm run build:css",
-    "build:docs": "pnpm --filter docs build",
+    "build:docs": "pnpm run build && pnpm --filter docs build",
     "build:js": "vite build",
     "build:css": "tailwindcss -i src/index.css -o dist/index.css",
     "test": "playwright test",

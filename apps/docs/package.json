@@ -3,7 +3,9 @@
   "version": "0.0.29",
   "private": true,
   "scripts": {
+    "prebuild": "pnpm --filter react-modular-datepicker build",
     "build": "next build",
+    "predev": "pnpm --filter react-modular-datepicker build",
     "dev": "next dev",
     "start": "next start"
   },
