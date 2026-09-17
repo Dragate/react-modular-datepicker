@@ -21,7 +21,7 @@ export function DemoContainer({ children, title }: { children: React.ReactNode; 
   return (
     <div className="my-6 rounded-xl border border-fd-border bg-fd-card p-6 shadow-sm">
       {title && <div className="text-xs font-semibold uppercase tracking-wider text-fd-muted-foreground mb-4">{title}</div>}
-      <div className="flex flex-col items-center justify-center min-h-[360px]">{children}</div>
+      <div className="flex flex-col items-center justify-center min-h-90">{children}</div>
     </div>
   );
 }
@@ -118,13 +118,12 @@ export function HeadlessDemo() {
               <button
                 key={idx}
                 {...getDateProps({ dateObj })}
-                className={`h-9 w-9 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${
-                  dateObj.selected
+                className={`h-9 w-9 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${dateObj.selected
                     ? 'bg-blue-600 text-white font-bold'
                     : dateObj.today
-                    ? 'border border-blue-500 text-blue-600'
-                    : 'hover:bg-fd-accent'
-                }`}
+                      ? 'border border-blue-500 text-blue-600'
+                      : 'hover:bg-fd-accent'
+                  }`}
               >
                 {dateObj.date.getDate()}
               </button>
@@ -177,9 +176,8 @@ export function LocalizationDemo() {
           <button
             key={l}
             onClick={() => setLang(l)}
-            className={`px-3 py-1 text-xs rounded font-medium transition-colors ${
-              lang === l ? 'bg-fd-primary text-fd-primary-foreground' : 'bg-fd-secondary text-fd-secondary-foreground'
-            }`}
+            className={`px-3 py-1 text-xs rounded font-medium transition-colors ${lang === l ? 'bg-fd-primary text-fd-primary-foreground' : 'bg-fd-secondary text-fd-secondary-foreground'
+              }`}
           >
             {l.toUpperCase()}
           </button>

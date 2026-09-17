@@ -1,12 +1,11 @@
 import { docsLlms, source } from '@/lib/source';
-import { getPageMarkdownUrl } from '@/lib/shared';
 import { notFound } from 'next/navigation';
 
 export const revalidate = false;
 
 export async function GET(_req: Request, { params }: RouteContext<'/llms.mdx/docs/[[...slug]]'>) {
   const { slug } = await params;
-  const page = source.getPage(slug?.slice(0, -1));
+  const page = source.getPage(slug);
   if (!page) notFound();
 
   return new Response(await docsLlms.page(page), {
@@ -17,8 +16,5 @@ export async function GET(_req: Request, { params }: RouteContext<'/llms.mdx/doc
 }
 
 export function generateStaticParams() {
-  return source.getPages().map((page) => ({
-    lang: page.locale,
-    slug: getPageMarkdownUrl(page).segments,
-  }));
+  return source.generateParams();
 }

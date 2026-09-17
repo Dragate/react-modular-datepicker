@@ -17,7 +17,7 @@ export default function HomePage() {
 
       <div className="flex flex-wrap gap-4 justify-center mb-12">
         <Link
-          href="/docs"
+          href="/docs/"
           className="px-6 py-3 rounded-lg font-medium bg-fd-primary text-fd-primary-foreground hover:opacity-90 transition-opacity"
         >
           Get Started
