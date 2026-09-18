@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { defaultClassNames, mergeClassNames } from '../../src/classNames';
+import { defaultClassNames, mergeClassNames } from '../../packages/react-modular-datepicker/src/classNames';
 
 test.describe('mergeClassNames', () => {
   test('returns defaultClassNames when no custom classNames are provided', () => {
@@ -47,4 +47,3 @@ test.describe('mergeClassNames', () => {
     expect(merged.footer).toBe(defaultClassNames.footer);
   });
 });
-

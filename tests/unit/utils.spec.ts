@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { defaultAdapter } from '../../src/adapters/dayjs';
+import { defaultAdapter } from '../../packages/react-modular-datepicker/src/adapters/dayjs';
 import {
   addMonth,
   composeEventHandlers,
@@ -7,7 +7,7 @@ import {
   isBackDisabled,
   isForwardDisabled,
   subtractMonth,
-} from '../../src/utils';
+} from '../../packages/react-modular-datepicker/src/utils';
 
 test.describe('utils: composeEventHandlers', () => {
   test('calls each provided handler in sequence', () => {
@@ -311,4 +311,3 @@ test.describe('utils: subtractMonth and addMonth', () => {
     expect(result).toBe(2);
   });
 });
-
