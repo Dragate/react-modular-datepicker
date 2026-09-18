@@ -1,0 +1,84 @@
+---
+title: Event & Schedule Calendar
+description: Build an event or schedule calendar with custom event indicators, tooltips, and side panel details.
+---
+
+# Event & Schedule Calendar
+
+The `<Calendar />` component supports custom modifiers, class names, and tooltips, making it straightforward to build event and schedule calendars.
+
+<EventScheduleDemo />
+
+---
+
+## Code Example
+
+```tsx
+import { useState } from 'react';
+import { Calendar } from 'react-modular-datepicker';
+import 'react-modular-datepicker/dist/index.css';
+
+interface EventItem {
+  title: string;
+  time: string;
+  type: 'meeting' | 'webinar' | 'deadline';
+}
+
+const eventsData: Record<string, EventItem[]> = {
+  '2025-03-05': [
+    { title: 'Team Sync & Standup', time: '09:00 AM', type: 'meeting' },
+    { title: 'Project Kickoff', time: '02:00 PM', type: 'meeting' },
+  ],
+  '2025-03-12': [
+    { title: 'React Modular Datepicker Webinar', time: '11:00 AM', type: 'webinar' },
+  ],
+  '2025-03-18': [
+    { title: 'Q3 Product Release Deadline', time: '05:00 PM', type: 'deadline' },
+  ],
+};
+
+export function EventScheduleExample() {
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date(2025, 2, 5));
+
+  const getKey = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  const dayEvents = eventsData[getKey(selectedDate)] || [];
+
+  return (
+    <div className="flex flex-col md:flex-row gap-6">
+      <Calendar
+        selected={selectedDate}
+        onChange={(d) => setSelectedDate(d as Date)}
+        modifiers={{
+          hasEvents: (date) => !!eventsData[getKey(date)],
+        }}
+        classNames={{
+          day: {
+            hasEvents: 'font-bold relative after:content-["•"] after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:text-amber-500',
+          },
+        }}
+        renderDayTooltip={(dateObj) => {
+          const events = eventsData[getKey(dateObj.date)];
+          return events ? `${events.length} event(s)` : null;
+        }}
+      />
+
+      <div className="flex-1 p-4 border rounded-xl">
+        <h3 className="font-bold text-lg mb-2">
+          Events for {selectedDate.toLocaleDateString()}
+        </h3>
+        {dayEvents.length === 0 ? (
+          <p className="text-sm text-gray-500">No events scheduled.</p>
+        ) : (
+          <ul className="space-y-2">
+            {dayEvents.map((event, i) => (
+              <li key={i} className="p-2 border rounded shadow-sm text-sm">
+                <span className="font-semibold">{event.title}</span> — {event.time}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </div>
+  );
+}
+```

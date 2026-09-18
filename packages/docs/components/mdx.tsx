@@ -12,6 +12,8 @@ import {
   MinMaxDisabledDemo,
   YearlyDemo,
   CustomAdapterDemo,
+  EventScheduleDemo,
+  AvailabilityDemo,
 } from './demos';
 
 export function getMDXComponents(components?: MDXComponents) {
@@ -28,6 +30,8 @@ export function getMDXComponents(components?: MDXComponents) {
     MinMaxDisabledDemo,
     YearlyDemo,
     CustomAdapterDemo,
+    EventScheduleDemo,
+    AvailabilityDemo,
     ...components,
   } satisfies MDXComponents;
 }

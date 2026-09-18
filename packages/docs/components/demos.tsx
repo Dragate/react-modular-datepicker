@@ -40,6 +40,212 @@ export function BasicDemo() {
   );
 }
 
+export function EventScheduleDemo() {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = today.getMonth();
+
+  const eventsData: Record<string, { title: string; time: string; type: 'meeting' | 'webinar' | 'deadline' }[]> = {
+    [`${year}-${month + 1}-5`]: [
+      { title: 'Team Sync & Standup', time: '09:00 AM', type: 'meeting' },
+      { title: 'Project Kickoff', time: '02:00 PM', type: 'meeting' },
+    ],
+    [`${year}-${month + 1}-12`]: [
+      { title: 'React Modular Datepicker Webinar', time: '11:00 AM', type: 'webinar' },
+    ],
+    [`${year}-${month + 1}-18`]: [
+      { title: 'Q3 Product Release Deadline', time: '05:00 PM', type: 'deadline' },
+    ],
+    [`${year}-${month + 1}-25`]: [
+      { title: 'Design System Workshop', time: '10:00 AM', type: 'meeting' },
+      { title: 'Sprint Review', time: '03:30 PM', type: 'meeting' },
+    ],
+  };
+
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date(year, month, 5));
+
+  const getKey = (d: Date) => `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+  const currentKey = getKey(selectedDate);
+  const dayEvents = eventsData[currentKey] || [];
+
+  return (
+    <DemoContainer title="Live Preview: Event / Schedule Calendar">
+      <div className="flex flex-col md:flex-row gap-6 items-start w-full max-w-2xl justify-center">
+        <Calendar
+          selected={selectedDate}
+          onChange={(d) => setSelectedDate(d as Date)}
+          modifiers={{
+            hasEvents: (date) => !!eventsData[getKey(date)],
+          }}
+          classNames={{
+            day: {
+              hasEvents: 'font-bold relative after:content-["•"] after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:text-brand-gold after:text-xs',
+            },
+          }}
+          renderDayTooltip={(dateObj) => {
+            const key = getKey(dateObj.date);
+            const events = eventsData[key];
+            if (events && events.length > 0) {
+              return `${events.length} event${events.length > 1 ? 's' : ''}`;
+            }
+            return null;
+          }}
+        />
+
+        <div className="flex-1 w-full bg-fd-background border border-fd-border rounded-xl p-4 shadow-sm min-w-[260px]">
+          <div className="border-b border-fd-border pb-2 mb-3">
+            <h4 className="font-semibold text-sm text-fd-foreground">
+              Schedule for {selectedDate.toLocaleDateString('default', { month: 'short', day: 'numeric', year: 'numeric' })}
+            </h4>
+          </div>
+
+          {dayEvents.length === 0 ? (
+            <p className="text-xs text-fd-muted-foreground italic py-4 text-center">
+              No events scheduled for this date.
+            </p>
+          ) : (
+            <div className="space-y-2.5">
+              {dayEvents.map((event, idx) => (
+                <div
+                  key={idx}
+                  className="p-2.5 rounded-lg border border-fd-border bg-fd-card flex items-start gap-3 text-xs"
+                >
+                  <span
+                    className={`px-2 py-0.5 rounded text-[10px] font-semibold uppercase ${
+                      event.type === 'meeting'
+                        ? 'bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300'
+                        : event.type === 'webinar'
+                        ? 'bg-purple-100 text-purple-700 dark:bg-purple-950 dark:text-purple-300'
+                        : 'bg-red-100 text-red-700 dark:bg-red-950 dark:text-red-300'
+                    }`}
+                  >
+                    {event.type}
+                  </span>
+                  <div className="flex-1">
+                    <div className="font-medium text-fd-foreground">{event.title}</div>
+                    <div className="text-fd-muted-foreground text-[11px]">{event.time}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </DemoContainer>
+  );
+}
+
+export function AvailabilityDemo() {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = today.getMonth();
+
+  // Define date states: fully booked or available with remaining slots
+  const bookedDays = [
+    new Date(year, month, 3),
+    new Date(year, month, 4),
+    new Date(year, month, 10),
+    new Date(year, month, 17),
+  ];
+
+  const availableSlotsMap: Record<string, string[]> = {
+    [`${year}-${month + 1}-8`]: ['09:00 AM', '10:30 AM', '02:00 PM'],
+    [`${year}-${month + 1}-9`]: ['01:00 PM', '03:30 PM'],
+    [`${year}-${month + 1}-15`]: ['09:00 AM', '11:00 AM', '01:30 PM', '04:00 PM'],
+    [`${year}-${month + 1}-16`]: ['10:00 AM'],
+    [`${year}-${month + 1}-22`]: ['09:30 AM', '11:30 AM', '02:30 PM'],
+  };
+
+  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date(year, month, 8));
+  const [selectedSlot, setSelectedSlot] = useState<string | null>('09:00 AM');
+  const [bookedSuccess, setBookedSuccess] = useState(false);
+
+  const getKey = (d: Date) => `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+  const slots = selectedDate ? availableSlotsMap[getKey(selectedDate)] || [] : [];
+
+  const handleBooking = () => {
+    if (selectedDate && selectedSlot) {
+      setBookedSuccess(true);
+    }
+  };
+
+  return (
+    <DemoContainer title="Live Preview: Availability & Booking Calendar">
+      <div className="flex flex-col md:flex-row gap-6 items-start w-full max-w-2xl justify-center">
+        <Calendar
+          selected={selectedDate || undefined}
+          onChange={(d) => {
+            setSelectedDate(d as Date);
+            setSelectedSlot(null);
+            setBookedSuccess(false);
+          }}
+          disabledDates={bookedDays}
+          modifiers={{
+            available: (d) => !!availableSlotsMap[getKey(d)],
+          }}
+          classNames={{
+            day: {
+              disabled: 'bg-red-500/10 text-red-400 line-through cursor-not-allowed',
+              available: 'font-semibold text-emerald-600 dark:text-emerald-400',
+            },
+          }}
+        />
+
+        <div className="flex-1 w-full bg-fd-background border border-fd-border rounded-xl p-4 shadow-sm min-w-[260px]">
+          <div className="border-b border-fd-border pb-2 mb-3">
+            <h4 className="font-semibold text-sm text-fd-foreground">
+              {selectedDate
+                ? `Available Times: ${selectedDate.toLocaleDateString('default', { month: 'short', day: 'numeric' })}`
+                : 'Select a Date'}
+            </h4>
+          </div>
+
+          {bookedSuccess ? (
+            <div className="p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-lg text-emerald-600 dark:text-emerald-400 text-xs text-center space-y-1">
+              <div className="font-bold">✓ Appointment Confirmed!</div>
+              <div>
+                {selectedDate?.toLocaleDateString()} at {selectedSlot}
+              </div>
+            </div>
+          ) : slots.length === 0 ? (
+            <p className="text-xs text-fd-muted-foreground italic py-4 text-center">
+              No available booking slots for this date.
+            </p>
+          ) : (
+            <div className="space-y-3">
+              <div className="grid grid-cols-2 gap-2">
+                {slots.map((slot) => (
+                  <button
+                    key={slot}
+                    type="button"
+                    onClick={() => setSelectedSlot(slot)}
+                    className={`py-2 px-3 text-xs rounded-lg font-medium border transition-colors ${
+                      selectedSlot === slot
+                        ? 'bg-fd-primary text-fd-primary-foreground border-fd-primary'
+                        : 'bg-fd-card text-fd-foreground border-fd-border hover:bg-fd-accent'
+                    }`}
+                  >
+                    {slot}
+                  </button>
+                ))}
+              </div>
+
+              <button
+                type="button"
+                disabled={!selectedSlot}
+                onClick={handleBooking}
+                className="w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-lg shadow disabled:opacity-40 transition-colors"
+              >
+                Confirm Appointment
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+    </DemoContainer>
+  );
+}
+
 export function RangeDemo() {
   const [range, setRange] = useState<{ start?: Date; end?: Date }>({});
   return (

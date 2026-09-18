@@ -21,6 +21,8 @@
     "recipes/custom-header-footer",
     "recipes/min-max-disabled",
     "recipes/yearly",
+    "recipes/event-schedule",
+    "recipes/availability",
     "recipes/custom-adapter"
   ]
 }
