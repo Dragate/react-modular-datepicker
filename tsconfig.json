@@ -14,19 +14,17 @@
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "strictBindCallApply": true,
-        "outDir": "./dist",
-        "rootDir": "./",
         "strict": true,
         "target": "ES2018",
         "noEmitOnError": true,
         "incremental": true
     },
     "include": [
-        "./src/**/*",
+        "./packages/**/*"
     ],
     "exclude": [
         "./**/dist",
-        "examples"
+        "./**/node_modules"
     ],
     "watchOptions": {
         "watchFile": "useFsEvents",

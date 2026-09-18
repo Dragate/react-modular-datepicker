@@ -3,12 +3,12 @@
 A modular, lightweight, and type-safe React datepicker library. Whether you need a fully-featured calendar component or a headless hook to build your own UI, `react-modular-datepicker` has you covered.
 
 <p align="center">
-  <img src="./docs/images/hero-calendar.png" alt="react-modular-datepicker preview" width="320" />
+  <img src="./packages/docs/docs/images/hero-calendar.png" alt="react-modular-datepicker preview" width="320" />
 </p>
 
-## Strengths
+## Features
 
-- 🏗️ **Headless & Modular**: Use the `useDates` hook for complete control over your UI, or the `Calendar` component for a beautiful, ready-to-use setup.
+- 🏗️ **Headless & Modular**: Use the `useDates` hook for complete control over your UI, or the `Calendar` component for a ready-to-use setup.
 - 🪶 **Lightweight**: Small footprint with a pluggable adapter system (defaults to Day.js).
 - 🛡️ **Type-safe**: Written in TypeScript for a great developer experience.
 - 🎨 **Fully Customizable**: Style everything via Tailwind CSS or custom class names.
@@ -27,515 +27,101 @@ pnpm add react-modular-datepicker dayjs
 yarn add react-modular-datepicker dayjs
 ```
 
-> **Note on Peer Dependencies**: `dayjs` is configured as an optional peer dependency. By default, `react-modular-datepicker` uses the built-in `DayjsAdapter`, so `dayjs` must be installed in your project. However, if you bring your own date management library (such as `date-fns` or Luxon), you can implement a custom `DateAdapter` and pass it to the `adapter` prop without needing `dayjs`.
+> **Note**: `dayjs` is an optional peer dependency used as the default date adapter. You can also implement a custom `DateAdapter` (e.g., using `date-fns` or Luxon).
 
 ---
 
-## API Reference
-
-### Imports
-
-```tsx
-import {
-  Calendar,
-  useDates,
-  Dates,
-  Day,
-  DayjsAdapter,
-  defaultAdapter
-} from 'react-modular-datepicker';
-```
+## Quick Start
 
 ### `Calendar` Component
-
-The primary component for a ready-to-use calendar.
-
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `date` | `Date` | `new Date()` | The initial date/month to display. |
-| `selected` | `Date \| Date[] \| Range` | `undefined` | The currently selected date(s). |
-| `selectionMode` | `'single' \| 'range' \| 'multiple'` | `'single'` | The selection behavior. |
-| `onChange` | `(selected: any) => void` | `undefined` | Callback triggered when the selection changes. |
-| `minDate` | `Date` | `undefined` | The earliest selectable date. |
-| `maxDate` | `Date` | `undefined` | The latest selectable date. |
-| `disabledDates` | `Date[]` | `undefined` | An array of dates that should be disabled. |
-| `monthsToDisplay` | `number` | `1` | Number of months to show simultaneously. |
-| `firstDayOfWeek` | `number` | `0` | The first day of the week (0=Sun, 1=Mon, ...). |
-| `showOutsideDays` | `boolean` | `false` | Whether to show days from the previous/next months. |
-| `classNames` | `CalendarClassNames` | `undefined` | Custom classes for styling various parts of the UI. |
-| `locale` | `string` | `undefined` | Locale for date formatting (e.g., 'fr', 'es'). |
-| `translations` | `Partial<Translations>` | `undefined` | Custom translation strings for "Back" and "Forward". |
-| `adapter` | `DateAdapter` | `defaultAdapter` | The date management adapter (e.g., DayjsAdapter). |
-
-### `useDates` Hook
-
-The logic core of the library. It handles selection, navigation, and grid generation.
-
-```typescript
-const {
-  calendars,
-  getDateProps,
-  getBackProps,
-  getForwardProps,
-  setOffset
-} = useDates(props: UseDatesProps);
-```
-
-**`UseDatesProps`** includes all props from `Calendar` (except `classNames`, `locale`, `translations`) plus:
-- `onDateSelected`: `(dateObj: DateObj, event: any) => void`
-- `onOffsetChanged`: `(newOffset: number) => void`
-- `modifiers`: `Record<string, (date: Date) => boolean>`
-
-### Main Types
-
-#### `DateObj`
-Represents a single day in the calendar grid.
-- `date`: `Date`
-- `selected`: `boolean`
-- `selectable`: `boolean`
-- `today`: `boolean`
-- `prevMonth`/`nextMonth`: `boolean` (if outside current month)
-- `isRangeStart`/`isRangeEnd`/`isRangeBetween`/`isRangeHovering`: `boolean`
-- `modifiers`: `string[]`
-
-#### `Calendar`
-Represents a month grid.
-- `month`: `number` (0-11)
-- `year`: `number`
-- `weeks`: `(DateObj | null)[][]`
-
-#### `DateAdapter`
-Pluggable interface for date operations:
-```typescript
-export interface DateAdapter<T = any> {
-  date(value?: any): T;
-  add(date: T, amount: number, unit: 'day' | 'month' | 'year'): T;
-  subtract(date: T, amount: number, unit: 'day' | 'month' | 'year'): T;
-  startOf(date: T, unit: 'day' | 'month' | 'year'): T;
-  endOf(date: T, unit: 'day' | 'month' | 'year'): T;
-  isBefore(date: T, comparison: T, unit?: 'day' | 'month' | 'year'): boolean;
-  isAfter(date: T, comparison: T, unit?: 'day' | 'month' | 'year'): boolean;
-  isSame(date: T, comparison: T, unit?: 'day' | 'month' | 'year'): boolean;
-  set(date: T, unit: 'day' | 'month' | 'year', value: number): T;
-  get(date: T, unit: 'day' | 'month' | 'year'): number;
-  format(date: T, formatStr: string, locale?: string): string;
-  getDaysInMonth(date: T): number;
-  toDate(date: T): Date;
-  diff(date: T, comparison: T, unit: 'month' | 'year'): number;
-  getMonths(locale?: string): string[];
-  getWeekdays(locale?: string): string[];
-}
-```
-
----
-
-## Recipes
-
-<details>
-<summary><b>Basic Selection</b></summary>
-A simple single-date selection calendar.
 
 ```tsx
 import { Calendar } from 'react-modular-datepicker';
 import 'react-modular-datepicker/dist/index.css';
 
-function BasicExample() {
+export function App() {
   return <Calendar onChange={(date) => console.log(date)} />;
 }
 ```
 
-<br />
-
-<img src="./docs/images/basic.png" alt="Basic Selection" width="500" />
-
-</details>
-
-<details>
-<summary><b>Range Selection</b></summary>
-Select a start and end date with a hover preview.
+### `useDates` Hook (Headless)
 
 ```tsx
-<Calendar
-  selectionMode="range"
-  monthsToDisplay={2}
-  onChange={(range) => console.log(range)}
-/>
-```
+import { useDates } from 'react-modular-datepicker';
 
-<br />
+export function CustomCalendar() {
+  const { calendars, getDateProps, getBackProps, getForwardProps } = useDates({
+    selectionMode: 'single',
+  });
 
-<img src="./docs/images/range.png" alt="Range Selection" width="500" />
+  const calendar = calendars[0];
+  if (!calendar) return null;
 
-</details>
-
-<details>
-<summary><b>Multiple Selection</b></summary>
-Select as many dates as you want.
-
-```tsx
-<Calendar
-  selectionMode="multiple"
-  onChange={(dates) => console.log(dates)}
-/>
-```
-
-<br />
-
-<img src="./docs/images/multiple.png" alt="Multiple Selection" width="500" />
-
-</details>
-
-<details>
-<summary><b>Headless Usage</b></summary>
-Complete freedom over your UI using the `useDates` hook.
-
-```tsx
-const { calendars, getDateProps } = useDates({ selectionMode: 'single' });
-
-return (
-  <div className="grid grid-cols-7">
-    {calendars[0].weeks.flat().map((dateObj, i) => (
-      dateObj ? (
-        <button key={i} {...getDateProps({ dateObj })}>
-          {dateObj.date.getDate()}
-        </button>
-      ) : <div key={i} />
-    ))}
-  </div>
-);
-```
-
-<br />
-
-<img src="./docs/images/headless.png" alt="Headless Usage" width="500" />
-
-</details>
-
-<details>
-<summary><b>Custom Styling</b></summary>
-Easily customize the look and feel using the `classNames` prop.
-
-```tsx
-<Calendar
-  classNames={{
-    root: 'bg-stone-50 p-6 rounded-2xl border border-stone-200 shadow-lg text-stone-800',
-    monthYearLabel: 'font-serif text-stone-900 text-lg font-bold',
-    day: {
-      unselected: 'bg-white border border-stone-200 hover:bg-amber-100/50 text-stone-800',
-      selected: 'bg-amber-800 text-amber-50 font-bold',
-    }
-  }}
-/>
-```
-
-<br />
-
-<img src="./docs/images/custom-styling.png" alt="Custom Styling" width="500" />
-
-</details>
-
-<details>
-<summary><b>Localization & i18n</b></summary>
-Easily customize language, month/weekday labels, and the first day of week.
-
-```tsx
-<Calendar
-  firstDayOfWeek={1} // Start week on Monday
-  translations={{
-    months: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-    weekdays: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
-  }}
-/>
-```
-
-<br />
-
-<img src="./docs/images/localization.png" alt="Localization & i18n" width="500" />
-
-</details>
-
-<details>
-<summary><b>Form Integration</b></summary>
-Integrate the calendar into a form or popup.
-
-```tsx
-const [date, setDate] = useState<Date | null>(null);
-
-<div className="relative group">
-  <input
-    type="text"
-    readOnly
-    value={date ? date.toLocaleDateString() : ''}
-    placeholder="Pick a date"
-  />
-  <div className="absolute top-full left-0 mt-2 z-50 invisible group-focus-within:visible">
-    <Calendar
-      selected={date}
-      onChange={(d) => setDate(d as Date)}
-    />
-  </div>
-</div>
-```
-
-<br />
-
-<img src="./docs/images/form-integration.png" alt="Form Integration" width="500" />
-
-</details>
-
-<details>
-<summary><b>Custom Header & Footer</b></summary>
-Customize header, footer, and day tooltips.
-
-```tsx
-<Calendar
-  selected={selected}
-  onChange={(val) => setSelected(val as Date)}
-  monthsToDisplay={2}
-  header={<div className="p-2 bg-blue-100 text-blue-800 font-bold text-center rounded-t-lg">My Header</div>}
-  footer={<div className="p-2 bg-gray-100 text-gray-600 text-sm text-center rounded-b-lg border-t">My Custom Footer</div>}
-  renderDayTooltip={(dateObj) => (
-    dateObj.date.getDate() === 15 ? 'Middle of the month!' : null
-  )}
-/>
-```
-
-<br />
-
-<img src="./docs/images/custom-header-footer.png" alt="Custom Header & Footer" width="500" />
-
-</details>
-
-<details>
-<summary><b>Min, Max & Disabled Dates</b></summary>
-Restrict date selection with min/max bounds or specific disabled dates.
-
-```tsx
-<Calendar
-  selected={selected}
-  onChange={(val) => setSelected(val as Date)}
-  minDate={minDate}
-  maxDate={maxDate}
-  disabledDates={[disabledDate1, disabledDate2]}
-/>
-```
-
-<br />
-
-<img src="./docs/images/min-max-disabled.png" alt="Min, Max & Disabled Dates" width="500" />
-
-</details>
-
-<details>
-<summary><b>Yearly View</b></summary>
-Display an entire year at once by customizing the grid and `monthsToDisplay`.
-
-```tsx
-<Calendar
-  selected={selected}
-  onChange={(val) => setSelected(val as Date)}
-  monthsToDisplay={12}
-  classNames={{
-    calendarsContainer: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-  }}
-/>
-```
-
-<br />
-
-<img src="./docs/images/yearly.png" alt="Yearly View" width="500" />
-
-</details>
-
-<details>
-<summary><b>Availability & Async Data</b></summary>
-Fetch and display availability dynamically when the month changes.
-
-```tsx
-<Calendar
-  selected={selected}
-  onChange={(val) => setSelected(val as Date)}
-  onMonthChange={(date) => fetchAvailabilities(date)}
-  modifiers={{
-    available: (date) => availabilities[date.toDateString()] === true,
-    unavailable: (date) => availabilities[date.toDateString()] === false,
-  }}
-  disabledDates={
-    Object.keys(availabilities)
-      .filter(key => !availabilities[key])
-      .map(key => new Date(key))
-  }
-  classNames={{
-    day: {
-      available: "bg-green-100 text-green-800 hover:bg-green-200",
-      unavailable: "bg-red-50 text-red-300 line-through cursor-not-allowed",
-    }
-  }}
-/>
-```
-
-<br />
-
-<img src="./docs/images/availability.png" alt="Availability Demo" width="500" />
-
-</details>
-
-<details>
-<summary><b>Full-Featured / Events Calendar (Google Calendar style)</b></summary>
-Build a full-page events calendar using the `useDates` hook.
-
-```tsx
-const { calendars, getBackProps, getForwardProps, getDateProps } = useDates({
-  showOutsideDays: true,
-  selected: selectedDate,
-  onChange: (d) => setSelectedDate(d as Date),
-});
-
-// Render custom full-grid layout with event badges...
-```
-
-<br />
-
-<img src="./docs/images/events.png" alt="Events Calendar" width="500" />
-
-</details>
-
-<details>
-<summary><b>Custom Date Adapter (e.g. date-fns)</b></summary>
-Replace the default `DayjsAdapter` with a custom adapter using `date-fns` (or any date library).
-
-```tsx
-import { Calendar, DateAdapter } from 'react-modular-datepicker';
-import {
-  addDays, addMonths, addYears,
-  subDays, subMonths, subYears,
-  startOfDay, startOfMonth, startOfYear,
-  endOfDay, endOfMonth, endOfYear,
-  isBefore, isAfter, isSameDay, isSameMonth, isSameYear,
-  setDate, setMonth, setYear,
-  getDate, getMonth, getYear,
-  format, getDaysInMonth,
-  differenceInCalendarMonths, differenceInCalendarYears
-} from 'date-fns';
-
-class DateFnsAdapter implements DateAdapter<Date> {
-  date(value?: any): Date { return value ? new Date(value) : new Date(); }
-  add(date: Date, amount: number, unit: 'day' | 'month' | 'year'): Date {
-    if (unit === 'day') return addDays(date, amount);
-    if (unit === 'month') return addMonths(date, amount);
-    return addYears(date, amount);
-  }
-  subtract(date: Date, amount: number, unit: 'day' | 'month' | 'year'): Date {
-    if (unit === 'day') return subDays(date, amount);
-    if (unit === 'month') return subMonths(date, amount);
-    return subYears(date, amount);
-  }
-  startOf(date: Date, unit: 'day' | 'month' | 'year'): Date {
-    if (unit === 'day') return startOfDay(date);
-    if (unit === 'month') return startOfMonth(date);
-    return startOfYear(date);
-  }
-  endOf(date: Date, unit: 'day' | 'month' | 'year'): Date {
-    if (unit === 'day') return endOfDay(date);
-    if (unit === 'month') return endOfMonth(date);
-    return endOfYear(date);
-  }
-  isBefore(date: Date, comparison: Date, unit?: 'day' | 'month' | 'year'): boolean {
-    if (unit === 'day') return startOfDay(date) < startOfDay(comparison);
-    if (unit === 'month') return startOfMonth(date) < startOfMonth(comparison);
-    if (unit === 'year') return startOfYear(date) < startOfYear(comparison);
-    return date < comparison;
-  }
-  isAfter(date: Date, comparison: Date, unit?: 'day' | 'month' | 'year'): boolean {
-    if (unit === 'day') return startOfDay(date) > startOfDay(comparison);
-    if (unit === 'month') return startOfMonth(date) > startOfMonth(comparison);
-    if (unit === 'year') return startOfYear(date) > startOfYear(comparison);
-    return date > comparison;
-  }
-  isSame(date: Date, comparison: Date, unit?: 'day' | 'month' | 'year'): boolean {
-    if (unit === 'day') return isSameDay(date, comparison);
-    if (unit === 'month') return isSameMonth(date, comparison);
-    if (unit === 'year') return isSameYear(date, comparison);
-    return date.getTime() === comparison.getTime();
-  }
-  set(date: Date, unit: 'day' | 'month' | 'year', value: number): Date {
-    if (unit === 'day') return setDate(date, value);
-    if (unit === 'month') return setMonth(date, value);
-    return setYear(date, value);
-  }
-  get(date: Date, unit: 'day' | 'month' | 'year'): number {
-    if (unit === 'day') return getDate(date);
-    if (unit === 'month') return getMonth(date);
-    return getYear(date);
-  }
-  format(date: Date, formatStr: string): string {
-    const f = formatStr.replace(/YYYY/g, 'yyyy').replace(/YY/g, 'yy').replace(/D/g, 'd');
-    return format(date, f);
-  }
-  getDaysInMonth(date: Date): number { return getDaysInMonth(date); }
-  toDate(date: Date): Date { return date; }
-  diff(date: Date, comparison: Date, unit: 'month' | 'year'): number {
-    if (unit === 'month') return differenceInCalendarMonths(date, comparison);
-    return differenceInCalendarYears(date, comparison);
-  }
-  getMonths(): string[] {
-    return ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-  }
-  getWeekdays(): string[] {
-    return ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
-  }
-}
-
-const customAdapter = new DateFnsAdapter();
-
-function CustomAdapterExample() {
-  return <Calendar adapter={customAdapter} onChange={(date) => console.log(date)} />;
+  return (
+    <div>
+      <div className="flex justify-between">
+        <button {...getBackProps({ calendars })}>Prev</button>
+        <span>{calendar.year} - {calendar.month + 1}</span>
+        <button {...getForwardProps({ calendars })}>Next</button>
+      </div>
+      <div className="grid grid-cols-7">
+        {calendar.weeks.flat().map((dateObj, i) => (
+          dateObj ? (
+            <button key={i} {...getDateProps({ dateObj })}>
+              {dateObj.date.getDate()}
+            </button>
+          ) : <div key={i} />
+        ))}
+      </div>
+    </div>
+  );
 }
 ```
-
-</details>
 
 ---
 
-## Contributors
+## Documentation & Recipes
 
-We welcome contributions! Here’s how you can get started:
+For full API reference, recipes, and interactive demos, check out the documentation package in `packages/docs`.
+
+To run the documentation site locally:
+```bash
+pnpm run dev:docs
+```
+
+---
+
+## Development
 
 ### Installation
 
-1. Clone the repository.
-2. Install dependencies:
-   ```bash
-   pnpm install
-   ```
+```bash
+pnpm install
+```
 
-### Development
+### Development Server
 
-Start the development server with the example app:
+Start watching for library changes and run the documentation app:
 ```bash
 pnpm run dev
 ```
-This runs `vite` in watch mode for the library and starts the Next.js example app at `http://localhost:3000`.
 
 ### Testing
 
-Run end-to-end tests using Playwright:
+Run unit and end-to-end tests:
 ```bash
-pnpm run test:e2e
+pnpm run test
 ```
-
-### Documentation & Examples
-
-- To update documentation, edit the `README.md`.
-- To add or modify examples, check the `examples/` directory.
 
 ### Building
 
-Build the package for production:
+Build the package and documentation:
 ```bash
 pnpm run build
 ```
 
 ---
 
-License: MIT
+## License
+
+MIT

@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { DayjsAdapter } from '../../src/adapters/dayjs';
+import { DayjsAdapter } from '../../packages/react-modular-datepicker/src/adapters/dayjs';
 
 test.describe('DayjsAdapter', () => {
   const adapter = new DayjsAdapter();
@@ -94,4 +94,3 @@ test.describe('DayjsAdapter', () => {
     expect(adapter.diff(d3, d1, 'year')).toBe(2);
   });
 });
-
