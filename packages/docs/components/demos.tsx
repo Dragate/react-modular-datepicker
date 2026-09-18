@@ -279,9 +279,6 @@ export function YearlyDemo() {
     <DemoContainer title="Live Preview: Multi-Month Grid">
       <Calendar
         monthsToDisplay={3}
-        classNames={{
-          calendarsContainer: 'grid grid-cols-1 md:grid-cols-3 gap-4'
-        }}
       />
     </DemoContainer>
   );
