@@ -6,6 +6,6 @@ test.describe('Range Selection Recipe', () => {
   });
 
   test('should render range selection demo', async ({ page }) => {
-    await expect(page.getByRole('heading', { name: 'Date Range Selection' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Range Selection', exact: true })).toBeVisible();
   });
 });

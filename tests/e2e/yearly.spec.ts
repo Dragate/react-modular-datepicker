@@ -6,6 +6,6 @@ test.describe('Yearly View Recipe', () => {
   });
 
   test('should render multi-month demo', async ({ page }) => {
-    await expect(page.getByRole('heading', { name: 'Yearly View' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Multi-Month Grid', exact: true })).toBeVisible();
   });
 });
