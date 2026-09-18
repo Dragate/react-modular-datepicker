@@ -11,3 +11,11 @@ html > body[data-scroll-locked] {
   margin-right: 0px !important;
   --removed-body-scroll-bar-size: 0px !important;
 }
+
+@layer utilities {
+  @media (min-width: 768px) {
+    #nd-subnav {
+      display: none !important;
+    }
+  }
+}
