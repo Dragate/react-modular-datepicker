@@ -6,6 +6,6 @@ test.describe('Custom Styling Recipe', () => {
   });
 
   test('should render custom styling demo', async ({ page }) => {
-    await expect(page.getByRole('heading', { name: 'Custom Styling' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Custom Styling & Themes', exact: true })).toBeVisible();
   });
 });

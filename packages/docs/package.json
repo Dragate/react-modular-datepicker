@@ -8,6 +8,8 @@
     "start": "next start"
   },
   "dependencies": {
+    "@vercel/analytics": "^2.0.1",
+    "@vercel/speed-insights": "^2.0.0",
     "date-fns": "^4.4.0",
     "dayjs": "^1.11.20",
     "fumadocs-core": "^16.15.11",
