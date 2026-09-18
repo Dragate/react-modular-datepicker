@@ -43,9 +43,28 @@
   "sideEffects": [
     "*.css"
   ],
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./useDates": {
+      "types": "./dist/useDates.d.ts",
+      "import": "./dist/useDates.js",
+      "require": "./dist/useDates.cjs"
+    },
+    "./utils": {
+      "types": "./dist/utils.d.ts",
+      "import": "./dist/utils.js",
+      "require": "./dist/utils.cjs"
+    },
+    "./dist/*": "./dist/*",
+    "./package.json": "./package.json"
+  },
   "scripts": {
     "dev:watch": "vite build --watch",
     "dev:css": "tailwindcss -i src/index.css -o dist/index.css --watch",
