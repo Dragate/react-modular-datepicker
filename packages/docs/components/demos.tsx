@@ -235,6 +235,7 @@ export function FormIntegrationDemo() {
         {isOpen && (
           <div className="absolute top-full left-0 mt-2 z-50 bg-fd-background border border-fd-border rounded-xl shadow-2xl p-2">
             <Calendar
+              date={date || undefined}
               selected={date || undefined}
               onChange={(d) => {
                 setDate(d as Date);

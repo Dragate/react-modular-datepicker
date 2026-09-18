@@ -26,4 +26,33 @@ test.describe('Form Integration Recipe', () => {
     // Popover should now be closed
     await expect(page.locator('.rmdp')).not.toBeVisible();
   });
+
+  test('should open calendar to selected date month when reopened', async ({ page }) => {
+    const input = page.getByPlaceholder('Pick a date...');
+    await input.click();
+    await expect(page.locator('.rmdp')).toBeVisible();
+
+    // Click Next month button in calendar header
+    const nextBtn = page.getByLabel('Next month');
+    await nextBtn.click();
+
+    // Select day 15 in next month
+    const dayBtn = page.getByText('15', { exact: true }).first();
+    await dayBtn.click();
+
+    // Popover closes on date selection
+    await expect(page.locator('.rmdp')).not.toBeVisible();
+
+    // Verify input value is non-empty
+    await expect(input).not.toHaveValue('');
+
+    // Reopen calendar
+    await input.click();
+    await expect(page.locator('.rmdp')).toBeVisible();
+
+    // Verify the selected day 15 is visible and selected in the reopened calendar
+    const selectedDay = page.locator('.rmdp [aria-pressed="true"]');
+    await expect(selectedDay).toBeVisible();
+    await expect(selectedDay).toHaveText('15');
+  });
 });
