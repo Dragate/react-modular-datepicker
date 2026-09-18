@@ -113,7 +113,7 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
   );
 
   return (
-    <div className={classNames.root}>
+    <div className={`rmdp ${classNames.root}`}>
       {typeof header === 'function' ? header({
           calendars,
           getBackProps: wrappedGetBackProps,

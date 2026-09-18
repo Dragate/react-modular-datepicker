@@ -1,10 +1,66 @@
-@import "tailwindcss";
+/*
+ * This is a component stylesheet, so do not include Tailwind's global
+ * Preflight reset. The host application owns the document-level styles.
+ */
+@layer theme, base, components, utilities;
+
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
 
 @theme {
   --color-brand-gold: #c5a059;
   --color-brand-gray-light: #b5bec6;
   --color-brand-gray-dark: #4a5660;
   --color-brand-text: #343a40;
+}
+
+/* Keep the component reset inside the datepicker boundary. */
+@layer base {
+  .rmdp,
+  .rmdp *,
+  .rmdp ::after,
+  .rmdp ::before,
+  .rmdp ::backdrop,
+  .rmdp ::file-selector-button {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: 0 solid;
+  }
+
+  .rmdp button,
+  .rmdp input,
+  .rmdp select,
+  .rmdp optgroup,
+  .rmdp textarea,
+  .rmdp ::file-selector-button {
+    font: inherit;
+    font-feature-settings: inherit;
+    font-variation-settings: inherit;
+    letter-spacing: inherit;
+    color: inherit;
+    border-radius: 0;
+    background-color: transparent;
+    opacity: 1;
+  }
+
+  .rmdp img,
+  .rmdp svg,
+  .rmdp video,
+  .rmdp canvas,
+  .rmdp audio,
+  .rmdp iframe,
+  .rmdp embed,
+  .rmdp object {
+    display: block;
+    vertical-align: middle;
+  }
+
+  .rmdp img,
+  .rmdp video {
+    max-width: 100%;
+    height: auto;
+  }
 }
 
 @keyframes slideInFromTop {
@@ -18,7 +74,7 @@
   }
 }
 
-.animate-slide-in-top {
+.rmdp .animate-slide-in-top {
   animation: slideInFromTop 0.2s ease-out forwards;
 }
 
@@ -32,10 +88,10 @@
   to { opacity: 1; transform: translateX(0); }
 }
 
-.animate-slide-in-right {
+.rmdp .animate-slide-in-right {
   animation: slideInRight 0.2s ease-out forwards;
 }
 
-.animate-slide-in-left {
+.rmdp .animate-slide-in-left {
   animation: slideInLeft 0.2s ease-out forwards;
 }
