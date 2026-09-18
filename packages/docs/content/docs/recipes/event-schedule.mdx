@@ -1,17 +1,19 @@
 ---
 title: Event & Schedule Calendar
-description: Build an event or schedule calendar with custom event indicators, tooltips, and side panel details.
+description: Build event or schedule calendars with event indicators, tooltips, or full Google Calendar style month views.
 ---
 
 # Event & Schedule Calendar
 
-The `<Calendar />` component supports custom modifiers, class names, and tooltips, making it straightforward to build event and schedule calendars.
+The `<Calendar />` component and the `useDates` hook support custom modifiers, tooltips, and custom cell rendering, making it straightforward to build event and schedule calendars.
+
+## Event Indicator View
+
+Pass custom modifiers and day class names to display event dots/indicators on dates with scheduled events.
 
 <EventScheduleDemo />
 
 ---
-
-## Code Example
 
 ```tsx
 import { useState } from 'react';
@@ -41,42 +43,123 @@ export function EventScheduleExample() {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date(2025, 2, 5));
 
   const getKey = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-  const dayEvents = eventsData[getKey(selectedDate)] || [];
 
   return (
-    <div className="flex flex-col md:flex-row gap-6">
-      <Calendar
-        selected={selectedDate}
-        onChange={(d) => setSelectedDate(d as Date)}
-        modifiers={{
-          hasEvents: (date) => !!eventsData[getKey(date)],
-        }}
-        classNames={{
-          day: {
-            hasEvents: 'font-bold relative after:content-["•"] after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:text-amber-500',
-          },
-        }}
-        renderDayTooltip={(dateObj) => {
-          const events = eventsData[getKey(dateObj.date)];
-          return events ? `${events.length} event(s)` : null;
-        }}
-      />
+    <Calendar
+      selected={selectedDate}
+      onChange={(d) => setSelectedDate(d as Date)}
+      modifiers={{
+        hasEvents: (date) => !!eventsData[getKey(date)],
+      }}
+      classNames={{
+        day: {
+          hasEvents: 'font-bold relative after:content-["•"] after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:text-amber-500',
+        },
+      }}
+      renderDayTooltip={(dateObj) => {
+        const events = eventsData[getKey(dateObj.date)];
+        return events ? `${events.length} event(s)` : null;
+      }}
+    />
+  );
+}
+```
 
-      <div className="flex-1 p-4 border rounded-xl">
-        <h3 className="font-bold text-lg mb-2">
-          Events for {selectedDate.toLocaleDateString()}
-        </h3>
-        {dayEvents.length === 0 ? (
-          <p className="text-sm text-gray-500">No events scheduled.</p>
-        ) : (
-          <ul className="space-y-2">
-            {dayEvents.map((event, i) => (
-              <li key={i} className="p-2 border rounded shadow-sm text-sm">
-                <span className="font-semibold">{event.title}</span> — {event.time}
-              </li>
-            ))}
-          </ul>
-        )}
+---
+
+## Google Calendar Style View
+
+Using the headless `useDates` hook, you can render full-sized date cells containing event badges with titles and times.
+
+<GoogleCalendarDemo />
+
+---
+
+### Google Calendar Code Example
+
+```tsx
+import { useState } from 'react';
+import { useDates } from 'react-modular-datepicker';
+
+interface EventItem {
+  title: string;
+  time: string;
+  color: string;
+}
+
+const eventsData: Record<string, EventItem[]> = {
+  '2025-03-05': [
+    { title: 'Team Standup', time: '9am', color: 'bg-blue-500 text-white' },
+    { title: 'Project Review', time: '2pm', color: 'bg-emerald-500 text-white' },
+  ],
+  '2025-03-12': [
+    { title: 'Webinar Live', time: '11am', color: 'bg-purple-500 text-white' },
+  ],
+};
+
+export function GoogleCalendarExample() {
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date(2025, 2, 5));
+  const { calendars, getBackProps, getForwardProps, getDateProps } = useDates({
+    selected: selectedDate,
+    onChange: (d) => setSelectedDate(d as Date),
+  });
+
+  const calendar = calendars[0];
+  if (!calendar) return null;
+
+  const getKey = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+
+  return (
+    <div className="w-full bg-white rounded-xl border p-4">
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex gap-2">
+          <button {...getBackProps({ calendars })} className="px-3 py-1 border rounded text-xs font-semibold">
+            Prev
+          </button>
+          <button {...getForwardProps({ calendars })} className="px-3 py-1 border rounded text-xs font-semibold">
+            Next
+          </button>
+        </div>
+        <span className="font-bold">
+          {new Date(calendar.year, calendar.month).toLocaleString('default', { month: 'long', year: 'numeric' })}
+        </span>
+      </div>
+
+      <div className="grid grid-cols-7 gap-px bg-gray-200 border rounded-lg overflow-hidden">
+        {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((d) => (
+          <div key={d} className="bg-white p-2 text-center text-xs font-semibold text-gray-500">
+            {d}
+          </div>
+        ))}
+
+        {calendar.weeks.flat().map((dateObj, idx) => {
+          if (!dateObj) return <div key={idx} className="bg-white min-h-[80px]" />;
+          const key = getKey(dateObj.date);
+          const events = eventsData[key] || [];
+
+          return (
+            <div
+              key={idx}
+              {...getDateProps({ dateObj })}
+              className={`bg-white min-h-[80px] p-1 flex flex-col justify-start cursor-pointer hover:bg-gray-50 ${
+                !dateObj.selectable ? 'opacity-40' : ''
+              }`}
+            >
+              <span className={`text-xs font-medium px-1.5 py-0.5 rounded-full ${dateObj.today ? 'bg-amber-500 text-white font-bold' : ''}`}>
+                {dateObj.date.getDate()}
+              </span>
+
+              <div className="mt-1 space-y-1">
+                {events.map((ev, i) => (
+                  <div key={i} className={`px-1.5 py-0.5 rounded text-[10px] font-medium truncate ${ev.color}`}>
+                    <span className="mr-1 opacity-80">{ev.time}</span>
+                    <span>{ev.title}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

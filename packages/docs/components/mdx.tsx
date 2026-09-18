@@ -13,6 +13,7 @@ import {
   YearlyDemo,
   CustomAdapterDemo,
   EventScheduleDemo,
+  GoogleCalendarDemo,
   AvailabilityDemo,
 } from './demos';
 
@@ -31,6 +32,7 @@ export function getMDXComponents(components?: MDXComponents) {
     YearlyDemo,
     CustomAdapterDemo,
     EventScheduleDemo,
+    GoogleCalendarDemo,
     AvailabilityDemo,
     ...components,
   } satisfies MDXComponents;

@@ -40,6 +40,110 @@ export function BasicDemo() {
   );
 }
 
+export function GoogleCalendarDemo() {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = today.getMonth();
+
+  const eventsData: Record<string, { title: string; time: string; color: string }[]> = {
+    [`${year}-${month + 1}-5`]: [
+      { title: 'Team Standup', time: '9am', color: 'bg-blue-500 text-white' },
+      { title: 'Project Review', time: '2pm', color: 'bg-emerald-500 text-white' },
+    ],
+    [`${year}-${month + 1}-12`]: [
+      { title: 'Webinar Live', time: '11am', color: 'bg-purple-500 text-white' },
+    ],
+    [`${year}-${month + 1}-18`]: [
+      { title: 'Release v2.0', time: '5pm', color: 'bg-rose-500 text-white' },
+    ],
+    [`${year}-${month + 1}-25`]: [
+      { title: 'Design Review', time: '10am', color: 'bg-amber-500 text-white' },
+      { title: 'Sprint Retro', time: '3pm', color: 'bg-blue-500 text-white' },
+    ],
+  };
+
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date(year, month, 5));
+  const { calendars, getBackProps, getForwardProps, getDateProps } = useDates({
+    selected: selectedDate,
+    onChange: (d) => setSelectedDate(d as Date),
+  });
+
+  const calendar = calendars[0];
+  if (!calendar) return null;
+
+  const getKey = (d: Date) => `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+
+  return (
+    <DemoContainer title="Live Preview: Google Calendar Style View">
+      <div className="w-full max-w-2xl bg-fd-card rounded-xl border border-fd-border p-4 shadow-sm">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2">
+            <button {...getBackProps({ calendars })} className="p-1.5 rounded-lg border border-fd-border hover:bg-fd-accent text-xs font-semibold">
+              ← Prev
+            </button>
+            <button {...getForwardProps({ calendars })} className="p-1.5 rounded-lg border border-fd-border hover:bg-fd-accent text-xs font-semibold">
+              Next →
+            </button>
+          </div>
+          <span className="font-bold text-base text-fd-foreground">
+            {new Date(calendar.year, calendar.month).toLocaleString('default', { month: 'long', year: 'numeric' })}
+          </span>
+          <span className="text-xs font-medium text-fd-muted-foreground bg-fd-secondary px-2.5 py-1 rounded-full">
+            Month View
+          </span>
+        </div>
+
+        <div className="grid grid-cols-7 gap-px bg-fd-border rounded-lg overflow-hidden border border-fd-border">
+          {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((d) => (
+            <div key={d} className="bg-fd-background p-2 text-center text-xs font-semibold text-fd-muted-foreground">
+              {d}
+            </div>
+          ))}
+
+          {calendar.weeks.flat().map((dateObj, idx) => {
+            if (!dateObj) return <div key={idx} className="bg-fd-background min-h-[75px]" />;
+            const key = getKey(dateObj.date);
+            const events = eventsData[key] || [];
+
+            return (
+              <div
+                key={idx}
+                {...getDateProps({ dateObj })}
+                className={`bg-fd-background min-h-[75px] p-1 flex flex-col justify-start transition-colors cursor-pointer hover:bg-fd-accent/40 ${
+                  !dateObj.selectable ? 'opacity-40' : ''
+                } ${dateObj.selected ? 'ring-2 ring-inset ring-brand-gold' : ''}`}
+              >
+                <div className="flex items-center justify-between mb-1">
+                  <span
+                    className={`text-xs font-medium px-1.5 py-0.5 rounded-full inline-block ${
+                      dateObj.today ? 'bg-brand-gold text-white font-bold' : 'text-fd-foreground'
+                    }`}
+                  >
+                    {dateObj.date.getDate()}
+                  </span>
+                </div>
+
+                <div className="space-y-1 overflow-hidden">
+                  {events.map((ev, i) => (
+                    <div
+                      key={i}
+                      className={`px-1.5 py-0.5 rounded text-[10px] font-medium truncate shadow-xs flex items-center gap-1 ${ev.color}`}
+                      title={`${ev.time} ${ev.title}`}
+                    >
+                      <span className="opacity-80 font-mono text-[9px]">{ev.time}</span>
+                      <span className="truncate">{ev.title}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </DemoContainer>
+  );
+}
+
 export function EventScheduleDemo() {
   const today = new Date();
   const year = today.getFullYear();

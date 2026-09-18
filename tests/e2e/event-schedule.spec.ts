@@ -17,4 +17,11 @@ test.describe('Event & Schedule Recipe', () => {
 
     await expect(page.getByText('React Modular Datepicker Webinar', { exact: true })).toBeVisible();
   });
+
+  test('should render Google Calendar style demo with event badges', async ({ page }) => {
+    await expect(page.getByText('Live Preview: Google Calendar Style View')).toBeVisible();
+
+    await expect(page.getByText('Team Standup', { exact: true })).toBeVisible();
+    await expect(page.getByText('Webinar Live', { exact: true })).toBeVisible();
+  });
 });
