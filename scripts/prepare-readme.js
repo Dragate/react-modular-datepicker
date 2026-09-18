@@ -2,6 +2,7 @@ const fs = require('fs')
 const path = require('path')
 
 const readmePath = path.join(__dirname, '../README.md')
+const packageReadmePath = path.join(__dirname, '../packages/react-modular-datepicker/README.md')
 
 let readme = fs.readFileSync(readmePath, 'utf8')
 
@@ -11,5 +12,6 @@ const cdnBase = `https://6pcvnpdosyar2uqr.public.blob.vercel-storage.com/docs/im
 readme = readme.replace(/(["'(])(?:\.\/)?docs\/images\//g, `$1${cdnBase}`)
 
 fs.writeFileSync(readmePath, readme, 'utf8')
+fs.writeFileSync(packageReadmePath, readme, 'utf8')
 console.log(`Updated README.md image URLs to use ${cdnBase}`)
 
