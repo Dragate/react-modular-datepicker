@@ -41,7 +41,7 @@ export const defaultClassNames = {
   monthButtonSelected: "bg-brand-gold text-white",
   monthButtonUnselected: "text-brand-text",
 
-  yearsGrid: "grid grid-cols-3 gap-2 max-h-[300px] overflow-y-auto pr-2 animate-slide-in-top",
+  yearsGrid: "grid grid-cols-3 gap-2 max-h-[210px] overflow-y-auto pr-2 animate-slide-in-top rmdp-scrollbar",
   yearButton: "py-3 rounded-lg hover:bg-brand-gray-light transition-colors cursor-pointer disabled:opacity-30 disabled:pointer-events-none",
   yearButtonSelected: "bg-brand-gold text-white",
   yearButtonUnselected: "text-brand-text",
