@@ -3,7 +3,8 @@ const path = require('path')
 const { execSync } = require('child_process')
 const semver = require('semver')
 
-const packageJsonPath = path.join(__dirname, '../package.json')
+const packageJsonPath = path.join(__dirname, '../packages/react-modular-datepicker/package.json')
+const packageDir = path.dirname(packageJsonPath)
 const packageJsonData = fs.readFileSync(packageJsonPath, 'utf8')
 const packageJson = JSON.parse(packageJsonData)
 
@@ -27,13 +28,15 @@ switch (process.env.RELEASE_TYPE) {
         process.exit(1)
 }
 
-fs.appendFileSync(process.env.GITHUB_OUTPUT, `version=${version}\n`)
+if (process.env.GITHUB_OUTPUT) {
+    fs.appendFileSync(process.env.GITHUB_OUTPUT, `version=${version}\n`)
+}
 
 if (process.env.DRY_RUN) {
     console.log(`pnpm version ${version}`)
 } else {
     try {
-        execSync(`pnpm version ${version}`, { stdio: 'inherit' })
+        execSync(`pnpm version ${version}`, { cwd: packageDir, stdio: 'inherit' })
     } catch (error) {
         console.error('Failed to execute version:', error)
         process.exit(1)
