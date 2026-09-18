@@ -13,14 +13,14 @@ export interface DayClassNames {
 export const defaultClassNames = {
   root: "w-fit flex flex-col p-4 bg-white rounded-lg shadow-lg",
   header: "flex items-center justify-between border-b-2 border-brand-gray-light/40 pb-2",
-  calendarsContainer: "flex flex-col md:flex-row gap-4",
-  calendarContainer: "flex-1 min-w-[280px] min-h-[260px]",
+  calendarsContainer: "flex flex-col md:flex-row gap-4 mt-3",
+  calendarContainer: "flex-1 min-w-[280px]",
   weekdayGrid: "grid grid-cols-7 gap-1 mb-1 border-b border-brand-gray-light/40",
   weekday: "text-center text-xs text-gray-400 py-2",
   daysGrid: "grid grid-cols-7 gap-px bg-brand-gray-light/20",
   footer: "mt-4",
 
-  navButton: "p-2 hover:bg-gray-100 rounded-full transition-colors cursor-pointer disabled:opacity-30 disabled:pointer-events-none",
+  navButton: "p-2 text-brand-text hover:bg-gray-100 rounded-full transition-colors cursor-pointer disabled:opacity-30 disabled:pointer-events-none",
   monthYearContainer: "flex gap-8",
   monthYearLabel: "flex gap-1 items-center font-semibold text-brand-text",
   monthYearButton: "hover:bg-gray-100 px-2 py-1 rounded cursor-pointer",
@@ -37,7 +37,7 @@ export const defaultClassNames = {
   },
 
   monthsGrid: "grid grid-cols-3 gap-2 animate-slide-in-top",
-  monthButton: "py-4 rounded-lg hover:bg-brand-gray-light transition-colors cursor-pointer disabled:opacity-30 disabled:pointer-events-none",
+  monthButton: "py-3 rounded-lg hover:bg-brand-gray-light transition-colors cursor-pointer disabled:opacity-30 disabled:pointer-events-none",
   monthButtonSelected: "bg-brand-gold text-white",
   monthButtonUnselected: "text-brand-text",
 
