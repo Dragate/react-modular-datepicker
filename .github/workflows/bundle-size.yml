@@ -37,7 +37,7 @@ jobs:
           node -e "
             const fs = require('fs');
             const path = require('path');
-            const dist = './dist';
+            const dist = './packages/react-modular-datepicker/dist';
             const sizes = {};
             for (const file of fs.readdirSync(dist)) {
               if (/\.(js|mjs|css)$/.test(file) && !file.endsWith('.map')) {
@@ -64,7 +64,7 @@ jobs:
           node -e "
             const fs = require('fs');
             const path = require('path');
-            const dist = './dist';
+            const dist = './packages/react-modular-datepicker/dist';
             const sizes = {};
             for (const file of fs.readdirSync(dist)) {
               if (/\.(js|mjs|css)$/.test(file) && !file.endsWith('.map')) {
