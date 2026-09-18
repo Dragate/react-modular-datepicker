@@ -1,11 +1,11 @@
 ---
 title: Availability & Booking Calendar
-description: Build appointment booking and availability calendars with custom modifier styles, disabled dates, and slot selection.
+description: Build appointment booking and availability calendars with custom modifier styles, disabled dates, and month change loading indicators.
 ---
 
 # Availability & Booking Calendar
 
-Create availability calendars for appointments, hotel bookings, or resource scheduling using disabled dates and custom modifier classes.
+Create availability calendars for appointments, hotel bookings, or resource scheduling using disabled dates, custom modifier classes, and async month navigation callbacks.
 
 <AvailabilityDemo />
 
@@ -32,19 +32,24 @@ const availableSlotsMap: Record<string, string[]> = {
 
 export function AvailabilityExample() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date(2025, 2, 8));
-  const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const getKey = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-  const slots = selectedDate ? availableSlotsMap[getKey(selectedDate)] || [] : [];
+
+  const handleMonthChange = (newDate: Date) => {
+    setIsLoading(true);
+    // Simulate API fetch for month availabilities
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 700);
+  };
 
   return (
-    <div className="flex flex-col md:flex-row gap-6">
+    <div className="relative inline-block">
       <Calendar
         selected={selectedDate || undefined}
-        onChange={(d) => {
-          setSelectedDate(d as Date);
-          setSelectedSlot(null);
-        }}
+        onChange={(d) => setSelectedDate(d as Date)}
+        onMonthChange={handleMonthChange}
         disabledDates={bookedDays}
         modifiers={{
           available: (d) => !!availableSlotsMap[getKey(d)],
@@ -57,28 +62,12 @@ export function AvailabilityExample() {
         }}
       />
 
-      <div className="flex-1 p-4 border rounded-xl">
-        <h3 className="font-bold text-lg mb-3">
-          {selectedDate ? `Slots for ${selectedDate.toLocaleDateString()}` : 'Select a date'}
-        </h3>
-        {slots.length === 0 ? (
-          <p className="text-sm text-gray-500">No available time slots.</p>
-        ) : (
-          <div className="grid grid-cols-2 gap-2">
-            {slots.map((slot) => (
-              <button
-                key={slot}
-                onClick={() => setSelectedSlot(slot)}
-                className={`py-2 px-3 text-xs font-semibold border rounded-lg ${
-                  selectedSlot === slot ? 'bg-emerald-600 text-white' : 'bg-gray-50'
-                }`}
-              >
-                {slot}
-              </button>
-            ))}
-          </div>
-        )}
-      </div>
+      {isLoading && (
+        <div className="absolute inset-0 bg-white/80 flex flex-col items-center justify-center rounded-lg z-20">
+          <div className="w-6 h-6 border-2 border-emerald-600 border-t-transparent rounded-full animate-spin mb-1" />
+          <span className="text-xs font-medium text-gray-700">Fetching availabilities...</span>
+        </div>
+      )}
     </div>
   );
 }

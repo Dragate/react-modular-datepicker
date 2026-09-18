@@ -263,6 +263,7 @@ export function AvailabilityDemo() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date(year, month, 8));
   const [selectedSlot, setSelectedSlot] = useState<string | null>('09:00 AM');
   const [bookedSuccess, setBookedSuccess] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const getKey = (d: Date) => `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
   const slots = selectedDate ? availableSlotsMap[getKey(selectedDate)] || [] : [];
@@ -273,27 +274,44 @@ export function AvailabilityDemo() {
     }
   };
 
+  const handleMonthChange = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 700);
+  };
+
   return (
     <DemoContainer title="Live Preview: Availability & Booking Calendar">
       <div className="flex flex-col md:flex-row gap-6 items-start w-full max-w-2xl justify-center">
-        <Calendar
-          selected={selectedDate || undefined}
-          onChange={(d) => {
-            setSelectedDate(d as Date);
-            setSelectedSlot(null);
-            setBookedSuccess(false);
-          }}
-          disabledDates={bookedDays}
-          modifiers={{
-            available: (d) => !!availableSlotsMap[getKey(d)],
-          }}
-          classNames={{
-            day: {
-              disabled: 'bg-red-500/10 text-red-400 line-through cursor-not-allowed',
-              available: 'font-semibold text-emerald-600 dark:text-emerald-400',
-            },
-          }}
-        />
+        <div className="relative">
+          <Calendar
+            selected={selectedDate || undefined}
+            onChange={(d) => {
+              setSelectedDate(d as Date);
+              setSelectedSlot(null);
+              setBookedSuccess(false);
+            }}
+            onMonthChange={handleMonthChange}
+            disabledDates={bookedDays}
+            modifiers={{
+              available: (d) => !!availableSlotsMap[getKey(d)],
+            }}
+            classNames={{
+              day: {
+                disabled: 'bg-red-500/10 text-red-400 line-through cursor-not-allowed',
+                available: 'font-semibold text-emerald-600 dark:text-emerald-400',
+              },
+            }}
+          />
+
+          {isLoading && (
+            <div className="absolute inset-0 bg-fd-background/80 backdrop-blur-xs flex flex-col items-center justify-center rounded-lg z-20">
+              <div className="w-7 h-7 border-3 border-emerald-500 border-t-transparent rounded-full animate-spin mb-2" />
+              <span className="text-xs font-semibold text-fd-foreground">Fetching availabilities...</span>
+            </div>
+          )}
+        </div>
 
         <div className="flex-1 w-full bg-fd-background border border-fd-border rounded-xl p-4 shadow-sm min-w-[260px]">
           <div className="border-b border-fd-border pb-2 mb-3">

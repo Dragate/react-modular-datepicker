@@ -19,4 +19,16 @@ test.describe('Availability & Booking Recipe', () => {
 
     await expect(page.getByText('Appointment Confirmed!')).toBeVisible();
   });
+
+  test('should display loading spinner overlay on month change', async ({ page }) => {
+    // Click next month chevron button
+    const nextBtn = page.getByRole('button', { name: 'Next month' });
+    await nextBtn.click();
+
+    // Assert loading overlay text appears
+    await expect(page.getByText('Fetching availabilities...', { exact: true })).toBeVisible();
+
+    // Wait for loading to finish
+    await expect(page.getByText('Fetching availabilities...', { exact: true })).not.toBeVisible();
+  });
 });
