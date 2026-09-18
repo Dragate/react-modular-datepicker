@@ -119,10 +119,10 @@ export function HeadlessDemo() {
                 key={idx}
                 {...getDateProps({ dateObj })}
                 className={`h-9 w-9 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${dateObj.selected
-                    ? 'bg-blue-600 text-white font-bold'
-                    : dateObj.today
-                      ? 'border border-blue-500 text-blue-600'
-                      : 'hover:bg-fd-accent'
+                  ? 'bg-blue-600 text-white font-bold'
+                  : dateObj.today
+                    ? 'border border-blue-500 text-blue-600'
+                    : 'hover:bg-fd-accent'
                   }`}
               >
                 {dateObj.date.getDate()}
@@ -295,7 +295,7 @@ export function YearlyDemo() {
   return (
     <DemoContainer title="Live Preview: Multi-Month Grid">
       <Calendar
-        monthsToDisplay={3}
+        monthsToDisplay={4}
       />
     </DemoContainer>
   );
