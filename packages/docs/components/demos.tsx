@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   Calendar,
   useDates,
@@ -194,10 +194,26 @@ export function LocalizationDemo() {
 export function FormIntegrationDemo() {
   const [date, setDate] = useState<Date | null>(null);
   const [isOpen, setIsOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    }
+
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen]);
 
   return (
     <DemoContainer title="Live Preview: Popover / Form Integration">
-      <div className="relative inline-block text-left">
+      <div ref={containerRef} className="relative inline-block text-left">
         <label className="block text-xs font-semibold mb-1 text-fd-muted-foreground">Select Travel Date</label>
         <div className="flex gap-2">
           <input
