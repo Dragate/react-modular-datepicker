@@ -5,6 +5,7 @@ const withMDX = createMDX();
 
 const config: NextConfig = {
   typedRoutes: true,
+  transpilePackages: ['react-modular-datepicker'],
   turbopack: {
     rules: {
       "*.css": {
