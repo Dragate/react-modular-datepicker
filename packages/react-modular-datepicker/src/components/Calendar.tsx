@@ -4,7 +4,7 @@ import { Day } from './Day';
 import { defaultAdapter } from '../adapters/dayjs';
 import { getTranslations, Translations } from '../i18n';
 import { CalendarHeader } from './CalendarHeader';
-import { DateObj, CalendarClassNames } from '../types';
+import { CalendarClassNames } from '../types';
 import { mergeClassNames } from '../classNames';
 import { MonthSelection } from './MonthSelection';
 import { YearSelection } from './YearSelection';
@@ -15,7 +15,6 @@ interface CalendarProps extends UseDatesProps {
   translations?: Partial<Translations>;
   header?: React.ReactNode | ((props: any) => React.ReactNode);
   footer?: React.ReactNode;
-  renderDayTooltip?: (dateObj: DateObj) => React.ReactNode;
 }
 
 type CalendarView = 'days' | 'months' | 'years';
@@ -29,7 +28,6 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
     firstDayOfWeek = 0,
     header,
     footer,
-    renderDayTooltip,
     ...useDatesProps
   } = props;
 
@@ -175,7 +173,6 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
                     dateObj={dateObj}
                     getDateProps={getDateProps}
                     classNames={classNames}
-                    tooltip={dateObj && renderDayTooltip?.(dateObj)}
                   />
                 ))
               )}

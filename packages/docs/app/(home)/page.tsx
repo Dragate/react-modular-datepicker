@@ -51,7 +51,7 @@ export default function HomePage() {
           <div className="text-2xl mb-2">🎨</div>
           <h3 className="font-bold text-lg mb-2 text-fd-card-foreground">Fully Customizable</h3>
           <p className="text-sm text-fd-muted-foreground">
-            Styled with Tailwind CSS. Deeply customize states, headers, footers, tooltips, and range highlights.
+            Styled with Tailwind CSS. Deeply customize states, headers, footers, and range highlights.
           </p>
         </div>
       </div>

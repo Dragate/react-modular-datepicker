@@ -1,16 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import type { CalendarClassNames, DateObj } from '../types';
 
 interface DayProps {
   dateObj: DateObj | null;
   getDateProps: (args: { dateObj: DateObj, [key: string]: any }) => any;
-  tooltip?: React.ReactNode;
   classNames: Required<CalendarClassNames>;
 }
 
-export const Day: React.FC<DayProps> = ({ dateObj, getDateProps, classNames, tooltip }) => {
-  const [isHovered, setIsHovered] = useState(false);
-
+export const Day: React.FC<DayProps> = ({ dateObj, getDateProps, classNames }) => {
   if (!dateObj) {
     return <div className="aspect-square bg-white" />;
   }
@@ -45,22 +42,10 @@ export const Day: React.FC<DayProps> = ({ dateObj, getDateProps, classNames, too
 
   return (
     <button
-      {...getDateProps({
-        dateObj,
-        onMouseEnter: () => setIsHovered(true),
-        onMouseLeave: () => setIsHovered(false)
-      })}
+      {...getDateProps({ dateObj })}
       className={className}
     >
       {date.getDate()}
-      {tooltip && isHovered && (
-        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block z-10">
-          <div className="bg-gray-800 text-white text-xs py-1 px-2 rounded whitespace-nowrap shadow-lg">
-            {tooltip}
-            <div className="absolute top-full left-1/2 -translate-x-1/2 border-8 border-transparent border-t-gray-800" />
-          </div>
-        </div>
-      )}
     </button>
   );
 };
