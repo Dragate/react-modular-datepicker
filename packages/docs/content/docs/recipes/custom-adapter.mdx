@@ -1,17 +1,17 @@
 ---
-title: Custom Date Adapter (date-fns)
-description: Create and plug a custom DateAdapter using date-fns or any date library.
+title: Custom Date Adapters (date-fns, Luxon, Moment.js)
+description: Create and plug a custom DateAdapter using date-fns, Luxon, Moment.js, or any date library.
 ---
 
-# Custom Date Adapter (`date-fns`)
+# Custom Date Adapters
 
-Replace the default `DayjsAdapter` with `date-fns` (or Luxon / native `Date`) by implementing the `DateAdapter<T>` interface.
+Replace the default `DayjsAdapter` with `date-fns`, `Luxon`, `Moment.js`, or native `Date` by implementing the `DateAdapter<T>` interface.
 
 <CustomAdapterDemo />
 
 ---
 
-## Code Example
+## `date-fns` Adapter Example
 
 ```tsx
 import { Calendar, DateAdapter } from 'react-modular-datepicker';
@@ -26,7 +26,7 @@ import {
   differenceInCalendarMonths, differenceInCalendarYears
 } from 'date-fns';
 
-class DateFnsAdapter implements DateAdapter<Date> {
+export class DateFnsAdapter implements DateAdapter<Date> {
   date(value?: any): Date { return value ? new Date(value) : new Date(); }
   add(date: Date, amount: number, unit: 'day' | 'month' | 'year'): Date {
     if (unit === 'day') return addDays(date, amount);
@@ -93,10 +93,134 @@ class DateFnsAdapter implements DateAdapter<Date> {
     return ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
   }
 }
+```
 
-const customAdapter = new DateFnsAdapter();
+---
 
-export function CustomAdapterExample() {
-  return <Calendar adapter={customAdapter} onChange={(date) => console.log(date)} />;
+## Luxon Adapter Example
+
+```tsx
+import { Calendar, DateAdapter } from 'react-modular-datepicker';
+import { DateTime } from 'luxon';
+
+export class LuxonAdapter implements DateAdapter<DateTime> {
+  date(value?: any): DateTime {
+    if (!value) return DateTime.now();
+    if (value instanceof DateTime) return value;
+    if (value instanceof Date) return DateTime.fromJSDate(value);
+    return DateTime.fromISO(String(value));
+  }
+  add(date: DateTime, amount: number, unit: 'day' | 'month' | 'year'): DateTime {
+    return date.plus({ [unit === 'day' ? 'days' : unit === 'month' ? 'months' : 'years']: amount });
+  }
+  subtract(date: DateTime, amount: number, unit: 'day' | 'month' | 'year'): DateTime {
+    return date.minus({ [unit === 'day' ? 'days' : unit === 'month' ? 'months' : 'years']: amount });
+  }
+  startOf(date: DateTime, unit: 'day' | 'month' | 'year'): DateTime {
+    return date.startOf(unit);
+  }
+  endOf(date: DateTime, unit: 'day' | 'month' | 'year'): DateTime {
+    return date.endOf(unit);
+  }
+  isBefore(date: DateTime, comparison: DateTime, unit?: 'day' | 'month' | 'year'): boolean {
+    if (unit) return date.startOf(unit) < comparison.startOf(unit);
+    return date < comparison;
+  }
+  isAfter(date: DateTime, comparison: DateTime, unit?: 'day' | 'month' | 'year'): boolean {
+    if (unit) return date.startOf(unit) > comparison.startOf(unit);
+    return date > comparison;
+  }
+  isSame(date: DateTime, comparison: DateTime, unit?: 'day' | 'month' | 'year'): boolean {
+    if (unit) return date.startOf(unit).hasSame(comparison.startOf(unit), unit);
+    return date.equals(comparison);
+  }
+  set(date: DateTime, unit: 'day' | 'month' | 'year', value: number): DateTime {
+    if (unit === 'month') return date.set({ month: value + 1 }); // Luxon months are 1-12
+    return date.set({ [unit]: value });
+  }
+  get(date: DateTime, unit: 'day' | 'month' | 'year'): number {
+    if (unit === 'day') return date.day;
+    if (unit === 'month') return date.month - 1; // Return 0-11 for consistency
+    return date.year;
+  }
+  format(date: DateTime, formatStr: string): string {
+    return date.toFormat(formatStr.replace(/YYYY/g, 'yyyy').replace(/DD/g, 'dd'));
+  }
+  getDaysInMonth(date: DateTime): number {
+    return date.daysInMonth ?? 30;
+  }
+  toDate(date: DateTime): Date {
+    return date.toJSDate();
+  }
+  diff(date: DateTime, comparison: DateTime, unit: 'month' | 'year'): number {
+    const d = date.startOf('month').diff(comparison.startOf('month'), unit === 'month' ? 'months' : 'years');
+    return Math.round(d[unit === 'month' ? 'months' : 'years'] ?? 0);
+  }
+  getMonths(): string[] {
+    return ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  }
+  getWeekdays(): string[] {
+    return ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+  }
+}
+```
+
+---
+
+## Moment.js Adapter Example
+
+```tsx
+import { Calendar, DateAdapter } from 'react-modular-datepicker';
+import moment, { Moment } from 'moment';
+
+export class MomentAdapter implements DateAdapter<Moment> {
+  date(value?: any): Moment {
+    return moment(value);
+  }
+  add(date: Moment, amount: number, unit: 'day' | 'month' | 'year'): Moment {
+    return date.clone().add(amount, unit);
+  }
+  subtract(date: Moment, amount: number, unit: 'day' | 'month' | 'year'): Moment {
+    return date.clone().subtract(amount, unit);
+  }
+  startOf(date: Moment, unit: 'day' | 'month' | 'year'): Moment {
+    return date.clone().startOf(unit);
+  }
+  endOf(date: Moment, unit: 'day' | 'month' | 'year'): Moment {
+    return date.clone().endOf(unit);
+  }
+  isBefore(date: Moment, comparison: Moment, unit?: 'day' | 'month' | 'year'): boolean {
+    return date.isBefore(comparison, unit);
+  }
+  isAfter(date: Moment, comparison: Moment, unit?: 'day' | 'month' | 'year'): boolean {
+    return date.isAfter(comparison, unit);
+  }
+  isSame(date: Moment, comparison: Moment, unit?: 'day' | 'month' | 'year'): boolean {
+    return date.isSame(comparison, unit);
+  }
+  set(date: Moment, unit: 'day' | 'month' | 'year', value: number): Moment {
+    return date.clone().set(unit, value);
+  }
+  get(date: Moment, unit: 'day' | 'month' | 'year'): number {
+    return date.get(unit);
+  }
+  format(date: Moment, formatStr: string): string {
+    return date.format(formatStr);
+  }
+  getDaysInMonth(date: Moment): number {
+    return date.daysInMonth();
+  }
+  toDate(date: Moment): Date {
+    return date.toDate();
+  }
+  diff(date: Moment, comparison: Moment, unit: 'month' | 'year'): number {
+    return date.clone().startOf('month').diff(comparison.clone().startOf('month'), unit === 'month' ? 'months' : 'years');
+  }
+  getMonths(): string[] {
+    return ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  }
+  getWeekdays(): string[] {
+    return ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+  }
 }
 ```

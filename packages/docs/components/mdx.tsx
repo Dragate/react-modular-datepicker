@@ -15,6 +15,7 @@ import {
   EventScheduleDemo,
   GoogleCalendarDemo,
   AvailabilityDemo,
+  ModifiersDemo,
 } from './demos';
 
 export function getMDXComponents(components?: MDXComponents) {
@@ -34,6 +35,7 @@ export function getMDXComponents(components?: MDXComponents) {
     EventScheduleDemo,
     GoogleCalendarDemo,
     AvailabilityDemo,
+    ModifiersDemo,
     ...components,
   } satisfies MDXComponents;
 }

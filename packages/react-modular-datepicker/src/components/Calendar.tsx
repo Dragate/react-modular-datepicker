@@ -103,8 +103,8 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
   const renderDefaultHeader = () => (
     <CalendarHeader
       calendars={calendars}
-      getBackProps={calendars.length === 12 ? wrappedGetBackProps : getBackProps}
-      getForwardProps={calendars.length === 12 ? wrappedGetForwardProps : getForwardProps}
+      getBackProps={wrappedGetBackProps}
+      getForwardProps={wrappedGetForwardProps}
       setView={setView}
       monthNames={monthNames}
       t={t}
@@ -157,7 +157,7 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
           <div key={`${calendar.month}-${calendar.year}`} className={classNames.calendarContainer}>
             {calendars.length > 1 && (
               <div className={classNames.header}>
-                <div className="w-9 flex justify-start">
+                <div className={classNames.navButtonSlotStart}>
                   {index === 0 && calendars.length < 12 && (
                     <button
                       {...wrappedGetBackProps({ calendars })}
@@ -169,11 +169,11 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
                     </button>
                   )}
                 </div>
-                <span className="font-semibold text-brand-text text-center flex-1">
+                <span className={classNames.headerTitleContainer}>
                   {monthNames[calendar.month]}
                   {calendars.length < 12 ? ` ${calendar.year}` : ''}
                 </span>
-                <div className="w-9 flex justify-end">
+                <div className={classNames.navButtonSlotEnd}>
                   {index === calendars.length - 1 && calendars.length < 12 && (
                     <button
                       {...wrappedGetForwardProps({ calendars })}
@@ -192,7 +192,7 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
                 <div key={day} className={classNames.weekday}>{day}</div>
               ))}
             </div>
-            <div className={`${classNames.daysGrid} ${slideDirection === 'left' ? 'animate-slide-in-left' : slideDirection === 'right' ? 'animate-slide-in-right' : ''}`}>
+            <div key={`daysGrid-${calendar.month}-${calendar.year}`} className={`${classNames.daysGrid} ${slideDirection === 'left' ? 'animate-slide-in-left' : slideDirection === 'right' ? 'animate-slide-in-right' : ''}`}>
               {calendar.weeks.map((week, wi) =>
                 week.map((dateObj, di) => (
                   <Day

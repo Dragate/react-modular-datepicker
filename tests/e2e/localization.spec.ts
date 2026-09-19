@@ -6,6 +6,6 @@ test.describe('Localization Recipe', () => {
   });
 
   test('should render localization demo', async ({ page }) => {
-    await expect(page.locator('h1').first()).toContainText('Localization & i18n');
+    await expect(page.locator('h1').first()).toContainText('Localization & RTL Support');
   });
 });

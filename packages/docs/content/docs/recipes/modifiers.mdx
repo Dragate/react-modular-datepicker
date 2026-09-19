@@ -1,0 +1,54 @@
+---
+title: Custom Modifiers & Highlights
+description: Highlight custom date categories like weekends, birthdays, or holidays using modifiers.
+---
+
+# Custom Modifiers & Highlights
+
+Use the `modifiers` prop to dynamically flag dates matching custom rules (e.g. weekends, birthdays, or company holidays) and style them via `classNames.day`.
+
+<ModifiersDemo />
+
+---
+
+## Code Example
+
+```tsx
+import { useState } from 'react';
+import { Calendar } from 'react-modular-datepicker';
+
+export function ModifiersExample() {
+  const [selected, setSelected] = useState<Date>(new Date());
+
+  const birthdays = ['2026-9-12', '2026-9-24'];
+  const holidays = ['2026-9-1', '2026-9-25'];
+
+  const getKey = (d: Date) => `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+
+  return (
+    <Calendar
+      selected={selected}
+      onChange={(d) => setSelected(d as Date)}
+      modifiers={{
+        weekend: (date) => date.getDay() === 0 || date.getDay() === 6,
+        birthday: (date) => birthdays.includes(getKey(date)),
+        holiday: (date) => holidays.includes(getKey(date)),
+      }}
+      getDayProps={(dateObj) => {
+        const key = getKey(dateObj.date);
+        if (birthdays.includes(key)) return { 'data-tooltip': '🎂 Birthday!' };
+        if (holidays.includes(key)) return { 'data-tooltip': '🎉 Holiday' };
+        if (dateObj.date.getDay() === 0 || dateObj.date.getDay() === 6) return { 'data-tooltip': '🌴 Weekend' };
+        return {};
+      }}
+      classNames={{
+        day: {
+          weekend: 'bg-indigo-100/70 text-indigo-900 font-bold',
+          holiday: 'border-2 border-emerald-500 font-bold',
+          birthday: 'text-pink-600 font-black scale-105',
+        },
+      }}
+    />
+  );
+}
+```

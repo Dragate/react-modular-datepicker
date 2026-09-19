@@ -10,7 +10,7 @@ interface DayProps {
 
 export const Day: React.FC<DayProps> = ({ dateObj, getDateProps, dayProps, classNames }) => {
   if (!dateObj) {
-    return <div className="aspect-square bg-white" />;
+    return <div className={classNames.day.empty} />;
   }
 
   const { date, selected, selectable, isRangeStart, isRangeEnd, isRangeBetween, isRangeHovering, isRangeActive } = dateObj;
@@ -35,11 +35,14 @@ export const Day: React.FC<DayProps> = ({ dateObj, getDateProps, dayProps, class
     stateClasses = dayClasses.unselected || '';
   }
 
-  const className = [
-    dayClasses.day,
-    stateClasses,
-    ...(dateObj.modifiers || []).map(m => (dayClasses as any)[m] || m)
-  ].filter(Boolean).join(' ');
+  const modifierClasses = (dateObj.modifiers || [])
+    .map(m => (dayClasses as any)[m] || m)
+    .filter(Boolean)
+    .join(' ');
+
+  const className = [dayClasses.day, stateClasses, modifierClasses]
+    .filter(Boolean)
+    .join(' ');
 
   return (
     <button

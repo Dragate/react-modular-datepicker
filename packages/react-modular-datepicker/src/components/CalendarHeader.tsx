@@ -43,12 +43,24 @@ export const CalendarHeader: React.FC<HeaderProps> = ({
   const first = calendars[0];
   const last = calendars[calendars.length - 1];
 
+  const headerClassName = [
+    classNames.header,
+    calendars.length > 1 ? classNames.headerMultiMonth : ''
+  ].filter(Boolean).join(' ');
+
+  const navButtonClassName = (isHidden: boolean) => [
+    classNames.navButton,
+    isHidden ? classNames.navButtonHidden : ''
+  ].filter(Boolean).join(' ');
+
+  const isNavHidden = !!(currentView && currentView !== 'days');
+
   return (
-    <div className={`${classNames.header} ${calendars.length > 1 ? 'border-b-0! pb-0!' : ''}`}>
+    <div className={headerClassName}>
       <button
         {...getBackProps({ calendars })}
         onMouseDown={(e) => e.preventDefault()}
-        className={`${classNames.navButton} ${currentView && currentView !== 'days' ? 'invisible pointer-events-none' : ''}`}
+        className={navButtonClassName(isNavHidden)}
         aria-label={t.back}
       >
         <ChevronLeftIcon />
@@ -84,7 +96,7 @@ export const CalendarHeader: React.FC<HeaderProps> = ({
       <button
         {...getForwardProps({ calendars })}
         onMouseDown={(e) => e.preventDefault()}
-        className={`${classNames.navButton} ${currentView && currentView !== 'days' ? 'invisible pointer-events-none' : ''}`}
+        className={navButtonClassName(isNavHidden)}
         aria-label={t.forward}
       >
         <ChevronRightIcon />

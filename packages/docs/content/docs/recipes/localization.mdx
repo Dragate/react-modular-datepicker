@@ -1,17 +1,19 @@
 ---
-title: Localization & i18n
-description: Switch languages, custom month/weekday labels, and first day of the week.
+title: Localization & RTL Support
+description: Switch languages, custom month/weekday labels, first day of the week, and Right-to-Left (RTL) layout support.
 ---
 
-# Localization & i18n
+# Localization & RTL Support
 
-Customize the starting day of the week with `firstDayOfWeek` and pass localized month and weekday arrays via `translations`.
+Customize the starting day of the week with `firstDayOfWeek`, pass localized month and weekday arrays via `translations`, and support Right-To-Left (RTL) languages like Arabic or Hebrew by placing the calendar inside a container with `dir="rtl"`.
 
 <LocalizationDemo />
 
 ---
 
 ## Code Example
+
+### Spanish (LTR)
 
 ```tsx
 import { Calendar } from 'react-modular-datepicker';
@@ -26,8 +28,37 @@ export function SpanishCalendarExample() {
           'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
         ],
         weekdays: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
+        back: 'Mes anterior',
+        forward: 'Mes siguiente',
       }}
     />
+  );
+}
+```
+
+---
+
+### Arabic (RTL)
+
+```tsx
+import { Calendar } from 'react-modular-datepicker';
+
+export function ArabicRtlCalendarExample() {
+  return (
+    <div dir="rtl">
+      <Calendar
+        firstDayOfWeek={6} // Start week on Saturday
+        translations={{
+          months: [
+            'يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو',
+            'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'
+          ],
+          weekdays: ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'],
+          back: 'الشهر السابق',
+          forward: 'الشهر التالي',
+        }}
+      />
+    </div>
   );
 }
 ```

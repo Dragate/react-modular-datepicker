@@ -42,6 +42,70 @@ export function BasicDemo() {
   );
 }
 
+export function ModifiersDemo() {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = today.getMonth();
+
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date(year, month, 15));
+
+  const birthdays = [`${year}-${month + 1}-12`, `${year}-${month + 1}-24`];
+  const holidays = [`${year}-${month + 1}-1`, `${year}-${month + 1}-25`];
+
+  const getKey = (d: Date) => `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+
+  return (
+    <DemoContainer title="Live Preview: Custom Modifiers (Weekends, Birthdays, Holidays)">
+      <Calendar
+        selected={selectedDate}
+        onChange={(d) => setSelectedDate(d as Date)}
+        modifiers={{
+          weekend: (date) => date.getDay() === 0 || date.getDay() === 6,
+          birthday: (date) => birthdays.includes(getKey(date)),
+          holiday: (date) => holidays.includes(getKey(date)),
+        }}
+        getDayProps={(dateObj) => {
+          const key = getKey(dateObj.date);
+          if (birthdays.includes(key)) {
+            return { 'data-tooltip': '🎂 Birthday!' };
+          }
+          if (holidays.includes(key)) {
+            return { 'data-tooltip': '🎉 Holiday' };
+          }
+          if (dateObj.date.getDay() === 0 || dateObj.date.getDay() === 6) {
+            return { 'data-tooltip': '🌴 Weekend' };
+          }
+          return {};
+        }}
+        classNames={{
+          day: {
+            weekend: 'bg-indigo-100/70 dark:bg-indigo-950/50 text-indigo-900 dark:text-indigo-200 font-bold',
+            holiday:
+              'border-2 border-emerald-500 font-bold relative ' +
+              'before:content-[attr(data-tooltip)] before:absolute before:bottom-full before:left-1/2 before:-translate-x-1/2 before:mb-1 before:hidden hover:before:block ' +
+              'before:px-2 before:py-0.5 before:bg-gray-800 before:text-white before:text-[10px] before:rounded before:whitespace-nowrap before:z-20',
+            birthday:
+              'text-pink-600 dark:text-pink-400 font-black scale-105 relative ' +
+              'before:content-[attr(data-tooltip)] before:absolute before:bottom-full before:left-1/2 before:-translate-x-1/2 before:mb-1 before:hidden hover:before:block ' +
+              'before:px-2 before:py-0.5 before:bg-gray-800 before:text-white before:text-[10px] before:rounded before:whitespace-nowrap before:z-20',
+          },
+        }}
+      />
+      <div className="mt-4 flex flex-wrap gap-3 justify-center text-xs">
+        <span className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-indigo-100/70 dark:bg-indigo-950/50 text-indigo-900 dark:text-indigo-200 font-semibold">
+          <span className="w-2.5 h-2.5 rounded-full bg-indigo-500 inline-block" /> Weekend (Background Color)
+        </span>
+        <span className="flex items-center gap-1.5 px-2.5 py-1 rounded border-2 border-emerald-500 text-emerald-800 dark:text-emerald-200 font-bold">
+          <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block" /> 🎉 Holiday (Border Highlight)
+        </span>
+        <span className="flex items-center gap-1.5 px-2.5 py-1 rounded text-pink-600 dark:text-pink-400 font-black">
+          <span className="w-2.5 h-2.5 rounded-full bg-pink-500 inline-block" /> 🎂 Birthday (Text Color)
+        </span>
+      </div>
+    </DemoContainer>
+  );
+}
+
 export function GoogleCalendarDemo() {
   const today = new Date();
   const year = today.getFullYear();
@@ -245,7 +309,7 @@ export function AvailabilityDemo() {
   return (
     <DemoContainer title="Live Preview: Availability & Booking Calendar">
       <div className="flex flex-col md:flex-row gap-6 items-start w-full max-w-2xl justify-center">
-        <div className="relative">
+        <div className="relative border border-fd-border rounded-lg bg-fd-card">
           <Calendar
             selected={selectedDate || undefined}
             onChange={(d) => {
@@ -256,16 +320,18 @@ export function AvailabilityDemo() {
             onMonthChange={handleMonthChange}
             disabledDates={bookedDays}
             classNames={{
+              daysGrid: 'grid grid-cols-7 gap-px bg-brand-gray-light/20 relative',
               day: {
                 disabled: 'text-red-400 line-through cursor-not-allowed',
+                outside: 'bg-white dark:bg-zinc-900 text-transparent border-none opacity-0 select-none pointer-events-none',
               },
             }}
           />
 
           {isLoading && (
-            <div className="absolute inset-0 bg-fd-background/80 backdrop-blur-xs flex flex-col items-center justify-center rounded-lg z-20">
+            <div className="absolute inset-x-0 bottom-0 top-12 bg-transparent backdrop-blur-md flex flex-col items-center justify-center rounded-b-lg z-20">
               <div className="w-7 h-7 border-3 border-[#c5a059] border-t-transparent rounded-full animate-spin mb-2" />
-              <span className="text-xs font-semibold text-fd-foreground">Fetching availabilities...</span>
+              <span className="text-xs font-bold text-fd-foreground drop-shadow-sm">Fetching availabilities...</span>
             </div>
           )}
         </div>
@@ -409,57 +475,165 @@ export function HeadlessDemo() {
 }
 
 export function CustomStylingDemo() {
+  const [theme, setTheme] = useState<'cyberpunk' | 'purple' | 'adaptive'>('adaptive');
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date(2026, 8, 13));
+
+  const cyberpunkClassNames = {
+    root: 'bg-[#050b14] p-6 rounded-none border-2 border-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.5)] text-cyan-400 font-mono w-full max-w-sm',
+    header: 'flex items-center justify-between border-b border-cyan-500/50 pb-3 mb-3',
+    navButton: 'p-1.5 text-cyan-400 hover:bg-cyan-950 hover:text-cyan-200 rounded transition-colors',
+    monthYearLabel: 'font-mono text-cyan-300 text-base font-bold tracking-wider',
+    monthYearButton: 'hover:bg-cyan-950 px-2 py-1 rounded text-cyan-300',
+    weekdayGrid: 'grid grid-cols-7 gap-1 mb-2 border-b border-cyan-900/60 pb-1',
+    weekday: 'text-center text-xs font-bold text-cyan-400 tracking-widest uppercase',
+    daysGrid: 'grid grid-cols-7 gap-1 bg-transparent',
+    day: {
+      day: 'aspect-square flex items-center justify-center text-xs font-bold transition-all relative border border-cyan-900/80 bg-[#081220] text-cyan-300 hover:border-cyan-400 hover:bg-cyan-950',
+      selected: 'bg-[#081220] text-amber-400 border-2 border-amber-400 shadow-[0_0_10px_rgba(251,191,36,0.6)] font-extrabold',
+      unselected: 'bg-[#081220] text-cyan-300',
+      disabled: 'bg-gray-900/80 text-gray-600 border-gray-900 cursor-not-allowed opacity-40',
+    },
+  };
+
+  const purpleClassNames = {
+    root: 'bg-gradient-to-b from-[#2d0b5a] via-[#1e073e] to-[#120327] p-6 rounded-3xl border border-purple-500/30 shadow-2xl text-purple-100 w-full max-w-sm',
+    header: 'flex items-center justify-between pb-3 mb-2',
+    navButton: 'p-1.5 text-purple-300 hover:bg-purple-900/50 rounded-full transition-colors',
+    monthYearLabel: 'font-sans text-purple-100 text-lg font-extrabold tracking-wide',
+    monthYearButton: 'hover:bg-purple-900/40 px-2 py-1 rounded-lg text-purple-100',
+    weekdayGrid: 'grid grid-cols-7 gap-1 mb-3',
+    weekday: 'text-center text-xs font-bold text-purple-300 uppercase tracking-wider',
+    daysGrid: 'grid grid-cols-7 gap-2 bg-transparent',
+    day: {
+      day: 'aspect-square flex items-center justify-center text-xs font-semibold rounded-full transition-all text-purple-100 hover:bg-purple-800/40',
+      selected: 'bg-purple-900/60 text-white font-bold ring-2 ring-pink-500 ring-offset-2 ring-offset-[#1e073e] rounded-full shadow-[0_0_12px_rgba(236,72,153,0.7)]',
+      unselected: 'text-purple-100',
+      disabled: 'bg-purple-950/40 text-purple-400/30 cursor-not-allowed',
+    },
+  };
+
+  const adaptiveClassNames = {
+    root: 'bg-slate-100/80 dark:bg-slate-900/90 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-lg text-slate-800 dark:text-slate-100 w-full max-w-sm backdrop-blur-md',
+    header: 'flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3 mb-3',
+    navButton: 'p-1.5 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-lg transition-colors',
+    monthYearLabel: 'font-sans text-slate-900 dark:text-slate-50 text-base font-bold tracking-tight',
+    monthYearButton: 'hover:bg-slate-200 dark:hover:bg-slate-800 px-2 py-1 rounded-lg text-slate-900 dark:text-slate-100 font-bold',
+    weekdayGrid: 'grid grid-cols-7 gap-1 mb-2 border-b border-slate-200/60 dark:border-slate-800/60 pb-1',
+    weekday: 'text-center text-[11px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider',
+    daysGrid: 'grid grid-cols-7 gap-1 bg-transparent',
+    day: {
+      day: 'aspect-square flex items-center justify-center text-xs font-semibold rounded-lg bg-slate-200/50 dark:bg-slate-800/50 text-slate-800 dark:text-slate-200 hover:bg-emerald-500/20 dark:hover:bg-emerald-500/30 hover:text-emerald-700 dark:hover:text-emerald-300 transition-all',
+      selected: 'bg-emerald-600 dark:bg-emerald-500 text-white font-bold rounded-lg shadow-md shadow-emerald-500/20',
+      unselected: 'text-slate-800 dark:text-slate-200',
+      disabled: 'opacity-30 bg-slate-100 dark:bg-slate-900 text-slate-400 dark:text-slate-600 cursor-not-allowed',
+    },
+  };
+
+  const themeClassNames = {
+    cyberpunk: cyberpunkClassNames,
+    purple: purpleClassNames,
+    adaptive: adaptiveClassNames,
+  };
+
   return (
-    <DemoContainer title="Live Preview: Custom Styling (Amber Theme)">
+    <DemoContainer title="Live Preview: Custom Styling & Themes">
+      <div className="flex gap-2 mb-6">
+        <button
+          type="button"
+          onClick={() => setTheme('adaptive')}
+          className={`px-3 py-1.5 text-xs rounded-lg font-semibold transition-all ${
+            theme === 'adaptive'
+              ? 'bg-emerald-600 text-white shadow-md'
+              : 'bg-fd-secondary text-fd-secondary-foreground hover:bg-fd-accent'
+          }`}
+        >
+          Adaptive Glass (Light & Dark)
+        </button>
+        <button
+          type="button"
+          onClick={() => setTheme('cyberpunk')}
+          className={`px-3 py-1.5 text-xs rounded-lg font-semibold transition-all ${
+            theme === 'cyberpunk'
+              ? 'bg-cyan-500 text-black shadow-md'
+              : 'bg-fd-secondary text-fd-secondary-foreground hover:bg-fd-accent'
+          }`}
+        >
+          Cyberpunk Cyan
+        </button>
+        <button
+          type="button"
+          onClick={() => setTheme('purple')}
+          className={`px-3 py-1.5 text-xs rounded-lg font-semibold transition-all ${
+            theme === 'purple'
+              ? 'bg-purple-600 text-white shadow-md'
+              : 'bg-fd-secondary text-fd-secondary-foreground hover:bg-fd-accent'
+          }`}
+        >
+          Royal Purple
+        </button>
+      </div>
+
       <Calendar
-        classNames={{
-          root: 'bg-amber-500/10 p-6 rounded-2xl border border-amber-500/30 shadow-lg text-amber-900 dark:text-amber-100',
-          monthYearLabel: 'font-serif text-amber-900 dark:text-amber-100 text-lg font-bold',
-          day: {
-            unselected: 'bg-white/80 dark:bg-amber-950/40 border border-amber-200 hover:bg-amber-200/50 text-amber-900 dark:text-amber-100',
-            selected: 'bg-amber-800 text-amber-50 font-bold',
-          }
-        }}
+        date={selectedDate}
+        selected={selectedDate}
+        onChange={(d) => setSelectedDate(d as Date)}
+        classNames={themeClassNames[theme]}
       />
     </DemoContainer>
   );
 }
 
 export function LocalizationDemo() {
-  const [lang, setLang] = useState<'es' | 'fr' | 'de'>('es');
+  const [lang, setLang] = useState<'es' | 'fr' | 'de' | 'ar'>('es');
   const translationsMap = {
     es: {
       months: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
       weekdays: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
+      back: 'Mes anterior',
+      forward: 'Mes siguiente',
     },
     fr: {
       months: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
       weekdays: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
+      back: 'Mois précédent',
+      forward: 'Mois suivant',
     },
     de: {
       months: ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'],
       weekdays: ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'],
+      back: 'Vorheriger Monat',
+      forward: 'Nächster Monat',
+    },
+    ar: {
+      months: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'],
+      weekdays: ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'],
+      back: 'الشهر السابق',
+      forward: 'الشهر التالي',
     },
   };
 
+  const isRtl = lang === 'ar';
+
   return (
-    <DemoContainer title="Live Preview: Localization & Translations">
+    <DemoContainer title="Live Preview: Localization & RTL Support">
       <div className="flex gap-2 mb-4">
-        {(['es', 'fr', 'de'] as const).map((l) => (
+        {(['es', 'fr', 'de', 'ar'] as const).map((l) => (
           <button
             key={l}
             onClick={() => setLang(l)}
             className={`px-3 py-1 text-xs rounded font-medium transition-colors ${lang === l ? 'bg-fd-primary text-fd-primary-foreground' : 'bg-fd-secondary text-fd-secondary-foreground'
               }`}
           >
-            {l.toUpperCase()}
+            {l === 'ar' ? 'العربية (RTL)' : l.toUpperCase()}
           </button>
         ))}
       </div>
-      <Calendar
-        firstDayOfWeek={1}
-        translations={translationsMap[lang]}
-      />
+      <div dir={isRtl ? 'rtl' : 'ltr'} className="w-full flex justify-center">
+        <Calendar
+          firstDayOfWeek={isRtl ? 6 : 1}
+          translations={translationsMap[lang]}
+        />
+      </div>
     </DemoContainer>
   );
 }
