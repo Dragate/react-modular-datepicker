@@ -329,9 +329,9 @@ export function AvailabilityDemo() {
           />
 
           {isLoading && (
-            <div className="absolute inset-x-0 bottom-0 top-12 bg-fd-card/50 backdrop-blur-[1px] flex flex-col items-center justify-center rounded-b-lg z-20">
+            <div className="absolute inset-x-0 bottom-0 top-12 bg-transparent backdrop-blur-md flex flex-col items-center justify-center rounded-b-lg z-20">
               <div className="w-7 h-7 border-3 border-[#c5a059] border-t-transparent rounded-full animate-spin mb-2" />
-              <span className="text-xs font-bold text-fd-foreground">Fetching availabilities...</span>
+              <span className="text-xs font-bold text-fd-foreground drop-shadow-sm">Fetching availabilities...</span>
             </div>
           )}
         </div>
@@ -475,7 +475,7 @@ export function HeadlessDemo() {
 }
 
 export function CustomStylingDemo() {
-  const [theme, setTheme] = useState<'cyberpunk' | 'purple' | 'neumorphic'>('cyberpunk');
+  const [theme, setTheme] = useState<'cyberpunk' | 'purple' | 'adaptive'>('adaptive');
   const [selectedDate, setSelectedDate] = useState<Date>(new Date(2026, 8, 13));
 
   const cyberpunkClassNames = {
@@ -512,32 +512,43 @@ export function CustomStylingDemo() {
     },
   };
 
-  const neumorphicClassNames = {
-    root: 'bg-[#faf9f6] p-6 rounded-2xl border border-stone-200/60 shadow-[2px_2px_6px_#e8e4da,-2px_-2px_6px_#ffffff] text-stone-900 w-full max-w-sm',
-    header: 'flex items-center justify-between border-b border-stone-300/70 pb-3 mb-3',
-    navButton: 'p-1.5 text-stone-800 hover:bg-stone-200/60 rounded-xl transition-colors font-bold',
-    monthYearLabel: 'font-serif text-stone-900 text-lg font-extrabold tracking-tight',
-    monthYearButton: 'hover:bg-stone-200/50 px-2 py-1 rounded-lg text-stone-900 font-bold',
-    weekdayGrid: 'grid grid-cols-7 gap-1 mb-2 border-b border-stone-200/60 pb-1',
-    weekday: 'text-center text-[11px] font-black text-amber-950 uppercase tracking-wider',
-    daysGrid: 'grid grid-cols-7 gap-2 bg-transparent',
+  const adaptiveClassNames = {
+    root: 'bg-slate-100/80 dark:bg-slate-900/90 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-lg text-slate-800 dark:text-slate-100 w-full max-w-sm backdrop-blur-md',
+    header: 'flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3 mb-3',
+    navButton: 'p-1.5 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-lg transition-colors',
+    monthYearLabel: 'font-sans text-slate-900 dark:text-slate-50 text-base font-bold tracking-tight',
+    monthYearButton: 'hover:bg-slate-200 dark:hover:bg-slate-800 px-2 py-1 rounded-lg text-slate-900 dark:text-slate-100 font-bold',
+    weekdayGrid: 'grid grid-cols-7 gap-1 mb-2 border-b border-slate-200/60 dark:border-slate-800/60 pb-1',
+    weekday: 'text-center text-[11px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider',
+    daysGrid: 'grid grid-cols-7 gap-1 bg-transparent',
     day: {
-      day: 'aspect-square flex items-center justify-center text-xs font-bold rounded-xl bg-[#faf9f6] text-stone-900 shadow-[1.5px_1.5px_3px_#e2decb,-1.5px_-1.5px_3px_#ffffff] hover:shadow-[inset_1.5px_1.5px_3px_#e2decb,inset_-1.5px_-1.5px_3px_#ffffff] transition-all',
-      selected: 'bg-[#faf9f6] text-amber-950 font-black border-2 border-amber-700 shadow-[inset_1.5px_1.5px_3px_#dcd8ce,inset_-1.5px_-1.5px_3px_#ffffff]',
-      unselected: 'text-stone-900',
-      disabled: 'opacity-30 shadow-none bg-stone-100 text-stone-500 cursor-not-allowed',
+      day: 'aspect-square flex items-center justify-center text-xs font-semibold rounded-lg bg-slate-200/50 dark:bg-slate-800/50 text-slate-800 dark:text-slate-200 hover:bg-emerald-500/20 dark:hover:bg-emerald-500/30 hover:text-emerald-700 dark:hover:text-emerald-300 transition-all',
+      selected: 'bg-emerald-600 dark:bg-emerald-500 text-white font-bold rounded-lg shadow-md shadow-emerald-500/20',
+      unselected: 'text-slate-800 dark:text-slate-200',
+      disabled: 'opacity-30 bg-slate-100 dark:bg-slate-900 text-slate-400 dark:text-slate-600 cursor-not-allowed',
     },
   };
 
   const themeClassNames = {
     cyberpunk: cyberpunkClassNames,
     purple: purpleClassNames,
-    neumorphic: neumorphicClassNames,
+    adaptive: adaptiveClassNames,
   };
 
   return (
     <DemoContainer title="Live Preview: Custom Styling & Themes">
       <div className="flex gap-2 mb-6">
+        <button
+          type="button"
+          onClick={() => setTheme('adaptive')}
+          className={`px-3 py-1.5 text-xs rounded-lg font-semibold transition-all ${
+            theme === 'adaptive'
+              ? 'bg-emerald-600 text-white shadow-md'
+              : 'bg-fd-secondary text-fd-secondary-foreground hover:bg-fd-accent'
+          }`}
+        >
+          Adaptive Glass (Light & Dark)
+        </button>
         <button
           type="button"
           onClick={() => setTheme('cyberpunk')}
@@ -559,17 +570,6 @@ export function CustomStylingDemo() {
           }`}
         >
           Royal Purple
-        </button>
-        <button
-          type="button"
-          onClick={() => setTheme('neumorphic')}
-          className={`px-3 py-1.5 text-xs rounded-lg font-semibold transition-all ${
-            theme === 'neumorphic'
-              ? 'bg-amber-700 text-stone-100 shadow-md'
-              : 'bg-fd-secondary text-fd-secondary-foreground hover:bg-fd-accent'
-          }`}
-        >
-          Neumorphic Cream
         </button>
       </div>
 

@@ -10,7 +10,7 @@ interface DayProps {
 
 export const Day: React.FC<DayProps> = ({ dateObj, getDateProps, dayProps, classNames }) => {
   if (!dateObj) {
-    return <div className="aspect-square bg-white" />;
+    return <div className={classNames.day.empty} />;
   }
 
   const { date, selected, selectable, isRangeStart, isRangeEnd, isRangeBetween, isRangeHovering, isRangeActive } = dateObj;

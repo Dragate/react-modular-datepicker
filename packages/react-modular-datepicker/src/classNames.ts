@@ -3,6 +3,7 @@ export interface DayClassNames {
   selected?: string;
   unselected?: string;
   disabled?: string;
+  empty?: string;
   rangeStart?: string;
   rangeEnd?: string;
   rangeBetween?: string;
@@ -13,14 +14,19 @@ export interface DayClassNames {
 export const defaultClassNames = {
   root: "w-fit flex flex-col p-4 bg-white rounded-lg shadow-lg",
   header: "flex items-center justify-between border-b-2 border-brand-gray-light/40 pb-2",
+  headerMultiMonth: "border-b-0 pb-0",
   calendarsContainer: "flex flex-wrap gap-4",
   calendarContainer: "flex-1 min-w-[280px] max-w-full",
+  navButtonSlotStart: "w-9 flex justify-start",
+  navButtonSlotEnd: "w-9 flex justify-end",
+  headerTitleContainer: "font-semibold text-brand-text text-center flex-1",
   weekdayGrid: "grid grid-cols-7 gap-1 mb-1 border-b border-brand-gray-light/40",
   weekday: "text-center text-xs text-gray-400 py-2",
   daysGrid: "grid grid-cols-7 gap-px bg-brand-gray-light/20",
   footer: "mt-4",
 
   navButton: "p-2 text-brand-text hover:bg-gray-100 rounded-full transition-colors cursor-pointer disabled:opacity-30 disabled:pointer-events-none",
+  navButtonHidden: "invisible pointer-events-none",
   monthYearContainer: "flex gap-8",
   monthYearLabel: "flex gap-1 items-center font-semibold text-brand-text",
   monthYearButton: "hover:bg-gray-100 px-2 py-1 rounded cursor-pointer",
@@ -30,6 +36,7 @@ export const defaultClassNames = {
     selected: "bg-brand-gold text-white rounded-full",
     unselected: "bg-white hover:bg-brand-gold/25 text-brand-text",
     disabled: "bg-white cursor-not-allowed",
+    empty: "aspect-square bg-white",
     rangeStart: "bg-brand-gold text-white",
     rangeEnd: "bg-brand-gold text-white",
     rangeBetween: "bg-brand-gold/25 text-brand-text",
@@ -50,14 +57,19 @@ export const defaultClassNames = {
 export interface CalendarClassNames {
   root?: string;
   header?: string;
+  headerMultiMonth?: string;
   calendarsContainer?: string;
   calendarContainer?: string;
+  navButtonSlotStart?: string;
+  navButtonSlotEnd?: string;
+  headerTitleContainer?: string;
   weekdayGrid?: string;
   weekday?: string;
   daysGrid?: string;
   footer?: string;
 
   navButton?: string;
+  navButtonHidden?: string;
   monthYearContainer?: string;
   monthYearLabel?: string;
   monthYearButton?: string;

@@ -157,7 +157,7 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
           <div key={`${calendar.month}-${calendar.year}`} className={classNames.calendarContainer}>
             {calendars.length > 1 && (
               <div className={classNames.header}>
-                <div className="w-9 flex justify-start">
+                <div className={classNames.navButtonSlotStart}>
                   {index === 0 && calendars.length < 12 && (
                     <button
                       {...wrappedGetBackProps({ calendars })}
@@ -169,11 +169,11 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
                     </button>
                   )}
                 </div>
-                <span className="font-semibold text-brand-text text-center flex-1">
+                <span className={classNames.headerTitleContainer}>
                   {monthNames[calendar.month]}
                   {calendars.length < 12 ? ` ${calendar.year}` : ''}
                 </span>
-                <div className="w-9 flex justify-end">
+                <div className={classNames.navButtonSlotEnd}>
                   {index === calendars.length - 1 && calendars.length < 12 && (
                     <button
                       {...wrappedGetForwardProps({ calendars })}
