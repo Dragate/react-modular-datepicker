@@ -13,7 +13,7 @@ export interface DayClassNames {
 export const defaultClassNames = {
   root: "w-fit flex flex-col p-4 bg-white rounded-lg shadow-lg",
   header: "flex items-center justify-between border-b-2 border-brand-gray-light/40 pb-2",
-  calendarsContainer: "flex flex-wrap gap-4 mt-3",
+  calendarsContainer: "flex flex-wrap gap-4",
   calendarContainer: "flex-1 min-w-[280px] max-w-full",
   weekdayGrid: "grid grid-cols-7 gap-1 mb-1 border-b border-brand-gray-light/40",
   weekday: "text-center text-xs text-gray-400 py-2",
