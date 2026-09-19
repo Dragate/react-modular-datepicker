@@ -287,11 +287,10 @@ export function AvailabilityDemo() {
                     key={slot}
                     type="button"
                     onClick={() => setSelectedSlot(slot)}
-                    className={`py-1.5 px-2 text-xs rounded-lg border transition-colors ${
-                      selectedSlot === slot
-                        ? 'bg-brand-gold text-white font-bold border-brand-gold'
-                        : 'border-fd-border bg-fd-background hover:bg-fd-accent text-fd-foreground'
-                    }`}
+                    className={`py-1.5 px-2 text-xs rounded-lg border transition-colors ${selectedSlot === slot
+                      ? 'bg-brand-gold text-white font-bold border-brand-gold'
+                      : 'border-fd-border bg-fd-background hover:bg-fd-accent text-fd-foreground'
+                      }`}
                   >
                     {slot}
                   </button>
@@ -580,7 +579,7 @@ export function YearlyDemo() {
             day: {
               day: 'aspect-square flex items-center justify-center text-xs font-medium transition-all relative group cursor-pointer p-0',
             },
-            weekday: 'text-center text-[10px] text-gray-400 py-1',
+            weekday: 'text-center text-xs text-gray-400 py-1',
           }}
         />
       </div>

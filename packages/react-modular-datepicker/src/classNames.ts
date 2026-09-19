@@ -26,10 +26,10 @@ export const defaultClassNames = {
   monthYearButton: "hover:bg-gray-100 px-2 py-1 rounded cursor-pointer",
 
   day: {
-    day: "aspect-square flex items-center justify-center text-sm font-medium transition-all relative group cursor-pointer p-px",
+    day: "aspect-square flex items-center justify-center text-sm font-medium transition-all relative group not-disabled:cursor-pointer p-px",
     selected: "bg-brand-gold text-white rounded-full",
-    unselected: "bg-white hover:bg-brand-gray-light text-brand-text",
-    disabled: "bg-white text-gray-300 cursor-not-allowed",
+    unselected: "bg-white hover:bg-brand-gold/25 text-brand-text",
+    disabled: "bg-white cursor-not-allowed",
     rangeStart: "bg-brand-gold text-white",
     rangeEnd: "bg-brand-gold text-white",
     rangeBetween: "bg-brand-gold/25 text-brand-text",

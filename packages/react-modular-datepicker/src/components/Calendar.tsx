@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { useDates, UseDatesProps } from '../useDates';
-import { Day } from './Day';
 import { defaultAdapter } from '../adapters/dayjs';
-import { getTranslations, Translations } from '../i18n';
-import { CalendarHeader, ChevronLeftIcon, ChevronRightIcon } from './CalendarHeader';
-import { DateObj, CalendarClassNames } from '../types';
 import { mergeClassNames } from '../classNames';
+import { getTranslations, Translations } from '../i18n';
+import { CalendarClassNames, DateObj } from '../types';
+import { useDates, UseDatesProps } from '../useDates';
+import { CalendarHeader, ChevronLeftIcon, ChevronRightIcon } from './CalendarHeader';
+import { Day } from './Day';
 import { MonthSelection } from './MonthSelection';
 import { YearSelection } from './YearSelection';
 
@@ -102,29 +102,29 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
 
   const renderDefaultHeader = () => (
     <CalendarHeader
-        calendars={calendars}
-        getBackProps={calendars.length === 12 ? wrappedGetBackProps : getBackProps}
-        getForwardProps={calendars.length === 12 ? wrappedGetForwardProps : getForwardProps}
-        setView={setView}
-        monthNames={monthNames}
-        t={t}
-        classNames={classNames}
-        slideDirection={slideDirection}
-        currentView={view}
+      calendars={calendars}
+      getBackProps={calendars.length === 12 ? wrappedGetBackProps : getBackProps}
+      getForwardProps={calendars.length === 12 ? wrappedGetForwardProps : getForwardProps}
+      setView={setView}
+      monthNames={monthNames}
+      t={t}
+      classNames={classNames}
+      slideDirection={slideDirection}
+      currentView={view}
     />
   );
 
   return (
     <div className={`rmdp ${classNames.root}`}>
       {typeof header === 'function' ? header({
-          calendars,
-          getBackProps: wrappedGetBackProps,
-          getForwardProps: wrappedGetForwardProps,
-          setView,
-          monthNames,
-          t,
-          slideDirection,
-          currentView: view
+        calendars,
+        getBackProps: wrappedGetBackProps,
+        getForwardProps: wrappedGetForwardProps,
+        setView,
+        monthNames,
+        t,
+        slideDirection,
+        currentView: view
       }) : (header || renderDefaultHeader())}
 
       <div className={classNames.calendarsContainer}>
@@ -156,7 +156,7 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
         {view === 'days' && calendars.map((calendar, index) => (
           <div key={`${calendar.month}-${calendar.year}`} className={classNames.calendarContainer}>
             {calendars.length > 1 && (
-              <div className={`${classNames.header} mb-2`}>
+              <div className={classNames.header}>
                 <div className="w-9 flex justify-start">
                   {index === 0 && calendars.length < 12 && (
                     <button

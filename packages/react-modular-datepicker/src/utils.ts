@@ -1,4 +1,4 @@
-import type { DateAdapter, DateObj, SelectionMode, Calendar } from './types';
+import type { Calendar, DateAdapter, DateObj, SelectionMode } from './types';
 
 export function composeEventHandlers(...fns: any[]) {
     return (event: any, ...args: any[]) =>
@@ -215,7 +215,7 @@ function createDateObj(
     const defaultModifiers: Record<string, (d: Date, m: number, y: number) => boolean> = {
         'text-brand-gold border border-brand-gold': (d: Date) =>
             adapter.isSame(adapter.date(d), adapter.date(), 'day'),
-        'text-gray-400 opacity-50': (d: Date, m: number) =>
+        'text-white cursor-default!': (d: Date, m: number) =>
             adapter.get(adapter.date(d), 'month') !== m
     };
     const mergedModifiers: Record<string, (d: Date, m: number, y: number) => boolean> = { ...defaultModifiers, ...modifiers };
@@ -397,7 +397,7 @@ function isSelected(
             }
         }
 
-                const isRangeActive = !!(
+        const isRangeActive = !!(
             (start && end && !adapter.isSame(adapter.date(start), adapter.date(end), 'day')) ||
             (start && !end && hoveredDate && !adapter.isSame(adapter.date(start), adapter.date(hoveredDate), 'day'))
         );
@@ -413,7 +413,7 @@ function isSelected(
     }
 
     if (Array.isArray(selectedDates) && selectedDates.length === 1 && selectionMode === 'single') {
-         return { selected: adapter.isSame(d, adapter.date(selectedDates[0]), 'day') };
+        return { selected: adapter.isSame(d, adapter.date(selectedDates[0]), 'day') };
     }
 
     return { selected: false };
