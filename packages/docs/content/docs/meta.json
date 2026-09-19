@@ -16,6 +16,7 @@
     "recipes/multiple",
     "recipes/headless",
     "recipes/custom-styling",
+    "recipes/modifiers",
     "recipes/localization",
     "recipes/form-integration",
     "recipes/custom-header-footer",

@@ -103,8 +103,8 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
   const renderDefaultHeader = () => (
     <CalendarHeader
       calendars={calendars}
-      getBackProps={calendars.length === 12 ? wrappedGetBackProps : getBackProps}
-      getForwardProps={calendars.length === 12 ? wrappedGetForwardProps : getForwardProps}
+      getBackProps={wrappedGetBackProps}
+      getForwardProps={wrappedGetForwardProps}
       setView={setView}
       monthNames={monthNames}
       t={t}
@@ -192,7 +192,7 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
                 <div key={day} className={classNames.weekday}>{day}</div>
               ))}
             </div>
-            <div className={`${classNames.daysGrid} ${slideDirection === 'left' ? 'animate-slide-in-left' : slideDirection === 'right' ? 'animate-slide-in-right' : ''}`}>
+            <div key={`daysGrid-${calendar.month}-${calendar.year}`} className={`${classNames.daysGrid} ${slideDirection === 'left' ? 'animate-slide-in-left' : slideDirection === 'right' ? 'animate-slide-in-right' : ''}`}>
               {calendar.weeks.map((week, wi) =>
                 week.map((dateObj, di) => (
                   <Day

@@ -42,6 +42,70 @@ export function BasicDemo() {
   );
 }
 
+export function ModifiersDemo() {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = today.getMonth();
+
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date(year, month, 15));
+
+  const birthdays = [`${year}-${month + 1}-12`, `${year}-${month + 1}-24`];
+  const holidays = [`${year}-${month + 1}-1`, `${year}-${month + 1}-25`];
+
+  const getKey = (d: Date) => `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+
+  return (
+    <DemoContainer title="Live Preview: Custom Modifiers (Weekends, Birthdays, Holidays)">
+      <Calendar
+        selected={selectedDate}
+        onChange={(d) => setSelectedDate(d as Date)}
+        modifiers={{
+          weekend: (date) => date.getDay() === 0 || date.getDay() === 6,
+          birthday: (date) => birthdays.includes(getKey(date)),
+          holiday: (date) => holidays.includes(getKey(date)),
+        }}
+        getDayProps={(dateObj) => {
+          const key = getKey(dateObj.date);
+          if (birthdays.includes(key)) {
+            return { 'data-tooltip': '🎂 Birthday!' };
+          }
+          if (holidays.includes(key)) {
+            return { 'data-tooltip': '🎉 Holiday' };
+          }
+          if (dateObj.date.getDay() === 0 || dateObj.date.getDay() === 6) {
+            return { 'data-tooltip': '🌴 Weekend' };
+          }
+          return {};
+        }}
+        classNames={{
+          day: {
+            weekend: 'text-indigo-600 dark:text-indigo-400 font-medium bg-indigo-50/50 dark:bg-indigo-950/20',
+            birthday:
+              'bg-pink-100 dark:bg-pink-950/40 text-pink-700 dark:text-pink-300 font-bold border border-pink-400 relative ' +
+              'before:content-[attr(data-tooltip)] before:absolute before:bottom-full before:left-1/2 before:-translate-x-1/2 before:mb-1 before:hidden hover:before:block ' +
+              'before:px-2 before:py-0.5 before:bg-gray-800 before:text-white before:text-[10px] before:rounded before:whitespace-nowrap before:z-20',
+            holiday:
+              'bg-emerald-100 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 font-bold border border-emerald-400 relative ' +
+              'before:content-[attr(data-tooltip)] before:absolute before:bottom-full before:left-1/2 before:-translate-x-1/2 before:mb-1 before:hidden hover:before:block ' +
+              'before:px-2 before:py-0.5 before:bg-gray-800 before:text-white before:text-[10px] before:rounded before:whitespace-nowrap before:z-20',
+          },
+        }}
+      />
+      <div className="mt-4 flex flex-wrap gap-3 justify-center text-xs">
+        <span className="flex items-center gap-1.5 px-2 py-1 rounded bg-indigo-50 dark:bg-indigo-950/30 text-indigo-600 dark:text-indigo-300 font-medium">
+          <span className="w-2 h-2 rounded-full bg-indigo-500 inline-block" /> Weekend
+        </span>
+        <span className="flex items-center gap-1.5 px-2 py-1 rounded bg-pink-100 dark:bg-pink-950/40 text-pink-700 dark:text-pink-300 font-medium">
+          <span className="w-2 h-2 rounded-full bg-pink-500 inline-block" /> 🎂 Birthday
+        </span>
+        <span className="flex items-center gap-1.5 px-2 py-1 rounded bg-emerald-100 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 font-medium">
+          <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block" /> 🎉 Holiday
+        </span>
+      </div>
+    </DemoContainer>
+  );
+}
+
 export function GoogleCalendarDemo() {
   const today = new Date();
   const year = today.getFullYear();
@@ -409,57 +473,165 @@ export function HeadlessDemo() {
 }
 
 export function CustomStylingDemo() {
+  const [theme, setTheme] = useState<'cyberpunk' | 'purple' | 'neumorphic'>('cyberpunk');
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date(2026, 8, 13));
+
+  const cyberpunkClassNames = {
+    root: 'bg-[#050b14] p-6 rounded-none border-2 border-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.5)] text-cyan-400 font-mono w-full max-w-sm',
+    header: 'flex items-center justify-between border-b border-cyan-500/50 pb-3 mb-3',
+    navButton: 'p-1.5 text-cyan-400 hover:bg-cyan-950 hover:text-cyan-200 rounded transition-colors',
+    monthYearLabel: 'font-mono text-cyan-300 text-base font-bold tracking-wider',
+    monthYearButton: 'hover:bg-cyan-950 px-2 py-1 rounded text-cyan-300',
+    weekdayGrid: 'grid grid-cols-7 gap-1 mb-2 border-b border-cyan-900/60 pb-1',
+    weekday: 'text-center text-xs font-bold text-cyan-400 tracking-widest uppercase',
+    daysGrid: 'grid grid-cols-7 gap-1 bg-transparent',
+    day: {
+      day: 'aspect-square flex items-center justify-center text-xs font-bold transition-all relative border border-cyan-900/80 bg-[#081220] text-cyan-300 hover:border-cyan-400 hover:bg-cyan-950',
+      selected: 'bg-[#081220] text-amber-400 border-2 border-amber-400 shadow-[0_0_10px_rgba(251,191,36,0.6)] font-extrabold',
+      unselected: 'bg-[#081220] text-cyan-300',
+      disabled: 'bg-gray-900/80 text-gray-600 border-gray-900 cursor-not-allowed opacity-40',
+    },
+  };
+
+  const purpleClassNames = {
+    root: 'bg-gradient-to-b from-[#2d0b5a] via-[#1e073e] to-[#120327] p-6 rounded-3xl border border-purple-500/30 shadow-2xl text-purple-100 w-full max-w-sm',
+    header: 'flex items-center justify-between pb-3 mb-2',
+    navButton: 'p-1.5 text-purple-300 hover:bg-purple-900/50 rounded-full transition-colors',
+    monthYearLabel: 'font-sans text-purple-100 text-lg font-extrabold tracking-wide',
+    monthYearButton: 'hover:bg-purple-900/40 px-2 py-1 rounded-lg text-purple-100',
+    weekdayGrid: 'grid grid-cols-7 gap-1 mb-3',
+    weekday: 'text-center text-xs font-bold text-purple-300 uppercase tracking-wider',
+    daysGrid: 'grid grid-cols-7 gap-2 bg-transparent',
+    day: {
+      day: 'aspect-square flex items-center justify-center text-xs font-semibold rounded-full transition-all text-purple-100 hover:bg-purple-800/40',
+      selected: 'bg-purple-900/60 text-white font-bold ring-2 ring-pink-500 ring-offset-2 ring-offset-[#1e073e] rounded-full shadow-[0_0_12px_rgba(236,72,153,0.7)]',
+      unselected: 'text-purple-100',
+      disabled: 'bg-purple-950/40 text-purple-400/30 cursor-not-allowed',
+    },
+  };
+
+  const neumorphicClassNames = {
+    root: 'bg-[#f5f3ef] p-6 rounded-3xl border border-stone-200/60 shadow-[10px_10px_20px_#e0ded9,-10px_-10px_20px_#ffffff] text-stone-800 w-full max-w-sm',
+    header: 'flex items-center justify-between border-b border-stone-200/80 pb-3 mb-3',
+    navButton: 'p-1.5 text-stone-600 hover:bg-stone-200/50 rounded-xl transition-colors',
+    monthYearLabel: 'font-serif text-stone-800 text-lg font-bold tracking-tight',
+    monthYearButton: 'hover:bg-stone-200/40 px-2 py-1 rounded-lg text-stone-800',
+    weekdayGrid: 'grid grid-cols-7 gap-1 mb-2',
+    weekday: 'text-center text-[11px] font-bold text-amber-800/80 uppercase tracking-wider',
+    daysGrid: 'grid grid-cols-7 gap-2 bg-transparent',
+    day: {
+      day: 'aspect-square flex items-center justify-center text-xs font-semibold rounded-xl bg-[#f5f3ef] text-stone-700 shadow-[3px_3px_6px_#e0ded9,-3px_-3px_6px_#ffffff] hover:shadow-[inset_2px_2px_4px_#e0ded9,inset_-2px_-2px_4px_#ffffff] transition-all',
+      selected: 'bg-[#f5f3ef] text-amber-900 font-bold border-2 border-amber-700/80 shadow-[inset_2px_2px_5px_#e0ded9,inset_-2px_-2px_5px_#ffffff]',
+      unselected: 'text-stone-700',
+      disabled: 'opacity-30 shadow-none bg-stone-100 text-stone-400 cursor-not-allowed',
+    },
+  };
+
+  const themeClassNames = {
+    cyberpunk: cyberpunkClassNames,
+    purple: purpleClassNames,
+    neumorphic: neumorphicClassNames,
+  };
+
   return (
-    <DemoContainer title="Live Preview: Custom Styling (Amber Theme)">
+    <DemoContainer title="Live Preview: Custom Styling & Themes">
+      <div className="flex gap-2 mb-6">
+        <button
+          type="button"
+          onClick={() => setTheme('cyberpunk')}
+          className={`px-3 py-1.5 text-xs rounded-lg font-semibold transition-all ${
+            theme === 'cyberpunk'
+              ? 'bg-cyan-500 text-black shadow-md'
+              : 'bg-fd-secondary text-fd-secondary-foreground hover:bg-fd-accent'
+          }`}
+        >
+          Cyberpunk Cyan
+        </button>
+        <button
+          type="button"
+          onClick={() => setTheme('purple')}
+          className={`px-3 py-1.5 text-xs rounded-lg font-semibold transition-all ${
+            theme === 'purple'
+              ? 'bg-purple-600 text-white shadow-md'
+              : 'bg-fd-secondary text-fd-secondary-foreground hover:bg-fd-accent'
+          }`}
+        >
+          Royal Purple
+        </button>
+        <button
+          type="button"
+          onClick={() => setTheme('neumorphic')}
+          className={`px-3 py-1.5 text-xs rounded-lg font-semibold transition-all ${
+            theme === 'neumorphic'
+              ? 'bg-amber-700 text-stone-100 shadow-md'
+              : 'bg-fd-secondary text-fd-secondary-foreground hover:bg-fd-accent'
+          }`}
+        >
+          Neumorphic Cream
+        </button>
+      </div>
+
       <Calendar
-        classNames={{
-          root: 'bg-amber-500/10 p-6 rounded-2xl border border-amber-500/30 shadow-lg text-amber-900 dark:text-amber-100',
-          monthYearLabel: 'font-serif text-amber-900 dark:text-amber-100 text-lg font-bold',
-          day: {
-            unselected: 'bg-white/80 dark:bg-amber-950/40 border border-amber-200 hover:bg-amber-200/50 text-amber-900 dark:text-amber-100',
-            selected: 'bg-amber-800 text-amber-50 font-bold',
-          }
-        }}
+        date={selectedDate}
+        selected={selectedDate}
+        onChange={(d) => setSelectedDate(d as Date)}
+        classNames={themeClassNames[theme]}
       />
     </DemoContainer>
   );
 }
 
 export function LocalizationDemo() {
-  const [lang, setLang] = useState<'es' | 'fr' | 'de'>('es');
+  const [lang, setLang] = useState<'es' | 'fr' | 'de' | 'ar'>('es');
   const translationsMap = {
     es: {
       months: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
       weekdays: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
+      back: 'Mes anterior',
+      forward: 'Mes siguiente',
     },
     fr: {
       months: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
       weekdays: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
+      back: 'Mois précédent',
+      forward: 'Mois suivant',
     },
     de: {
       months: ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'],
       weekdays: ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'],
+      back: 'Vorheriger Monat',
+      forward: 'Nächster Monat',
+    },
+    ar: {
+      months: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'],
+      weekdays: ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'],
+      back: 'الشهر السابق',
+      forward: 'الشهر التالي',
     },
   };
 
+  const isRtl = lang === 'ar';
+
   return (
-    <DemoContainer title="Live Preview: Localization & Translations">
+    <DemoContainer title="Live Preview: Localization & RTL Support">
       <div className="flex gap-2 mb-4">
-        {(['es', 'fr', 'de'] as const).map((l) => (
+        {(['es', 'fr', 'de', 'ar'] as const).map((l) => (
           <button
             key={l}
             onClick={() => setLang(l)}
             className={`px-3 py-1 text-xs rounded font-medium transition-colors ${lang === l ? 'bg-fd-primary text-fd-primary-foreground' : 'bg-fd-secondary text-fd-secondary-foreground'
               }`}
           >
-            {l.toUpperCase()}
+            {l === 'ar' ? 'العربية (RTL)' : l.toUpperCase()}
           </button>
         ))}
       </div>
-      <Calendar
-        firstDayOfWeek={1}
-        translations={translationsMap[lang]}
-      />
+      <div dir={isRtl ? 'rtl' : 'ltr'} className="w-full flex justify-center">
+        <Calendar
+          firstDayOfWeek={isRtl ? 6 : 1}
+          translations={translationsMap[lang]}
+        />
+      </div>
     </DemoContainer>
   );
 }
