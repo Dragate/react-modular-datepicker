@@ -19,6 +19,10 @@ const config: NextConfig = {
       },
     },
   },
+  rewrites: async () => [{
+    source: '/docs/:slug*.md',
+    destination: '/llms.mdx/docs/:slug*/content.md',
+  }]
 };
 
 export default withMDX(config);

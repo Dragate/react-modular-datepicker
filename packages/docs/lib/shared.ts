@@ -1,9 +1,7 @@
 import { createGetUrl } from 'fumadocs-core/source';
 
 export const appName = 'react-modular-datepicker';
-export const docsRoute = '/docs';
 export const docsImageRoute = '/og/docs';
-export const docsContentRoute = '/llms.mdx/docs';
 
 export const gitConfig = {
   user: 'Dragate',
@@ -11,7 +9,7 @@ export const gitConfig = {
   branch: 'main',
 };
 
-const getContentUrl = createGetUrl(docsContentRoute);
+const getContentUrl = createGetUrl('/llms.mdx/docs');
 
 export function getPageMarkdownUrl(page: { slugs: string[]; locale?: string }) {
   const segments = [...page.slugs, 'content.md'];

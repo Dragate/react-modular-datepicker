@@ -5,7 +5,10 @@ export const revalidate = false;
 
 export async function GET(_req: Request, { params }: RouteContext<'/llms.mdx/docs/[[...slug]]'>) {
   const { slug } = await params;
-  const page = source.getPage(slug);
+  // remove the appended "content.md", `/docs/index.md` is rewritten to the root page
+  const slugs = slug?.slice(0, -1) ?? [];
+  if (slugs.at(-1) === 'index') slugs.pop();
+  const page = source.getPage(slugs);
   if (!page) notFound();
 
   return new Response(await docsLlms.page(page), {
@@ -16,5 +19,8 @@ export async function GET(_req: Request, { params }: RouteContext<'/llms.mdx/doc
 }
 
 export function generateStaticParams() {
-  return source.generateParams();
+  return source.generateParams().map((item) => ({
+    ...item,
+    slug: [...item.slug, 'content.md'],
+  }));
 }
