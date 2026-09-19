@@ -79,27 +79,27 @@ export function ModifiersDemo() {
         }}
         classNames={{
           day: {
-            weekend: 'text-indigo-600 dark:text-indigo-400 font-medium bg-indigo-50/50 dark:bg-indigo-950/20',
-            birthday:
-              'bg-pink-100 dark:bg-pink-950/40 text-pink-700 dark:text-pink-300 font-bold border border-pink-400 relative ' +
+            weekend: 'bg-indigo-100/70 dark:bg-indigo-950/50 text-indigo-900 dark:text-indigo-200 font-bold',
+            holiday:
+              'border-2 border-emerald-500 font-bold relative ' +
               'before:content-[attr(data-tooltip)] before:absolute before:bottom-full before:left-1/2 before:-translate-x-1/2 before:mb-1 before:hidden hover:before:block ' +
               'before:px-2 before:py-0.5 before:bg-gray-800 before:text-white before:text-[10px] before:rounded before:whitespace-nowrap before:z-20',
-            holiday:
-              'bg-emerald-100 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 font-bold border border-emerald-400 relative ' +
+            birthday:
+              'text-pink-600 dark:text-pink-400 font-black scale-105 relative ' +
               'before:content-[attr(data-tooltip)] before:absolute before:bottom-full before:left-1/2 before:-translate-x-1/2 before:mb-1 before:hidden hover:before:block ' +
               'before:px-2 before:py-0.5 before:bg-gray-800 before:text-white before:text-[10px] before:rounded before:whitespace-nowrap before:z-20',
           },
         }}
       />
       <div className="mt-4 flex flex-wrap gap-3 justify-center text-xs">
-        <span className="flex items-center gap-1.5 px-2 py-1 rounded bg-indigo-50 dark:bg-indigo-950/30 text-indigo-600 dark:text-indigo-300 font-medium">
-          <span className="w-2 h-2 rounded-full bg-indigo-500 inline-block" /> Weekend
+        <span className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-indigo-100/70 dark:bg-indigo-950/50 text-indigo-900 dark:text-indigo-200 font-semibold">
+          <span className="w-2.5 h-2.5 rounded-full bg-indigo-500 inline-block" /> Weekend (Background Color)
         </span>
-        <span className="flex items-center gap-1.5 px-2 py-1 rounded bg-pink-100 dark:bg-pink-950/40 text-pink-700 dark:text-pink-300 font-medium">
-          <span className="w-2 h-2 rounded-full bg-pink-500 inline-block" /> 🎂 Birthday
+        <span className="flex items-center gap-1.5 px-2.5 py-1 rounded border-2 border-emerald-500 text-emerald-800 dark:text-emerald-200 font-bold">
+          <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block" /> 🎉 Holiday (Border Highlight)
         </span>
-        <span className="flex items-center gap-1.5 px-2 py-1 rounded bg-emerald-100 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 font-medium">
-          <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block" /> 🎉 Holiday
+        <span className="flex items-center gap-1.5 px-2.5 py-1 rounded text-pink-600 dark:text-pink-400 font-black">
+          <span className="w-2.5 h-2.5 rounded-full bg-pink-500 inline-block" /> 🎂 Birthday (Text Color)
         </span>
       </div>
     </DemoContainer>
@@ -309,7 +309,7 @@ export function AvailabilityDemo() {
   return (
     <DemoContainer title="Live Preview: Availability & Booking Calendar">
       <div className="flex flex-col md:flex-row gap-6 items-start w-full max-w-2xl justify-center">
-        <div className="relative">
+        <div className="relative border border-fd-border rounded-lg bg-fd-card">
           <Calendar
             selected={selectedDate || undefined}
             onChange={(d) => {
@@ -320,14 +320,16 @@ export function AvailabilityDemo() {
             onMonthChange={handleMonthChange}
             disabledDates={bookedDays}
             classNames={{
+              daysGrid: 'grid grid-cols-7 gap-px bg-brand-gray-light/20 relative',
               day: {
                 disabled: 'text-red-400 line-through cursor-not-allowed',
+                outside: 'bg-white dark:bg-zinc-900 text-transparent border-none opacity-0 select-none pointer-events-none',
               },
             }}
           />
 
           {isLoading && (
-            <div className="absolute inset-0 bg-fd-background/80 backdrop-blur-xs flex flex-col items-center justify-center rounded-lg z-20">
+            <div className="absolute inset-x-0 bottom-0 top-12 bg-fd-card/85 backdrop-blur-xs flex flex-col items-center justify-center rounded-b-lg z-20">
               <div className="w-7 h-7 border-3 border-[#c5a059] border-t-transparent rounded-full animate-spin mb-2" />
               <span className="text-xs font-semibold text-fd-foreground">Fetching availabilities...</span>
             </div>
@@ -511,19 +513,19 @@ export function CustomStylingDemo() {
   };
 
   const neumorphicClassNames = {
-    root: 'bg-[#f5f3ef] p-6 rounded-3xl border border-stone-200/60 shadow-[10px_10px_20px_#e0ded9,-10px_-10px_20px_#ffffff] text-stone-800 w-full max-w-sm',
-    header: 'flex items-center justify-between border-b border-stone-200/80 pb-3 mb-3',
-    navButton: 'p-1.5 text-stone-600 hover:bg-stone-200/50 rounded-xl transition-colors',
+    root: 'bg-[#faf9f6] p-6 rounded-2xl border border-stone-200/50 shadow-[4px_4px_12px_#e6e3dc,-4px_-4px_12px_#ffffff] text-stone-800 w-full max-w-sm',
+    header: 'flex items-center justify-between border-b border-stone-200/60 pb-3 mb-3',
+    navButton: 'p-1.5 text-stone-600 hover:bg-stone-200/40 rounded-xl transition-colors',
     monthYearLabel: 'font-serif text-stone-800 text-lg font-bold tracking-tight',
-    monthYearButton: 'hover:bg-stone-200/40 px-2 py-1 rounded-lg text-stone-800',
+    monthYearButton: 'hover:bg-stone-200/30 px-2 py-1 rounded-lg text-stone-800',
     weekdayGrid: 'grid grid-cols-7 gap-1 mb-2',
-    weekday: 'text-center text-[11px] font-bold text-amber-800/80 uppercase tracking-wider',
+    weekday: 'text-center text-[11px] font-bold text-amber-900/70 uppercase tracking-wider',
     daysGrid: 'grid grid-cols-7 gap-2 bg-transparent',
     day: {
-      day: 'aspect-square flex items-center justify-center text-xs font-semibold rounded-xl bg-[#f5f3ef] text-stone-700 shadow-[3px_3px_6px_#e0ded9,-3px_-3px_6px_#ffffff] hover:shadow-[inset_2px_2px_4px_#e0ded9,inset_-2px_-2px_4px_#ffffff] transition-all',
-      selected: 'bg-[#f5f3ef] text-amber-900 font-bold border-2 border-amber-700/80 shadow-[inset_2px_2px_5px_#e0ded9,inset_-2px_-2px_5px_#ffffff]',
+      day: 'aspect-square flex items-center justify-center text-xs font-semibold rounded-xl bg-[#faf9f6] text-stone-700 shadow-[2px_2px_5px_#e6e3dc,-2px_-2px_5px_#ffffff] hover:shadow-[inset_1.5px_1.5px_3px_#e6e3dc,inset_-1.5px_-1.5px_3px_#ffffff] transition-all',
+      selected: 'bg-[#faf9f6] text-amber-900 font-bold border border-amber-600/70 shadow-[inset_1.5px_1.5px_3px_#dcd8ce,inset_-1.5px_-1.5px_3px_#ffffff]',
       unselected: 'text-stone-700',
-      disabled: 'opacity-30 shadow-none bg-stone-100 text-stone-400 cursor-not-allowed',
+      disabled: 'opacity-30 shadow-none bg-stone-100/50 text-stone-400 cursor-not-allowed',
     },
   };
 
