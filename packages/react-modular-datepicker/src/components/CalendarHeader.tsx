@@ -44,7 +44,7 @@ export const CalendarHeader: React.FC<HeaderProps> = ({
   const last = calendars[calendars.length - 1];
 
   return (
-    <div className={classNames.header}>
+    <div className={`${classNames.header} ${calendars.length > 1 ? 'border-b-0 pb-0' : ''}`}>
       <button
         {...getBackProps({ calendars })}
         onMouseDown={(e) => e.preventDefault()}
