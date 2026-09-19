@@ -1,32 +1,27 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
   <defs>
-    <!-- Primary Brand Gradient -->
-    <linearGradient id="brandGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+    <!-- Highlight Gradient for Active Modules -->
+    <linearGradient id="activeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#D8B775" />
       <stop offset="100%" stop-color="#C5A059" />
     </linearGradient>
-    <!-- Deep Accent Gradient for Highlighted Module -->
-    <linearGradient id="moduleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#C5A059" />
-      <stop offset="100%" stop-color="#9E7C3B" />
-    </linearGradient>
   </defs>
 
-  <!-- Outer Calendar Frame -->
-  <rect x="30" y="40" width="140" height="130" rx="18" fill="none" stroke="url(#brandGrad)" stroke-width="8" />
+  <!-- Outer Rounded Calendar Frame -->
+  <rect x="25" y="25" width="150" height="150" rx="30" fill="none" stroke="#C5A059" stroke-width="12" />
 
-  <!-- Calendar Header Bar -->
-  <path d="M 30 72 L 170 72" stroke="url(#brandGrad)" stroke-width="6" stroke-linecap="round" />
+  <!-- Horizontal Divider Line Connected to Frame Sides -->
+  <line x1="25" y1="68" x2="175" y2="68" stroke="#C5A059" stroke-width="8" opacity="0.85" />
 
   <!-- Modular Grid Blocks -->
-  <!-- Row 1 -->
-  <rect x="52" y="90" width="22" height="22" rx="6" fill="#C5A059" opacity="0.25" />
-  <rect x="89" y="90" width="22" height="22" rx="6" fill="#C5A059" opacity="0.25" />
-  <rect x="126" y="90" width="22" height="22" rx="6" fill="#C5A059" opacity="0.25" />
+  <!-- Top Row (Inactive / Dark Modules) -->
+  <rect x="48" y="86" width="28" height="28" rx="8" fill="#C5A059" opacity="0.2" />
+  <rect x="86" y="86" width="28" height="28" rx="8" fill="#C5A059" opacity="0.2" />
+  <rect x="124" y="86" width="28" height="28" rx="8" fill="#C5A059" opacity="0.2" />
 
-  <!-- Row 2 -->
-  <rect x="52" y="127" width="22" height="22" rx="6" fill="#C5A059" opacity="0.25" />
-  <!-- Active / Modular Highlighted Blocks -->
-  <rect x="89" y="127" width="22" height="22" rx="6" fill="url(#brandGrad)" />
-  <rect x="126" y="127" width="22" height="22" rx="6" fill="url(#moduleGrad)" />
+  <!-- Bottom Row -->
+  <rect x="48" y="124" width="28" height="28" rx="8" fill="#C5A059" opacity="0.2" />
+  <!-- Active / Highlighted Modules -->
+  <rect x="86" y="124" width="28" height="28" rx="8" fill="url(#activeGrad)" />
+  <rect x="124" y="124" width="28" height="28" rx="8" fill="url(#activeGrad)" />
 </svg>

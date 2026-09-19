@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200"><metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/"><rdf:Description><dc:creator>RealFaviconGenerator</dc:creator><dc:source>https://realfavicongenerator.net</dc:source></rdf:Description></rdf:RDF></metadata><defs>
+    <!-- Highlight Gradient for Active Modules -->
+    <linearGradient id="activeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#D8B775"></stop>
+      <stop offset="100%" stop-color="#C5A059"></stop>
+    </linearGradient>
+  </defs><rect x="25" y="25" width="150" height="150" rx="30" fill="none" stroke="#C5A059" stroke-width="12"></rect><line x1="25" y1="68" x2="175" y2="68" stroke="#C5A059" stroke-width="8" opacity="0.85"></line><rect x="48" y="86" width="28" height="28" rx="8" fill="#C5A059" opacity="0.2"></rect><rect x="86" y="86" width="28" height="28" rx="8" fill="#C5A059" opacity="0.2"></rect><rect x="124" y="86" width="28" height="28" rx="8" fill="#C5A059" opacity="0.2"></rect><rect x="48" y="124" width="28" height="28" rx="8" fill="#C5A059" opacity="0.2"></rect><rect x="86" y="124" width="28" height="28" rx="8" fill="url(#activeGrad)"></rect><rect x="124" y="124" width="28" height="28" rx="8" fill="url(#activeGrad)"></rect></svg>
