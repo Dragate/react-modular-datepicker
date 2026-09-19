@@ -329,9 +329,9 @@ export function AvailabilityDemo() {
           />
 
           {isLoading && (
-            <div className="absolute inset-x-0 bottom-0 top-12 bg-fd-card/85 backdrop-blur-xs flex flex-col items-center justify-center rounded-b-lg z-20">
+            <div className="absolute inset-x-0 bottom-0 top-12 bg-fd-card/50 backdrop-blur-[1px] flex flex-col items-center justify-center rounded-b-lg z-20">
               <div className="w-7 h-7 border-3 border-[#c5a059] border-t-transparent rounded-full animate-spin mb-2" />
-              <span className="text-xs font-semibold text-fd-foreground">Fetching availabilities...</span>
+              <span className="text-xs font-bold text-fd-foreground">Fetching availabilities...</span>
             </div>
           )}
         </div>
@@ -513,19 +513,19 @@ export function CustomStylingDemo() {
   };
 
   const neumorphicClassNames = {
-    root: 'bg-[#faf9f6] p-6 rounded-2xl border border-stone-200/50 shadow-[4px_4px_12px_#e6e3dc,-4px_-4px_12px_#ffffff] text-stone-800 w-full max-w-sm',
-    header: 'flex items-center justify-between border-b border-stone-200/60 pb-3 mb-3',
-    navButton: 'p-1.5 text-stone-600 hover:bg-stone-200/40 rounded-xl transition-colors',
-    monthYearLabel: 'font-serif text-stone-800 text-lg font-bold tracking-tight',
-    monthYearButton: 'hover:bg-stone-200/30 px-2 py-1 rounded-lg text-stone-800',
-    weekdayGrid: 'grid grid-cols-7 gap-1 mb-2',
-    weekday: 'text-center text-[11px] font-bold text-amber-900/70 uppercase tracking-wider',
+    root: 'bg-[#faf9f6] p-6 rounded-2xl border border-stone-200/60 shadow-[2px_2px_6px_#e8e4da,-2px_-2px_6px_#ffffff] text-stone-900 w-full max-w-sm',
+    header: 'flex items-center justify-between border-b border-stone-300/70 pb-3 mb-3',
+    navButton: 'p-1.5 text-stone-800 hover:bg-stone-200/60 rounded-xl transition-colors font-bold',
+    monthYearLabel: 'font-serif text-stone-900 text-lg font-extrabold tracking-tight',
+    monthYearButton: 'hover:bg-stone-200/50 px-2 py-1 rounded-lg text-stone-900 font-bold',
+    weekdayGrid: 'grid grid-cols-7 gap-1 mb-2 border-b border-stone-200/60 pb-1',
+    weekday: 'text-center text-[11px] font-black text-amber-950 uppercase tracking-wider',
     daysGrid: 'grid grid-cols-7 gap-2 bg-transparent',
     day: {
-      day: 'aspect-square flex items-center justify-center text-xs font-semibold rounded-xl bg-[#faf9f6] text-stone-700 shadow-[2px_2px_5px_#e6e3dc,-2px_-2px_5px_#ffffff] hover:shadow-[inset_1.5px_1.5px_3px_#e6e3dc,inset_-1.5px_-1.5px_3px_#ffffff] transition-all',
-      selected: 'bg-[#faf9f6] text-amber-900 font-bold border border-amber-600/70 shadow-[inset_1.5px_1.5px_3px_#dcd8ce,inset_-1.5px_-1.5px_3px_#ffffff]',
-      unselected: 'text-stone-700',
-      disabled: 'opacity-30 shadow-none bg-stone-100/50 text-stone-400 cursor-not-allowed',
+      day: 'aspect-square flex items-center justify-center text-xs font-bold rounded-xl bg-[#faf9f6] text-stone-900 shadow-[1.5px_1.5px_3px_#e2decb,-1.5px_-1.5px_3px_#ffffff] hover:shadow-[inset_1.5px_1.5px_3px_#e2decb,inset_-1.5px_-1.5px_3px_#ffffff] transition-all',
+      selected: 'bg-[#faf9f6] text-amber-950 font-black border-2 border-amber-700 shadow-[inset_1.5px_1.5px_3px_#dcd8ce,inset_-1.5px_-1.5px_3px_#ffffff]',
+      unselected: 'text-stone-900',
+      disabled: 'opacity-30 shadow-none bg-stone-100 text-stone-500 cursor-not-allowed',
     },
   };
 

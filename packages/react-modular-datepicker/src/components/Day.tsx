@@ -1,5 +1,6 @@
 import React from 'react';
 import type { CalendarClassNames, DateObj } from '../types';
+import { cn } from '../utils';
 
 interface DayProps {
   dateObj: DateObj | null;
@@ -35,11 +36,11 @@ export const Day: React.FC<DayProps> = ({ dateObj, getDateProps, dayProps, class
     stateClasses = dayClasses.unselected || '';
   }
 
-  const className = [
+  const className = cn(
     dayClasses.day,
     stateClasses,
     ...(dateObj.modifiers || []).map(m => (dayClasses as any)[m] || m)
-  ].filter(Boolean).join(' ');
+  );
 
   return (
     <button
