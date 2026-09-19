@@ -1,0 +1,74 @@
+---
+title: Availability & Booking Calendar
+description: Build appointment booking and availability calendars with custom modifier styles, disabled dates, and month change loading indicators.
+---
+
+# Availability & Booking Calendar
+
+Create availability calendars for appointments, hotel bookings, or resource scheduling using disabled dates, custom modifier classes, and async month navigation callbacks.
+
+<AvailabilityDemo />
+
+---
+
+## Code Example
+
+```tsx
+import { useState } from 'react';
+import { Calendar } from 'react-modular-datepicker';
+import 'react-modular-datepicker/dist/index.css';
+
+const bookedDays = [
+  new Date(2025, 2, 3),
+  new Date(2025, 2, 4),
+  new Date(2025, 2, 10),
+];
+
+const availableSlotsMap: Record<string, string[]> = {
+  '2025-03-08': ['09:00 AM', '10:30 AM', '02:00 PM'],
+  '2025-03-09': ['01:00 PM', '03:30 PM'],
+  '2025-03-15': ['09:00 AM', '11:00 AM', '04:00 PM'],
+};
+
+export function AvailabilityExample() {
+  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date(2025, 2, 8));
+  const [isLoading, setIsLoading] = useState(false);
+
+  const getKey = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+
+  const handleMonthChange = (newDate: Date) => {
+    setIsLoading(true);
+    // Simulate API fetch for month availabilities
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 700);
+  };
+
+  return (
+    <div className="relative inline-block">
+      <Calendar
+        selected={selectedDate || undefined}
+        onChange={(d) => setSelectedDate(d as Date)}
+        onMonthChange={handleMonthChange}
+        disabledDates={bookedDays}
+        modifiers={{
+          available: (d) => !!availableSlotsMap[getKey(d)],
+        }}
+        classNames={{
+          day: {
+            disabled: 'bg-red-50 text-red-300 line-through cursor-not-allowed',
+            available: 'font-semibold text-emerald-600',
+          },
+        }}
+      />
+
+      {isLoading && (
+        <div className="absolute inset-0 bg-white/80 flex flex-col items-center justify-center rounded-lg z-20">
+          <div className="w-6 h-6 border-2 border-emerald-600 border-t-transparent rounded-full animate-spin mb-1" />
+          <span className="text-xs font-medium text-gray-700">Fetching availabilities...</span>
+        </div>
+      )}
+    </div>
+  );
+}
+```
