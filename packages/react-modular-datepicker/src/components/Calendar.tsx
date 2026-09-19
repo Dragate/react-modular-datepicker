@@ -154,7 +154,7 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
         {view === 'days' && calendars.map((calendar, index) => (
           <div key={`${calendar.month}-${calendar.year}`} className={classNames.calendarContainer}>
             {calendars.length > 1 && (
-              <div className="flex items-center justify-between mb-2">
+              <div className={`${classNames.header} mb-2`}>
                 <div className="w-9 flex justify-start">
                   {index === 0 && calendars.length < 12 && (
                     <button
