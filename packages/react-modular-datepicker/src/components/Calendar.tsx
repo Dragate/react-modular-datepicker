@@ -3,7 +3,7 @@ import { useDates, UseDatesProps } from '../useDates';
 import { Day } from './Day';
 import { defaultAdapter } from '../adapters/dayjs';
 import { getTranslations, Translations } from '../i18n';
-import { CalendarHeader } from './CalendarHeader';
+import { CalendarHeader, ChevronLeftIcon, ChevronRightIcon } from './CalendarHeader';
 import { DateObj, CalendarClassNames } from '../types';
 import { mergeClassNames } from '../classNames';
 import { MonthSelection } from './MonthSelection';
@@ -76,8 +76,10 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
     setView('days');
   };
 
+  const stepOffset = useDatesProps.monthsToDisplay || 1;
+
   const wrappedGetBackProps = (args: any) => {
-    const props = getBackProps(args);
+    const props = getBackProps({ offset: stepOffset, ...args });
     return {
       ...props,
       onClick: (e: any) => {
@@ -88,7 +90,7 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
   };
 
   const wrappedGetForwardProps = (args: any) => {
-    const props = getForwardProps(args);
+    const props = getForwardProps({ offset: stepOffset, ...args });
     return {
       ...props,
       onClick: (e: any) => {
@@ -101,8 +103,8 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
   const renderDefaultHeader = () => (
     <CalendarHeader
         calendars={calendars}
-        getBackProps={wrappedGetBackProps}
-        getForwardProps={wrappedGetForwardProps}
+        getBackProps={calendars.length === 12 ? wrappedGetBackProps : getBackProps}
+        getForwardProps={calendars.length === 12 ? wrappedGetForwardProps : getForwardProps}
         setView={setView}
         monthNames={monthNames}
         t={t}
@@ -151,16 +153,39 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
             />
           </div>
         ))}
-        {view === 'days' && calendars.map((calendar) => (
+        {view === 'days' && calendars.map((calendar, index) => (
           <div key={`${calendar.month}-${calendar.year}`} className={classNames.calendarContainer}>
             {calendars.length > 1 && (
-              <button
-                type="button"
-                aria-label={monthNames[calendar.month]}
-                className="block w-full text-center font-semibold mb-2 text-brand-text"
-              >
-                {monthNames[calendar.month]} {calendars[0].year !== calendars[calendars.length - 1].year ? calendar.year : ''}
-              </button>
+              <div className={`${classNames.header} mb-2`}>
+                <div className="w-9 flex justify-start">
+                  {index === 0 && calendars.length < 12 && (
+                    <button
+                      {...wrappedGetBackProps({ calendars })}
+                      onMouseDown={(e) => e.preventDefault()}
+                      className={classNames.navButton}
+                      aria-label={t.back}
+                    >
+                      <ChevronLeftIcon />
+                    </button>
+                  )}
+                </div>
+                <span className="font-semibold text-brand-text text-center flex-1">
+                  {monthNames[calendar.month]}
+                  {calendars.length < 12 ? ` ${calendar.year}` : ''}
+                </span>
+                <div className="w-9 flex justify-end">
+                  {index === calendars.length - 1 && calendars.length < 12 && (
+                    <button
+                      {...wrappedGetForwardProps({ calendars })}
+                      onMouseDown={(e) => e.preventDefault()}
+                      className={classNames.navButton}
+                      aria-label={t.forward}
+                    >
+                      <ChevronRightIcon />
+                    </button>
+                  )}
+                </div>
+              </div>
             )}
             <div className={classNames.weekdayGrid}>
               {sortedWeekdays.map((day) => (

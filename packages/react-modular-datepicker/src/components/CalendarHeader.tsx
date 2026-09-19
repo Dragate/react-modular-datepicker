@@ -36,8 +36,15 @@ export const CalendarHeader: React.FC<HeaderProps> = ({
   slideDirection,
   currentView
 }) => {
+  if (calendars.length > 1 && calendars.length < 12) {
+    return null;
+  }
+
+  const first = calendars[0];
+  const last = calendars[calendars.length - 1];
+
   return (
-    <div className={classNames.header}>
+    <div className={`${classNames.header} ${calendars.length > 1 ? 'border-b-0 pb-0' : ''}`}>
       <button
         {...getBackProps({ calendars })}
         onMouseDown={(e) => e.preventDefault()}
@@ -67,19 +74,9 @@ export const CalendarHeader: React.FC<HeaderProps> = ({
           </div>
         ) : (
           <div className={`${classNames.monthYearLabel} ${slideDirection === 'left' ? 'animate-slide-in-left' : slideDirection === 'right' ? 'animate-slide-in-right' : ''}`}>
-            {(() => {
-              const first = calendars[0];
-              const last = calendars[calendars.length - 1];
-              const isFullYear = calendars.length === 12 && first.month === 0 && last.month === 11 && first.year === last.year;
-
-              if (isFullYear) {
-                return <span>{first.year}</span>;
-              } else if (first.year === last.year) {
-                return <span>{monthNames[first.month]} - {monthNames[last.month]} {first.year}</span>;
-              } else {
-                return <span>{monthNames[first.month]} {first.year} - {monthNames[last.month]} {last.year}</span>;
-              }
-            })()}
+            <span>
+              {first.year === last.year ? first.year : `${first.year} - ${last.year}`}
+            </span>
           </div>
         )}
       </div>

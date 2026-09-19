@@ -565,11 +565,25 @@ export function MinMaxDisabledDemo() {
 }
 
 export function YearlyDemo() {
+  const currentYear = new Date().getFullYear();
+  const startOfYear = new Date(currentYear, 0, 1);
+
   return (
-    <DemoContainer title="Live Preview: Multi-Month Grid">
-      <Calendar
-        monthsToDisplay={4}
-      />
+    <DemoContainer title="Live Preview: Yearly View">
+      <div className="w-full">
+        <Calendar
+          date={startOfYear}
+          monthsToDisplay={12}
+          classNames={{
+            calendarsContainer: 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-3 w-full',
+            calendarContainer: 'min-w-0',
+            day: {
+              day: 'aspect-square flex items-center justify-center text-xs font-medium transition-all relative group cursor-pointer p-0',
+            },
+            weekday: 'text-center text-[10px] text-gray-400 py-1',
+          }}
+        />
+      </div>
     </DemoContainer>
   );
 }
