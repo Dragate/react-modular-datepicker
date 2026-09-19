@@ -1,11 +1,11 @@
 ---
-title: Multi-Month Grid
-description: Display multiple concurrent months in grid views.
+title: Yearly View
+description: Display a full year of months in a 3-column grid layout.
 ---
 
-# Multi-Month Grid
+# Yearly View
 
-Set `monthsToDisplay` to 2, 3, 4, or 12 to display multiple months simultaneously.
+Set `monthsToDisplay` to `12` to display a full year calendar. Clicking next or previous navigates by a full year at a time.
 
 <YearlyDemo />
 
@@ -16,10 +16,13 @@ Set `monthsToDisplay` to 2, 3, 4, or 12 to display multiple months simultaneousl
 ```tsx
 import { Calendar } from 'react-modular-datepicker';
 
-export function MultiMonthExample() {
+export function YearlyExample() {
   return (
     <Calendar
-      monthsToDisplay={4}
+      monthsToDisplay={12}
+      classNames={{
+        calendarsContainer: 'grid grid-cols-1 md:grid-cols-3 gap-6 mt-3 max-w-5xl',
+      }}
     />
   );
 }

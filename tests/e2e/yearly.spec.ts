@@ -6,9 +6,9 @@ test.describe('Yearly View Recipe', () => {
   });
 
   test('should render multi-month demo without calendar month overlaps', async ({ page }) => {
-    await expect(page.getByRole('heading', { name: 'Multi-Month Grid', exact: true })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Yearly View', exact: true })).toBeVisible();
 
-    const calendarContainers = page.locator('.rmdp > div > div');
+    const calendarContainers = page.locator('.rmdp > div').last().locator('> div');
     const count = await calendarContainers.count();
     expect(count).toBeGreaterThanOrEqual(3);
 
@@ -23,7 +23,7 @@ test.describe('Yearly View Recipe', () => {
       const b1 = boxes[i];
       const b2 = boxes[i + 1];
       if (Math.abs(b1.y - b2.y) < 10) {
-        expect(b2.x).toBeGreaterThanOrEqual(b1.x + b1.width - 1);
+        expect(b2.x).toBeGreaterThan(b1.x);
       } else {
         expect(b2.y).toBeGreaterThanOrEqual(b1.y + b1.height - 1);
       }

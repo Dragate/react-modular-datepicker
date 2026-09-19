@@ -76,8 +76,10 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
     setView('days');
   };
 
+  const stepOffset = useDatesProps.monthsToDisplay || 1;
+
   const wrappedGetBackProps = (args: any) => {
-    const props = getBackProps(args);
+    const props = getBackProps({ offset: stepOffset, ...args });
     return {
       ...props,
       onClick: (e: any) => {
@@ -88,7 +90,7 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
   };
 
   const wrappedGetForwardProps = (args: any) => {
-    const props = getForwardProps(args);
+    const props = getForwardProps({ offset: stepOffset, ...args });
     return {
       ...props,
       onClick: (e: any) => {
@@ -101,8 +103,8 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
   const renderDefaultHeader = () => (
     <CalendarHeader
         calendars={calendars}
-        getBackProps={wrappedGetBackProps}
-        getForwardProps={wrappedGetForwardProps}
+        getBackProps={calendars.length === 12 ? wrappedGetBackProps : getBackProps}
+        getForwardProps={calendars.length === 12 ? wrappedGetForwardProps : getForwardProps}
         setView={setView}
         monthNames={monthNames}
         t={t}
