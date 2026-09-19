@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { defaultAdapter } from '../../packages/react-modular-datepicker/src/adapters/dayjs';
+import { defaultAdapter } from '../../src/adapters/dayjs';
 import {
   addMonth,
   composeEventHandlers,
@@ -7,7 +7,7 @@ import {
   isBackDisabled,
   isForwardDisabled,
   subtractMonth,
-} from '../../packages/react-modular-datepicker/src/utils';
+} from '../../src/utils';
 
 test.describe('utils: composeEventHandlers', () => {
   test('calls each provided handler in sequence', () => {
@@ -228,7 +228,7 @@ test.describe('utils: getCalendars and date object creation', () => {
     });
 
     const flatDays = calendars[0].weeks.flat().filter(Boolean);
-    const weekendDays = flatDays.filter(d => d?.modifiers.includes('weekend-badge'));
+    const weekendDays = flatDays.filter(d => d?.modifiers?.includes('weekend-badge'));
     expect(weekendDays.length).toBeGreaterThan(0);
     weekendDays.forEach(d => {
       const dayOfWeek = d?.date.getDay();

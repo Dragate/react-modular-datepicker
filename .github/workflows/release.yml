@@ -58,7 +58,5 @@ jobs:
       run: gh release create v${{ steps.bump.outputs.version }} --target ${GITHUB_REF#refs/heads/} --generate-notes ${{ github.event.inputs.releaseType == 'canary' && '--prerelease' || '' }}
       env:
         GH_TOKEN: ${{ github.token }}
-    - name: Prepare README for npm publish
-      run: node ./scripts/prepare-readme.js
     - name: Publish package
       run: pnpm --filter react-modular-datepicker publish --no-git-checks --access public ${{ github.event.inputs.releaseType != 'stable' && format('--tag {0}', github.event.inputs.releaseType) || '' }}

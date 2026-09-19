@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { DayjsAdapter } from '../../packages/react-modular-datepicker/src/adapters/dayjs';
+import { DayjsAdapter } from '../../src/adapters/dayjs';
 
 test.describe('DayjsAdapter', () => {
   const adapter = new DayjsAdapter();
