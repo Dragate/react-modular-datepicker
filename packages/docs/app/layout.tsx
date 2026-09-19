@@ -10,6 +10,13 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  applicationName: "React Modular Datepicker",
+  title: {
+    template: "%s | React Modular Datepicker",
+    default: "React Modular Datepicker",
+  },
+  description: "asd",
+  creator: "https://www.spidfair.com",
   verification: {
     google: "cPwTWWsKpgpJaiwv1lo8Q16c19J9l6bztgp4-o5BXiw",
   },
