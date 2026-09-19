@@ -36,6 +36,13 @@ export const CalendarHeader: React.FC<HeaderProps> = ({
   slideDirection,
   currentView
 }) => {
+  if (calendars.length > 1 && calendars.length < 12) {
+    return null;
+  }
+
+  const first = calendars[0];
+  const last = calendars[calendars.length - 1];
+
   return (
     <div className={classNames.header}>
       <button
@@ -48,7 +55,7 @@ export const CalendarHeader: React.FC<HeaderProps> = ({
       </button>
 
       <div className={classNames.monthYearContainer}>
-        {calendars.length === 1 && (
+        {calendars.length === 1 ? (
           <div key={`${calendars[0].month}-${calendars[0].year}`} className={`${classNames.monthYearLabel} ${slideDirection === 'left' ? 'animate-slide-in-left' : slideDirection === 'right' ? 'animate-slide-in-right' : ''}`}>
             <button
               onMouseDown={(e) => e.preventDefault()}
@@ -64,6 +71,12 @@ export const CalendarHeader: React.FC<HeaderProps> = ({
             >
               {calendars[0].year}
             </button>
+          </div>
+        ) : (
+          <div className={`${classNames.monthYearLabel} ${slideDirection === 'left' ? 'animate-slide-in-left' : slideDirection === 'right' ? 'animate-slide-in-right' : ''}`}>
+            <span>
+              {first.year === last.year ? first.year : `${first.year} - ${last.year}`}
+            </span>
           </div>
         )}
       </div>
