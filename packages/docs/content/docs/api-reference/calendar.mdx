@@ -29,8 +29,8 @@ The `<Calendar />` component renders a full datepicker UI with single, multiple,
 | `adapter` | `DateAdapter` | `defaultAdapter` | Date management adapter implementation. |
 | `header` | `React.ReactNode` | `undefined` | Custom header content placed above month sheet headers. |
 | `footer` | `React.ReactNode` | `undefined` | Custom footer content placed below calendar sheets. |
-| `renderDayTooltip` | `(dateObj: DateObj) => React.ReactNode` | `undefined` | Tooltip callback function for date cells. |
 | `onMonthChange` | `(date: Date) => void` | `undefined` | Callback fired when month navigation occurs. |
+| `getDayProps` | `(dateObj: DateObj) => Record<string, any>` | `undefined` | Function to return custom props/attributes (e.g. `data-tooltip`) for day buttons. |
 | `modifiers` | `Record<string, (date: Date, month: number, year: number) => boolean>` | `undefined` | Custom modifier rules. |
 
 ---

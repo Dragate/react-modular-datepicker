@@ -169,33 +169,33 @@ export function EventScheduleDemo() {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date(year, month, 5));
 
   const getKey = (d: Date) => `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
-  const currentKey = getKey(selectedDate);
-  const dayEvents = eventsData[currentKey] || [];
 
   return (
     <DemoContainer title="Live Preview: Event / Schedule Calendar">
-      <div className="flex flex-col md:flex-row gap-6 items-start w-full max-w-2xl justify-center">
-        <Calendar
-          selected={selectedDate}
-          onChange={(d) => setSelectedDate(d as Date)}
-          modifiers={{
-            hasEvents: (date) => !!eventsData[getKey(date)],
-          }}
-          classNames={{
-            day: {
-              hasEvents: 'font-bold relative after:content-["•"] after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:text-brand-gold after:text-xs',
-            },
-          }}
-          renderDayTooltip={(dateObj) => {
-            const key = getKey(dateObj.date);
-            const events = eventsData[key];
-            if (events && events.length > 0) {
-              return `${events.length} event${events.length > 1 ? 's' : ''}`;
-            }
-            return null;
-          }}
-        />
-      </div>
+      <Calendar
+        selected={selectedDate}
+        onChange={(d) => setSelectedDate(d as Date)}
+        modifiers={{
+          hasEvents: (date) => !!eventsData[getKey(date)],
+        }}
+        getDayProps={(dateObj) => {
+          const events = eventsData[getKey(dateObj.date)];
+          if (events && events.length > 0) {
+            return {
+              'data-tooltip': `${events.length} event${events.length > 1 ? 's' : ''}`,
+            };
+          }
+          return {};
+        }}
+        classNames={{
+          day: {
+            hasEvents:
+              'font-bold relative after:content-["•"] after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:text-brand-gold after:text-xs ' +
+              'before:content-[attr(data-tooltip)] before:absolute before:bottom-full before:left-1/2 before:-translate-x-1/2 before:mb-1.5 before:hidden hover:before:block ' +
+              'before:px-2 before:py-1 before:bg-gray-800 before:text-white before:text-[10px] before:rounded before:whitespace-nowrap before:z-20 before:shadow-md',
+          },
+        }}
+      />
     </DemoContainer>
   );
 }
@@ -226,6 +226,8 @@ export function AvailabilityDemo() {
 
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date(year, month, 8));
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
+  const [confirmed, setConfirmed] = useState(false);
 
   const handleMonthChange = (date: Date) => {
     setIsLoading(true);
@@ -238,6 +240,8 @@ export function AvailabilityDemo() {
     }, 700);
   };
 
+  const timeSlots = ['09:00 AM', '10:30 AM', '01:00 PM', '02:30 PM', '04:00 PM'];
+
   return (
     <DemoContainer title="Live Preview: Availability & Booking Calendar">
       <div className="flex flex-col md:flex-row gap-6 items-start w-full max-w-2xl justify-center">
@@ -246,6 +250,8 @@ export function AvailabilityDemo() {
             selected={selectedDate || undefined}
             onChange={(d) => {
               setSelectedDate(d as Date);
+              setSelectedSlot(null);
+              setConfirmed(false);
             }}
             onMonthChange={handleMonthChange}
             disabledDates={bookedDays}
@@ -261,6 +267,46 @@ export function AvailabilityDemo() {
               <div className="w-7 h-7 border-3 border-[#c5a059] border-t-transparent rounded-full animate-spin mb-2" />
               <span className="text-xs font-semibold text-fd-foreground">Fetching availabilities...</span>
             </div>
+          )}
+        </div>
+
+        <div className="w-full max-w-xs bg-fd-card border border-fd-border rounded-xl p-4 shadow-sm">
+          <h3 className="font-bold text-sm text-fd-foreground mb-3 border-b border-fd-border pb-2">
+            Available Times: {selectedDate ? selectedDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : 'Select Date'}
+          </h3>
+          {confirmed ? (
+            <div className="p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-lg text-center">
+              <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 block mb-1">Appointment Confirmed!</span>
+              <span className="text-[11px] text-fd-muted-foreground block">{selectedDate?.toLocaleDateString()} at {selectedSlot}</span>
+            </div>
+          ) : (
+            <>
+              <div className="grid grid-cols-2 gap-2 mb-4">
+                {timeSlots.map((slot) => (
+                  <button
+                    key={slot}
+                    type="button"
+                    onClick={() => setSelectedSlot(slot)}
+                    className={`py-1.5 px-2 text-xs rounded-lg border transition-colors ${
+                      selectedSlot === slot
+                        ? 'bg-brand-gold text-white font-bold border-brand-gold'
+                        : 'border-fd-border bg-fd-background hover:bg-fd-accent text-fd-foreground'
+                    }`}
+                  >
+                    {slot}
+                  </button>
+                ))}
+              </div>
+              {selectedSlot && (
+                <button
+                  type="button"
+                  onClick={() => setConfirmed(true)}
+                  className="w-full py-2 bg-fd-primary text-fd-primary-foreground text-xs font-bold rounded-lg hover:opacity-90 transition-opacity"
+                >
+                  Confirm Appointment
+                </button>
+              )}
+            </>
           )}
         </div>
       </div>
@@ -486,7 +532,6 @@ export function HeaderFooterDemo() {
         onChange={(val) => setSelected(val as Date)}
         header={<div className="p-2 bg-blue-500/20 text-blue-700 dark:text-blue-300 font-bold text-center rounded-t-lg">🌟 Custom Header Banner</div>}
         footer={<div className="p-2 bg-fd-muted text-fd-muted-foreground text-xs text-center rounded-b-lg border-t border-fd-border">Custom Footer: Select any date</div>}
-        renderDayTooltip={(dateObj) => (dateObj.date.getDate() === 15 ? 'Middle of the month!' : null)}
       />
     </DemoContainer>
   );

@@ -15,7 +15,7 @@ interface CalendarProps extends UseDatesProps {
   translations?: Partial<Translations>;
   header?: React.ReactNode | ((props: any) => React.ReactNode);
   footer?: React.ReactNode;
-  renderDayTooltip?: (dateObj: DateObj) => React.ReactNode;
+  getDayProps?: (dateObj: DateObj) => Record<string, any>;
 }
 
 type CalendarView = 'days' | 'months' | 'years';
@@ -29,7 +29,7 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
     firstDayOfWeek = 0,
     header,
     footer,
-    renderDayTooltip,
+    getDayProps,
     ...useDatesProps
   } = props;
 
@@ -174,8 +174,8 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
                     key={`${wi}-${di}`}
                     dateObj={dateObj}
                     getDateProps={getDateProps}
+                    dayProps={dateObj ? getDayProps?.(dateObj) : undefined}
                     classNames={classNames}
-                    tooltip={dateObj && renderDayTooltip?.(dateObj)}
                   />
                 ))
               )}
