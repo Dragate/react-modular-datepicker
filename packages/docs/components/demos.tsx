@@ -79,13 +79,13 @@ export function ModifiersDemo() {
         }}
         classNames={{
           day: {
-            weekend: 'bg-indigo-100/70 dark:bg-indigo-950/50 text-indigo-900 dark:text-indigo-200 font-bold',
+            weekend: '!bg-indigo-100/70 dark:!bg-indigo-950/50 !text-indigo-900 dark:!text-indigo-200 font-bold',
             holiday:
               'border-2 border-emerald-500 font-bold relative ' +
               'before:content-[attr(data-tooltip)] before:absolute before:bottom-full before:left-1/2 before:-translate-x-1/2 before:mb-1 before:hidden hover:before:block ' +
               'before:px-2 before:py-0.5 before:bg-gray-800 before:text-white before:text-[10px] before:rounded before:whitespace-nowrap before:z-20',
             birthday:
-              'text-pink-600 dark:text-pink-400 font-black scale-105 relative ' +
+              '!text-pink-600 dark:!text-pink-400 font-black scale-105 relative ' +
               'before:content-[attr(data-tooltip)] before:absolute before:bottom-full before:left-1/2 before:-translate-x-1/2 before:mb-1 before:hidden hover:before:block ' +
               'before:px-2 before:py-0.5 before:bg-gray-800 before:text-white before:text-[10px] before:rounded before:whitespace-nowrap before:z-20',
           },
