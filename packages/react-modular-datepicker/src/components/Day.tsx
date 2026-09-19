@@ -4,10 +4,11 @@ import type { CalendarClassNames, DateObj } from '../types';
 interface DayProps {
   dateObj: DateObj | null;
   getDateProps: (args: { dateObj: DateObj, [key: string]: any }) => any;
+  dayProps?: Record<string, any>;
   classNames: Required<CalendarClassNames>;
 }
 
-export const Day: React.FC<DayProps> = ({ dateObj, getDateProps, classNames }) => {
+export const Day: React.FC<DayProps> = ({ dateObj, getDateProps, dayProps, classNames }) => {
   if (!dateObj) {
     return <div className="aspect-square bg-white" />;
   }
@@ -42,7 +43,7 @@ export const Day: React.FC<DayProps> = ({ dateObj, getDateProps, classNames }) =
 
   return (
     <button
-      {...getDateProps({ dateObj })}
+      {...getDateProps({ dateObj, ...dayProps })}
       className={className}
     >
       {date.getDate()}

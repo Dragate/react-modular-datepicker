@@ -169,45 +169,33 @@ export function EventScheduleDemo() {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date(year, month, 5));
 
   const getKey = (d: Date) => `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
-  const currentKey = getKey(selectedDate);
-  const dayEvents = eventsData[currentKey] || [];
 
   return (
     <DemoContainer title="Live Preview: Event / Schedule Calendar">
-      <div className="flex flex-col md:flex-row gap-6 items-start w-full max-w-2xl justify-center">
-        <Calendar
-          selected={selectedDate}
-          onChange={(d) => setSelectedDate(d as Date)}
-          modifiers={{
-            hasEvents: (date) => !!eventsData[getKey(date)],
-          }}
-          classNames={{
-            day: {
-              hasEvents:
-                'font-bold relative after:content-["•"] after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:text-brand-gold after:text-xs ' +
-                'before:content-["Events"] before:absolute before:bottom-full before:left-1/2 before:-translate-x-1/2 before:mb-1.5 before:hidden hover:before:block ' +
-                'before:px-2 before:py-1 before:bg-gray-800 before:text-white before:text-[10px] before:rounded before:whitespace-nowrap before:z-20 before:shadow-md',
-            },
-          }}
-        />
-        <div className="w-full max-w-xs bg-fd-card border border-fd-border rounded-xl p-4 shadow-sm">
-          <h3 className="font-bold text-sm text-fd-foreground mb-3 border-b border-fd-border pb-2">
-            Schedule for {selectedDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-          </h3>
-          {dayEvents.length > 0 ? (
-            <div className="space-y-2">
-              {dayEvents.map((event, idx) => (
-                <div key={idx} className="p-2.5 rounded-lg border border-fd-border bg-fd-background flex flex-col gap-1">
-                  <span className="text-xs font-semibold text-fd-foreground">{event.title}</span>
-                  <span className="text-[10px] text-fd-muted-foreground font-mono">{event.time} • {event.type}</span>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="text-xs text-fd-muted-foreground py-4 text-center">No events scheduled for this day.</div>
-          )}
-        </div>
-      </div>
+      <Calendar
+        selected={selectedDate}
+        onChange={(d) => setSelectedDate(d as Date)}
+        modifiers={{
+          hasEvents: (date) => !!eventsData[getKey(date)],
+        }}
+        getDayProps={(dateObj) => {
+          const events = eventsData[getKey(dateObj.date)];
+          if (events && events.length > 0) {
+            return {
+              'data-tooltip': `${events.length} event${events.length > 1 ? 's' : ''}`,
+            };
+          }
+          return {};
+        }}
+        classNames={{
+          day: {
+            hasEvents:
+              'font-bold relative after:content-["•"] after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:text-brand-gold after:text-xs ' +
+              'before:content-[attr(data-tooltip)] before:absolute before:bottom-full before:left-1/2 before:-translate-x-1/2 before:mb-1.5 before:hidden hover:before:block ' +
+              'before:px-2 before:py-1 before:bg-gray-800 before:text-white before:text-[10px] before:rounded before:whitespace-nowrap before:z-20 before:shadow-md',
+          },
+        }}
+      />
     </DemoContainer>
   );
 }

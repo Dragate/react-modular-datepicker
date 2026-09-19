@@ -5,17 +5,16 @@ test.describe('Event & Schedule Recipe', () => {
     await page.goto('/docs/recipes/event-schedule');
   });
 
-  test('should render event schedule calendar demo and display events', async ({ page }) => {
+  test('should render event schedule calendar demo with dynamic data-tooltip attributes', async ({ page }) => {
     await expect(page.locator('h1').first()).toContainText('Event & Schedule Calendar');
 
-    await expect(page.getByText('Schedule for', { exact: false })).toBeVisible();
-    await expect(page.getByText('Team Sync & Standup', { exact: true })).toBeVisible();
+    // Day 5 has 2 events
+    const day5Btn = page.locator('button', { hasText: '5' }).first();
+    await expect(day5Btn).toHaveAttribute('data-tooltip', '2 events');
 
-    // Click on 12th day which has a webinar event
-    const day12Btn = page.getByText('12', { exact: true }).first();
-    await day12Btn.click();
-
-    await expect(page.getByText('React Modular Datepicker Webinar', { exact: true })).toBeVisible();
+    // Day 12 has 1 event
+    const day12Btn = page.locator('button', { hasText: '12' }).first();
+    await expect(day12Btn).toHaveAttribute('data-tooltip', '1 event');
   });
 
   test('should render Google Calendar style demo with event badges', async ({ page }) => {
