@@ -63,6 +63,71 @@
   }
 }
 
+/*
+ * Keep the date button defaults in the component layer. Consumer utilities
+ * are emitted in Tailwind's utilities layer, so modifier classes can override
+ * these defaults without !important or selector-specificity workarounds.
+ */
+@layer components {
+  .rmdp .rmdp-day,
+  .rmdp .rmdp-day-empty {
+    aspect-ratio: 1;
+  }
+
+  .rmdp .rmdp-day {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1px;
+    position: relative;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    font-weight: 500;
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 0.15s;
+  }
+
+  .rmdp .rmdp-day:not(:disabled) {
+    cursor: pointer;
+  }
+
+  .rmdp .rmdp-day-empty,
+  .rmdp .rmdp-day-disabled {
+    background-color: #fff;
+  }
+
+  .rmdp .rmdp-day-disabled {
+    cursor: not-allowed;
+  }
+
+  .rmdp .rmdp-day-selected,
+  .rmdp .rmdp-day-range-start,
+  .rmdp .rmdp-day-range-end {
+    background-color: var(--color-brand-gold);
+    color: #fff;
+  }
+
+  .rmdp .rmdp-day-selected {
+    border-radius: 9999px;
+  }
+
+  .rmdp .rmdp-day-unselected {
+    background-color: #fff;
+    color: var(--color-brand-text);
+  }
+
+  .rmdp .rmdp-day-unselected:hover {
+    background-color: color-mix(in oklab, var(--color-brand-gold) 25%, transparent);
+  }
+
+  .rmdp .rmdp-day-range-between,
+  .rmdp .rmdp-day-range-hovering {
+    background-color: color-mix(in oklab, var(--color-brand-gold) 25%, transparent);
+    color: var(--color-brand-text);
+  }
+}
+
 @keyframes slideInFromTop {
   from {
     opacity: 0;
