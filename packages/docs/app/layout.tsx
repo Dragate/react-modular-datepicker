@@ -9,18 +9,86 @@ const inter = Inter({
   subsets: ['latin'],
 });
 
+const defaultTitle = "React Modular Datepicker — Modular, Lightweight & Type-Safe Datepicker for React";
+const defaultDescription = "Build date range pickers, single selection calendars, or headless custom layouts for React. Powered by Tailwind CSS and pluggable date adapters.";
+
 export const metadata: Metadata = {
+  metadataBase: new URL("https://react-modular-datepicker.vercel.app"),
   applicationName: "React Modular Datepicker",
   title: {
     template: "%s | React Modular Datepicker",
-    default: "React Modular Datepicker",
+    default: defaultTitle,
   },
-  description: "asd",
-  creator: "https://www.spidfair.com",
+  description: defaultDescription,
+  keywords: [
+    "react",
+    "datepicker",
+    "date picker",
+    "calendar",
+    "react datepicker",
+    "react calendar",
+    "date range picker",
+    "react modular datepicker",
+    "tailwind datepicker",
+    "tailwind css datepicker",
+    "headless datepicker",
+    "date adapter",
+    "dayjs datepicker",
+    "date-fns datepicker",
+    "type-safe datepicker",
+    "react components",
+    "ui library",
+    "spidfair",
+  ],
+  authors: [{ name: "Spidfair", url: "https://www.spidfair.com" }],
+  creator: "Spidfair",
+  publisher: "React Modular Datepicker",
+  category: "technology",
+  openGraph: {
+    title: "React Modular Datepicker",
+    description: defaultDescription,
+    url: "https://react-modular-datepicker.vercel.app",
+    siteName: "React Modular Datepicker",
+    locale: "en_US",
+    type: "website",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "React Modular Datepicker - Modular, Lightweight & Type-Safe Datepicker for React",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "React Modular Datepicker",
+    description: defaultDescription,
+    images: ["/opengraph-image"],
+    creator: "@spidfair",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/icon0.svg", type: "image/svg+xml" },
+    ],
+    apple: "/apple-icon.png",
+  },
   verification: {
     google: "cPwTWWsKpgpJaiwv1lo8Q16c19J9l6bztgp4-o5BXiw",
   },
-}
+};
 
 export default function Layout({ children }: LayoutProps<'/'>) {
   return (

@@ -3,3 +3,38 @@
 @import 'fumadocs-ui/css/preset.css';
 @import 'react-modular-datepicker/dist/index.css';
 
+@keyframes float-orb-1 {
+  0%, 100% {
+    transform: translate(0px, 0px) scale(1);
+    opacity: 0.25;
+  }
+  50% {
+    transform: translate(30px, -40px) scale(1.1);
+    opacity: 0.45;
+  }
+}
+
+@keyframes float-orb-2 {
+  0%, 100% {
+    transform: translate(0px, 0px) scale(1);
+    opacity: 0.2;
+  }
+  50% {
+    transform: translate(-35px, 25px) scale(1.15);
+    opacity: 0.35;
+  }
+}
+
+.animate-orb-1 {
+  animation: float-orb-1 12s ease-in-out infinite;
+}
+
+.animate-orb-2 {
+  animation: float-orb-2 15s ease-in-out infinite;
+}
+
+.bg-grid-pattern {
+  background-size: 32px 32px;
+  background-image: linear-gradient(to right, rgba(150, 150, 150, 0.08) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(150, 150, 150, 0.08) 1px, transparent 1px);
+}
