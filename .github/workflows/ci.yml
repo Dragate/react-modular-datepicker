@@ -29,7 +29,7 @@ jobs:
         run: pnpm test:unit
 
       - name: Install Playwright browsers
-        run: pnpm exec playwright install --with-deps chromium
+        run: pnpm --filter react-modular-datepicker exec playwright install --with-deps chromium
 
       - name: Run e2e & snapshot tests
         run: pnpm test:e2e
