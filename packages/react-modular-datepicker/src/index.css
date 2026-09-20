@@ -50,6 +50,7 @@
   flex-direction: column;
   padding: 1rem;
   background-color: #ffffff;
+  color: var(--rmdp-text);
   border-radius: 0.5rem;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
 }
@@ -203,8 +204,7 @@
   opacity: 0.5;
 }
 
-/* Zero specificity for default unselected day background/color so user custom modifier utility classes easily override them */
-:where(.rmdp .rmdp-day-unselected) {
+.rmdp .rmdp-day-unselected {
   background-color: #ffffff;
   color: var(--rmdp-text);
 }
