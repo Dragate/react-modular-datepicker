@@ -38,3 +38,157 @@
   from { opacity: 0; transform: translateX(-20px); }
   to { opacity: 1; transform: translateX(0); }
 }
+
+@layer components {
+  .rmd-root {
+    @apply rmd:w-fit rmd:flex rmd:flex-col rmd:p-4 rmd:bg-white rmd:rounded-lg rmd:shadow-lg;
+  }
+
+  .rmd-header {
+    @apply rmd:flex rmd:items-center rmd:justify-between rmd:border-b-2 rmd:border-brand-gray-light/40 rmd:pb-2;
+  }
+
+  .rmd-header-multi-month {
+    @apply rmd:border-b-0 rmd:pb-0;
+  }
+
+  .rmd-calendars-container {
+    @apply rmd:flex rmd:flex-wrap rmd:gap-4;
+  }
+
+  .rmd-calendar-container {
+    @apply rmd:flex-1 rmd:min-w-[280px] rmd:max-w-full;
+  }
+
+  .rmd-nav-button-slot-start {
+    @apply rmd:w-9 rmd:flex rmd:justify-start;
+  }
+
+  .rmd-nav-button-slot-end {
+    @apply rmd:w-9 rmd:flex rmd:justify-end;
+  }
+
+  .rmd-header-title-container {
+    @apply rmd:font-semibold rmd:text-brand-text rmd:text-center rmd:flex-1;
+  }
+
+  .rmd-weekday-grid {
+    @apply rmd:grid rmd:grid-cols-7 rmd:gap-1 rmd:mb-1 rmd:border-b rmd:border-brand-gray-light/40;
+  }
+
+  .rmd-weekday {
+    @apply rmd:text-center rmd:text-xs rmd:text-gray-400 rmd:py-2;
+  }
+
+  .rmd-days-grid {
+    @apply rmd:grid rmd:grid-cols-7 rmd:gap-px rmd:bg-brand-gray-light/20;
+  }
+
+  .rmd-footer {
+    @apply rmd:mt-4;
+  }
+
+  .rmd-nav-button {
+    @apply rmd:p-2 rmd:text-brand-text rmd:hover:bg-gray-100 rmd:rounded-full rmd:transition-colors rmd:cursor-pointer rmd:disabled:opacity-30 rmd:disabled:pointer-events-none;
+  }
+
+  .rmd-nav-button-hidden {
+    @apply rmd:invisible rmd:pointer-events-none;
+  }
+
+  .rmd-month-year-container {
+    @apply rmd:flex rmd:gap-8;
+  }
+
+  .rmd-month-year-label {
+    @apply rmd:flex rmd:gap-1 rmd:items-center rmd:font-semibold rmd:text-brand-text;
+  }
+
+  .rmd-month-year-button {
+    @apply rmd:hover:bg-gray-100 rmd:px-2 rmd:py-1 rmd:rounded rmd:cursor-pointer;
+  }
+
+  .rmd-day {
+    @apply rmd:aspect-square rmd:flex rmd:items-center rmd:justify-center rmd:p-[1px] rmd:relative rmd:text-sm rmd:font-medium rmd:transition-all rmd:enabled:cursor-pointer rmd:rounded-full;
+  }
+
+  .rmd-day-selected {
+    @apply rmd:bg-brand-gold rmd:text-white rmd:rounded-full;
+  }
+
+  .rmd-day-unselected {
+    @apply rmd:bg-white rmd:text-brand-text rmd:hover:bg-brand-gold/25;
+  }
+
+  .rmd-day-disabled {
+    @apply rmd:bg-white rmd:cursor-not-allowed;
+  }
+
+  .rmd-day-empty {
+    @apply rmd:aspect-square rmd:bg-white;
+  }
+
+  .rmd-day-range-start {
+    @apply rmd:bg-brand-gold rmd:text-white rmd:rounded-full;
+  }
+
+  .rmd-day-range-start.rmd-day-range-active {
+    @apply rmd:rounded-l-full rmd:rounded-r-none;
+  }
+
+  .rmd-day-range-end {
+    @apply rmd:bg-brand-gold rmd:text-white rmd:rounded-full;
+  }
+
+  .rmd-day-range-end.rmd-day-range-active {
+    @apply rmd:rounded-r-full rmd:rounded-l-none;
+  }
+
+  .rmd-day-range-between {
+    @apply rmd:bg-brand-gold/25 rmd:text-brand-text;
+  }
+
+  .rmd-day-range-hovering {
+    @apply rmd:bg-brand-gold/25 rmd:text-brand-text;
+  }
+
+  .rmd-months-grid {
+    @apply rmd:grid rmd:grid-cols-3 rmd:gap-2 rmd:animate-slide-in-top;
+  }
+
+  .rmd-month-button {
+    @apply rmd:py-3 rmd:rounded-lg rmd:hover:bg-brand-gray-light rmd:transition-colors rmd:cursor-pointer rmd:disabled:opacity-30 rmd:disabled:pointer-events-none;
+  }
+
+  .rmd-month-button-selected {
+    @apply rmd:bg-brand-gold rmd:text-white;
+  }
+
+  .rmd-month-button-unselected {
+    @apply rmd:text-brand-text;
+  }
+
+  .rmd-years-grid {
+    @apply rmd:grid rmd:grid-cols-3 rmd:gap-2 rmd:max-h-[210px] rmd:overflow-y-auto rmd:pr-2 rmd:animate-slide-in-top;
+  }
+
+  .rmd-year-button {
+    @apply rmd:py-3 rmd:rounded-lg rmd:hover:bg-brand-gray-light rmd:transition-colors rmd:cursor-pointer rmd:disabled:opacity-30 rmd:disabled:pointer-events-none;
+  }
+
+  .rmd-year-button-selected {
+    @apply rmd:bg-brand-gold rmd:text-white;
+  }
+
+  .rmd-year-button-unselected {
+    @apply rmd:text-brand-text;
+  }
+
+  .rmd-slide-left {
+    @apply rmd:animate-slide-in-left;
+  }
+
+  .rmd-slide-right {
+    @apply rmd:animate-slide-in-right;
+  }
+}

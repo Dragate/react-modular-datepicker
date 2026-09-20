@@ -68,7 +68,7 @@ export const CalendarHeader: React.FC<HeaderProps> = ({
 
       <div className={classNames.monthYearContainer}>
         {calendars.length === 1 ? (
-          <div key={`${calendars[0].month}-${calendars[0].year}`} className={`${classNames.monthYearLabel} ${slideDirection === 'left' ? 'rmd:animate-slide-in-left' : slideDirection === 'right' ? 'rmd:animate-slide-in-right' : ''}`}>
+          <div key={`${calendars[0].month}-${calendars[0].year}`} className={`${classNames.monthYearLabel} ${slideDirection === 'left' ? 'rmd-slide-left' : slideDirection === 'right' ? 'rmd-slide-right' : ''}`}>
             <button
               onMouseDown={(e) => e.preventDefault()}
               onClick={() => setView(currentView === 'months' ? 'days' : 'months')}
@@ -85,7 +85,7 @@ export const CalendarHeader: React.FC<HeaderProps> = ({
             </button>
           </div>
         ) : (
-          <div className={`${classNames.monthYearLabel} ${slideDirection === 'left' ? 'rmd:animate-slide-in-left' : slideDirection === 'right' ? 'rmd:animate-slide-in-right' : ''}`}>
+          <div className={`${classNames.monthYearLabel} ${slideDirection === 'left' ? 'rmd-slide-left' : slideDirection === 'right' ? 'rmd-slide-right' : ''}`}>
             <span>
               {first.year === last.year ? first.year : `${first.year} - ${last.year}`}
             </span>
