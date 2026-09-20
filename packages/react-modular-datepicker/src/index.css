@@ -3,18 +3,18 @@
 @import "tailwindcss/theme.css" layer(theme);
 @import "tailwindcss/utilities.css" layer(utilities);
 
-@theme {
-  --color-rmd-gold: var(--rmd-gold, #c5a059);
-  --color-rmd-gray-light: var(--rmd-gray-light, #b5bec6);
-  --color-rmd-gray-dark: var(--rmd-gray-dark, #4a5660);
-  --color-rmd-text: var(--rmd-text, #343a40);
-}
-
 :root, .rmd {
   --rmd-gold: #c5a059;
   --rmd-gray-light: #b5bec6;
   --rmd-gray-dark: #4a5660;
   --rmd-text: #343a40;
+}
+
+@theme {
+  --color-rmd-gold: var(--rmd-gold);
+  --color-rmd-gray-light: var(--rmd-gray-light);
+  --color-rmd-gray-dark: var(--rmd-gray-dark);
+  --color-rmd-text: var(--rmd-text);
 }
 
 /*
@@ -58,7 +58,7 @@
   .rmd .rmd-day-selected,
   .rmd .rmd-day-range-start,
   .rmd .rmd-day-range-end {
-    background-color: var(--rmd-gold, #c5a059);
+    background-color: var(--rmd-gold);
     color: #fff;
   }
 
@@ -68,17 +68,17 @@
 
   .rmd .rmd-day-unselected {
     background-color: #fff;
-    color: var(--rmd-text, #343a40);
+    color: var(--rmd-text);
   }
 
   .rmd .rmd-day-unselected:hover {
-    background-color: color-mix(in oklab, var(--rmd-gold, #c5a059) 25%, transparent);
+    background-color: color-mix(in oklab, var(--rmd-gold) 25%, transparent);
   }
 
   .rmd .rmd-day-range-between,
   .rmd .rmd-day-range-hovering {
-    background-color: color-mix(in oklab, var(--rmd-gold, #c5a059) 25%, transparent);
-    color: var(--rmd-text, #343a40);
+    background-color: color-mix(in oklab, var(--rmd-gold) 25%, transparent);
+    color: var(--rmd-text);
   }
 }
 
@@ -118,7 +118,7 @@
 /* Custom scrollbar styling for year selector and other scrollable areas */
 .rmd .rmd-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: var(--rmd-gray-light, #b5bec6) transparent;
+  scrollbar-color: var(--rmd-gray-light) transparent;
 }
 
 .rmd .rmd-scrollbar::-webkit-scrollbar {
@@ -130,10 +130,10 @@
 }
 
 .rmd .rmd-scrollbar::-webkit-scrollbar-thumb {
-  background-color: var(--rmd-gray-light, #b5bec6);
+  background-color: var(--rmd-gray-light);
   border-radius: 9999px;
 }
 
 .rmd .rmd-scrollbar::-webkit-scrollbar-thumb:hover {
-  background-color: var(--rmd-gray-dark, #4a5660);
+  background-color: var(--rmd-gray-dark);
 }
