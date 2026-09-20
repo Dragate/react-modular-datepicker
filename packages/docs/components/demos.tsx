@@ -43,20 +43,18 @@ export function BasicDemo() {
 }
 
 export function ModifiersDemo() {
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = today.getMonth();
+  const demoDate = new Date(2026, 8, 15);
+  const [selectedDate, setSelectedDate] = useState<Date>(demoDate);
 
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date(year, month, 15));
-
-  const birthdays = [`${year}-${month + 1}-12`, `${year}-${month + 1}-24`];
-  const holidays = [`${year}-${month + 1}-1`, `${year}-${month + 1}-25`];
+  const birthdays = ['2026-9-12', '2026-9-24'];
+  const holidays = ['2026-9-1', '2026-9-25'];
 
   const getKey = (d: Date) => `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
 
   return (
-    <DemoContainer title="Live Preview: Custom Modifiers (Weekends, Birthdays, Holidays)">
+    <DemoContainer title="LIVE PREVIEW: CUSTOM MODIFIERS (WEEKENDS, BIRTHDAYS, HOLIDAYS)">
       <Calendar
+        date={demoDate}
         selected={selectedDate}
         onChange={(d) => setSelectedDate(d as Date)}
         modifiers={{
@@ -79,26 +77,26 @@ export function ModifiersDemo() {
         }}
         classNames={{
           day: {
-            weekend: 'bg-indigo-100/70 dark:bg-indigo-950/50 text-indigo-900 dark:text-indigo-200 font-bold',
+            weekend: 'bg-[#8285a6] text-white font-semibold',
             holiday:
-              'border-2 border-emerald-500 font-bold relative ' +
+              'border-2 border-emerald-500 text-emerald-600 dark:text-emerald-400 font-bold relative ' +
               'before:content-[attr(data-tooltip)] before:absolute before:bottom-full before:left-1/2 before:-translate-x-1/2 before:mb-1 before:hidden hover:before:block ' +
               'before:px-2 before:py-0.5 before:bg-gray-800 before:text-white before:text-[10px] before:rounded before:whitespace-nowrap before:z-20',
             birthday:
-              'text-pink-600 dark:text-pink-400 font-black scale-105 relative ' +
+              'text-pink-500 font-black relative ' +
               'before:content-[attr(data-tooltip)] before:absolute before:bottom-full before:left-1/2 before:-translate-x-1/2 before:mb-1 before:hidden hover:before:block ' +
               'before:px-2 before:py-0.5 before:bg-gray-800 before:text-white before:text-[10px] before:rounded before:whitespace-nowrap before:z-20',
           },
         }}
       />
-      <div className="mt-4 flex flex-wrap gap-3 justify-center text-xs">
-        <span className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-indigo-100/70 dark:bg-indigo-950/50 text-indigo-900 dark:text-indigo-200 font-semibold">
-          <span className="w-2.5 h-2.5 rounded-full bg-indigo-500 inline-block" /> Weekend (Background Color)
+      <div className="mt-6 flex flex-wrap gap-3 justify-center text-xs">
+        <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#252849] text-white font-semibold">
+          <span className="w-2.5 h-2.5 rounded-full bg-[#8285a6] inline-block" /> Weekend (Background Color)
         </span>
-        <span className="flex items-center gap-1.5 px-2.5 py-1 rounded border-2 border-emerald-500 text-emerald-800 dark:text-emerald-200 font-bold">
-          <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block" /> 🎉 Holiday (Border Highlight)
+        <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-md border-2 border-emerald-500 text-emerald-400 font-bold bg-[#0d1f18]">
+          <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block" /> 🥳 Holiday (Border Highlight)
         </span>
-        <span className="flex items-center gap-1.5 px-2.5 py-1 rounded text-pink-600 dark:text-pink-400 font-black">
+        <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-pink-400 font-black">
           <span className="w-2.5 h-2.5 rounded-full bg-pink-500 inline-block" /> 🎂 Birthday (Text Color)
         </span>
       </div>
@@ -476,6 +474,7 @@ export function HeadlessDemo() {
 
 export function CustomStylingDemo() {
   const [theme, setTheme] = useState<'cyberpunk' | 'purple' | 'adaptive'>('adaptive');
+  const demoDate = new Date(2026, 8, 1);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date(2026, 8, 13));
 
   const cyberpunkClassNames = {
@@ -489,8 +488,10 @@ export function CustomStylingDemo() {
     daysGrid: 'grid grid-cols-7 gap-1 bg-transparent',
     day: {
       day: 'aspect-square flex items-center justify-center text-xs font-bold transition-all relative border border-cyan-900/80 bg-[#081220] text-cyan-300 hover:border-cyan-400 hover:bg-cyan-950',
-      selected: 'bg-[#081220] text-amber-400 border-2 border-amber-400 shadow-[0_0_10px_rgba(251,191,36,0.6)] font-extrabold',
+      selected: 'bg-[#081220] text-cyan-300 border-2 border-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.6)] font-extrabold',
       unselected: 'bg-[#081220] text-cyan-300',
+      today: 'border-2 border-amber-400 text-amber-400 font-bold',
+      outside: 'opacity-30 text-cyan-800 bg-[#040810] border-transparent',
       disabled: 'bg-gray-900/80 text-gray-600 border-gray-900 cursor-not-allowed opacity-40',
     },
   };
@@ -506,8 +507,10 @@ export function CustomStylingDemo() {
     daysGrid: 'grid grid-cols-7 gap-2 bg-transparent',
     day: {
       day: 'aspect-square flex items-center justify-center text-xs font-semibold rounded-full transition-all text-purple-100 hover:bg-purple-800/40',
-      selected: 'bg-purple-900/60 text-white font-bold ring-2 ring-pink-500 ring-offset-2 ring-offset-[#1e073e] rounded-full shadow-[0_0_12px_rgba(236,72,153,0.7)]',
+      selected: 'bg-[#1e073e] text-white font-bold ring-2 ring-pink-500 ring-offset-2 ring-offset-[#1e073e] rounded-full shadow-[0_0_12px_rgba(236,72,153,0.7)]',
       unselected: 'text-purple-100',
+      today: 'border-2 border-amber-400 text-amber-300 font-bold rounded-full',
+      outside: 'opacity-20 text-purple-400',
       disabled: 'bg-purple-950/40 text-purple-400/30 cursor-not-allowed',
     },
   };
@@ -523,8 +526,10 @@ export function CustomStylingDemo() {
     daysGrid: 'grid grid-cols-7 gap-1 bg-transparent',
     day: {
       day: 'aspect-square flex items-center justify-center text-xs font-semibold rounded-lg bg-slate-200/50 dark:bg-slate-800/50 text-slate-800 dark:text-slate-200 hover:bg-emerald-500/20 dark:hover:bg-emerald-500/30 hover:text-emerald-700 dark:hover:text-emerald-300 transition-all',
-      selected: 'bg-emerald-600 dark:bg-emerald-500 text-white font-bold rounded-lg shadow-md shadow-emerald-500/20',
+      selected: 'bg-emerald-500/20 dark:bg-emerald-500/30 border border-emerald-500/50 text-emerald-700 dark:text-emerald-300 font-bold rounded-lg',
       unselected: 'text-slate-800 dark:text-slate-200',
+      today: 'border border-amber-500 text-amber-600 dark:text-amber-400 font-bold rounded-lg',
+      outside: 'opacity-30 text-slate-400 dark:text-slate-600 bg-transparent',
       disabled: 'opacity-30 bg-slate-100 dark:bg-slate-900 text-slate-400 dark:text-slate-600 cursor-not-allowed',
     },
   };
@@ -574,7 +579,7 @@ export function CustomStylingDemo() {
       </div>
 
       <Calendar
-        date={selectedDate}
+        date={demoDate}
         selected={selectedDate}
         onChange={(d) => setSelectedDate(d as Date)}
         classNames={themeClassNames[theme]}

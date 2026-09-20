@@ -1,6 +1,8 @@
 /*
  * react-modular-datepicker default component stylesheet
  * All styles are strictly scoped under .rmdp to avoid leaking into host applications.
+ * Uses :where() for default state selectors so user-defined custom classes (e.g. Tailwind utilities)
+ * can easily override default styling without specificity conflicts.
  */
 
 .rmdp {
@@ -43,8 +45,8 @@
 }
 
 /* Root Calendar */
-.rmdp.rmdp-calendar,
-.rmdp-calendar {
+:where(.rmdp.rmdp-calendar),
+:where(.rmdp-calendar) {
   width: fit-content;
   display: flex;
   flex-direction: column;
@@ -56,7 +58,7 @@
 }
 
 /* Header */
-.rmdp .rmdp-header {
+:where(.rmdp) :where(.rmdp-header) {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -64,44 +66,44 @@
   padding-bottom: 0.5rem;
 }
 
-.rmdp .rmdp-header-multi-month {
+:where(.rmdp) :where(.rmdp-header-multi-month) {
   border-bottom-width: 0;
   padding-bottom: 0;
 }
 
-.rmdp .rmdp-calendars-container {
+:where(.rmdp) :where(.rmdp-calendars-container) {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
   margin-top: 0.75rem;
 }
 
-.rmdp .rmdp-calendar-container {
+:where(.rmdp) :where(.rmdp-calendar-container) {
   flex: 1 1 0%;
   min-width: 280px;
   max-width: 100%;
 }
 
-.rmdp .rmdp-nav-button-slot-start {
+:where(.rmdp) :where(.rmdp-nav-button-slot-start) {
   width: 2.25rem;
   display: flex;
   justify-content: flex-start;
 }
 
-.rmdp .rmdp-nav-button-slot-end {
+:where(.rmdp) :where(.rmdp-nav-button-slot-end) {
   width: 2.25rem;
   display: flex;
   justify-content: flex-end;
 }
 
-.rmdp .rmdp-header-title-container {
+:where(.rmdp) :where(.rmdp-header-title-container) {
   font-weight: 600;
   color: var(--rmdp-text);
   text-align: center;
   flex: 1 1 0%;
 }
 
-.rmdp .rmdp-nav-button {
+:where(.rmdp) :where(.rmdp-nav-button) {
   padding: 0.5rem;
   color: var(--rmdp-text);
   border-radius: 9999px;
@@ -109,26 +111,26 @@
   cursor: pointer;
 }
 
-.rmdp .rmdp-nav-button:hover {
+:where(.rmdp) :where(.rmdp-nav-button:hover) {
   background-color: rgba(0, 0, 0, 0.05);
 }
 
-.rmdp .rmdp-nav-button:disabled {
+:where(.rmdp) :where(.rmdp-nav-button:disabled) {
   opacity: 0.3;
   pointer-events: none;
 }
 
-.rmdp .rmdp-nav-button-hidden {
+:where(.rmdp) :where(.rmdp-nav-button-hidden) {
   visibility: hidden;
   pointer-events: none;
 }
 
-.rmdp .rmdp-month-year-container {
+:where(.rmdp) :where(.rmdp-month-year-container) {
   display: flex;
   gap: 2rem;
 }
 
-.rmdp .rmdp-month-year-label {
+:where(.rmdp) :where(.rmdp-month-year-label) {
   display: flex;
   gap: 0.25rem;
   align-items: center;
@@ -136,19 +138,19 @@
   color: var(--rmdp-text);
 }
 
-.rmdp .rmdp-month-year-button {
+:where(.rmdp) :where(.rmdp-month-year-button) {
   padding: 0.25rem 0.5rem;
   border-radius: 0.25rem;
   cursor: pointer;
   transition: background-color 0.15s ease;
 }
 
-.rmdp .rmdp-month-year-button:hover {
+:where(.rmdp) :where(.rmdp-month-year-button:hover) {
   background-color: rgba(0, 0, 0, 0.05);
 }
 
 /* Weekday Grid & Cells */
-.rmdp .rmdp-weekday-grid {
+:where(.rmdp) :where(.rmdp-weekday-grid) {
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
   gap: 0.25rem;
@@ -156,7 +158,7 @@
   border-bottom: 1px solid color-mix(in oklab, var(--rmdp-gray-light) 40%, transparent);
 }
 
-.rmdp .rmdp-weekday {
+:where(.rmdp) :where(.rmdp-weekday) {
   text-align: center;
   font-size: 0.75rem;
   line-height: 1rem;
@@ -166,19 +168,19 @@
 }
 
 /* Days Grid & Cells */
-.rmdp .rmdp-days-grid {
+:where(.rmdp) :where(.rmdp-days-grid) {
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
   gap: 1px;
   background-color: color-mix(in oklab, var(--rmdp-gray-light) 20%, transparent);
 }
 
-.rmdp .rmdp-day,
-.rmdp .rmdp-day-empty {
+:where(.rmdp) :where(.rmdp-day),
+:where(.rmdp) :where(.rmdp-day-empty) {
   aspect-ratio: 1 / 1;
 }
 
-.rmdp .rmdp-day {
+:where(.rmdp) :where(.rmdp-day) {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -190,49 +192,49 @@
   transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.rmdp .rmdp-day:not(:disabled) {
+:where(.rmdp) :where(.rmdp-day:not(:disabled)) {
   cursor: pointer;
 }
 
-.rmdp .rmdp-day-empty,
-.rmdp .rmdp-day-disabled {
+:where(.rmdp) :where(.rmdp-day-empty),
+:where(.rmdp) :where(.rmdp-day-disabled) {
   background-color: #ffffff;
 }
 
-.rmdp .rmdp-day-disabled {
+:where(.rmdp) :where(.rmdp-day-disabled) {
   cursor: not-allowed;
   opacity: 0.5;
 }
 
-.rmdp .rmdp-day-unselected {
+:where(.rmdp) :where(.rmdp-day-unselected) {
   background-color: #ffffff;
   color: var(--rmdp-text);
 }
 
-.rmdp .rmdp-day-unselected:hover {
+:where(.rmdp) :where(.rmdp-day-unselected:hover) {
   background-color: color-mix(in oklab, var(--rmdp-gold) 25%, transparent);
 }
 
-.rmdp .rmdp-day-today:not(.rmdp-day-selected):not(.rmdp-day-range-start):not(.rmdp-day-range-end) {
+:where(.rmdp) :where(.rmdp-day-today:not(.rmdp-day-selected):not(.rmdp-day-range-start):not(.rmdp-day-range-end)) {
   color: var(--rmdp-gold);
   border: 1px solid var(--rmdp-gold);
   border-radius: 9999px;
   font-weight: 600;
 }
 
-.rmdp .rmdp-day-outside {
+:where(.rmdp) :where(.rmdp-day-outside) {
   color: #9ca3af;
   opacity: 0.5;
   background-color: #ffffff;
 }
 
-.rmdp .rmdp-day-selected {
+:where(.rmdp) :where(.rmdp-day-selected) {
   background-color: var(--rmdp-gold);
   color: #ffffff;
   border-radius: 9999px;
 }
 
-.rmdp .rmdp-day-range-start {
+:where(.rmdp) :where(.rmdp-day-range-start) {
   background-color: var(--rmdp-gold);
   color: #ffffff;
   border-top-left-radius: 9999px;
@@ -241,7 +243,7 @@
   border-bottom-right-radius: 0;
 }
 
-.rmdp .rmdp-day-range-end {
+:where(.rmdp) :where(.rmdp-day-range-end) {
   background-color: var(--rmdp-gold);
   color: #ffffff;
   border-top-right-radius: 9999px;
@@ -250,20 +252,20 @@
   border-bottom-left-radius: 0;
 }
 
-.rmdp .rmdp-day-range-between,
-.rmdp .rmdp-day-range-hovering {
+:where(.rmdp) :where(.rmdp-day-range-between),
+:where(.rmdp) :where(.rmdp-day-range-hovering) {
   background-color: color-mix(in oklab, var(--rmdp-gold) 25%, transparent);
   color: var(--rmdp-text);
 }
 
 /* Months Grid & Buttons */
-.rmdp .rmdp-months-grid {
+:where(.rmdp) :where(.rmdp-months-grid) {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.5rem;
 }
 
-.rmdp .rmdp-month-button {
+:where(.rmdp) :where(.rmdp-month-button) {
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
   border-radius: 0.5rem;
@@ -271,26 +273,26 @@
   cursor: pointer;
 }
 
-.rmdp .rmdp-month-button:hover {
+:where(.rmdp) :where(.rmdp-month-button:hover) {
   background-color: var(--rmdp-gray-light);
 }
 
-.rmdp .rmdp-month-button:disabled {
+:where(.rmdp) :where(.rmdp-month-button:disabled) {
   opacity: 0.3;
   pointer-events: none;
 }
 
-.rmdp .rmdp-month-button-selected {
+:where(.rmdp) :where(.rmdp-month-button-selected) {
   background-color: var(--rmdp-gold);
   color: #ffffff;
 }
 
-.rmdp .rmdp-month-button-unselected {
+:where(.rmdp) :where(.rmdp-month-button-unselected) {
   color: var(--rmdp-text);
 }
 
 /* Years Grid & Buttons */
-.rmdp .rmdp-years-grid {
+:where(.rmdp) :where(.rmdp-years-grid) {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.5rem;
@@ -299,7 +301,7 @@
   padding-right: 0.5rem;
 }
 
-.rmdp .rmdp-year-button {
+:where(.rmdp) :where(.rmdp-year-button) {
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
   border-radius: 0.5rem;
@@ -307,26 +309,26 @@
   cursor: pointer;
 }
 
-.rmdp .rmdp-year-button:hover {
+:where(.rmdp) :where(.rmdp-year-button:hover) {
   background-color: var(--rmdp-gray-light);
 }
 
-.rmdp .rmdp-year-button:disabled {
+:where(.rmdp) :where(.rmdp-year-button:disabled) {
   opacity: 0.3;
   pointer-events: none;
 }
 
-.rmdp .rmdp-year-button-selected {
+:where(.rmdp) :where(.rmdp-year-button-selected) {
   background-color: var(--rmdp-gold);
   color: #ffffff;
 }
 
-.rmdp .rmdp-year-button-unselected {
+:where(.rmdp) :where(.rmdp-year-button-unselected) {
   color: var(--rmdp-text);
 }
 
 /* Footer */
-.rmdp .rmdp-footer {
+:where(.rmdp) :where(.rmdp-footer) {
   margin-top: 1rem;
 }
 
