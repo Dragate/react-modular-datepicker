@@ -8,7 +8,7 @@ export interface HeaderProps {
   setView: (view: 'days' | 'months' | 'years') => void;
   monthNames: string[];
   t: { back: string; forward: string };
-  classNames: Required<CalendarClassNames>;
+  classNames?: CalendarClassNames;
   slideDirection?: 'left' | 'right' | null;
   currentView?: 'days' | 'months' | 'years';
 }
@@ -44,48 +44,67 @@ export const CalendarHeader: React.FC<HeaderProps> = ({
   const last = calendars[calendars.length - 1];
 
   const headerClassName = [
-    classNames.header,
-    calendars.length > 1 ? classNames.headerMultiMonth : ''
-  ].filter(Boolean).join(' ');
-
-  const navButtonClassName = (isHidden: boolean) => [
-    classNames.navButton,
-    isHidden ? classNames.navButtonHidden : ''
+    'rmd-header',
+    calendars.length > 1 ? 'rmd-header-multi-month' : '',
+    classNames?.header,
+    calendars.length > 1 ? classNames?.headerMultiMonth : ''
   ].filter(Boolean).join(' ');
 
   const isNavHidden = !!(currentView && currentView !== 'days');
+  const navButtonClassName = [
+    'rmd-nav-button',
+    isNavHidden ? 'rmd-nav-button-hidden' : '',
+    classNames?.navButton,
+    isNavHidden ? classNames?.navButtonHidden : ''
+  ].filter(Boolean).join(' ');
+
+  const monthYearContainerClassName = [
+    'rmd-month-year-container',
+    classNames?.monthYearContainer
+  ].filter(Boolean).join(' ');
+
+  const monthYearLabelClassName = [
+    'rmd-month-year-label',
+    slideDirection === 'left' ? 'rmd-slide-left' : slideDirection === 'right' ? 'rmd-slide-right' : '',
+    classNames?.monthYearLabel
+  ].filter(Boolean).join(' ');
+
+  const monthYearButtonClassName = [
+    'rmd-month-year-button',
+    classNames?.monthYearButton
+  ].filter(Boolean).join(' ');
 
   return (
     <div className={headerClassName}>
       <button
         {...getBackProps({ calendars })}
         onMouseDown={(e) => e.preventDefault()}
-        className={navButtonClassName(isNavHidden)}
+        className={navButtonClassName}
         aria-label={t.back}
       >
         <ChevronLeftIcon />
       </button>
 
-      <div className={classNames.monthYearContainer}>
+      <div className={monthYearContainerClassName}>
         {calendars.length === 1 ? (
-          <div key={`${calendars[0].month}-${calendars[0].year}`} className={`${classNames.monthYearLabel} ${slideDirection === 'left' ? 'rmd-slide-left' : slideDirection === 'right' ? 'rmd-slide-right' : ''}`}>
+          <div key={`${calendars[0].month}-${calendars[0].year}`} className={monthYearLabelClassName}>
             <button
               onMouseDown={(e) => e.preventDefault()}
               onClick={() => setView(currentView === 'months' ? 'days' : 'months')}
-              className={classNames.monthYearButton}
+              className={monthYearButtonClassName}
             >
               {monthNames[calendars[0].month]}
             </button>
             <button
               onMouseDown={(e) => e.preventDefault()}
               onClick={() => setView(currentView === 'years' ? 'days' : 'years')}
-              className={classNames.monthYearButton}
+              className={monthYearButtonClassName}
             >
               {calendars[0].year}
             </button>
           </div>
         ) : (
-          <div className={`${classNames.monthYearLabel} ${slideDirection === 'left' ? 'rmd-slide-left' : slideDirection === 'right' ? 'rmd-slide-right' : ''}`}>
+          <div className={monthYearLabelClassName}>
             <span>
               {first.year === last.year ? first.year : `${first.year} - ${last.year}`}
             </span>
@@ -96,7 +115,7 @@ export const CalendarHeader: React.FC<HeaderProps> = ({
       <button
         {...getForwardProps({ calendars })}
         onMouseDown={(e) => e.preventDefault()}
-        className={navButtonClassName(isNavHidden)}
+        className={navButtonClassName}
         aria-label={t.forward}
       >
         <ChevronRightIcon />

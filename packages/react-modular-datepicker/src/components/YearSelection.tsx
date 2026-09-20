@@ -7,7 +7,7 @@ interface YearSelectionProps {
   maxDate?: Date | null;
   adapter: DateAdapter;
   onYearSelect: (year: number) => void;
-  classNames: Required<CalendarClassNames>;
+  classNames?: CalendarClassNames;
 }
 
 export const YearSelection: React.FC<YearSelectionProps> = ({
@@ -36,19 +36,31 @@ export const YearSelection: React.FC<YearSelectionProps> = ({
     years.push(y);
   }
 
+  const gridClassName = ['rmd-years-grid', classNames?.yearsGrid].filter(Boolean).join(' ');
+
   return (
-    <div ref={yearListRef} className={classNames.yearsGrid}>
-      {years.map((y) => (
-        <button
-          key={y}
-          data-selected={y === year}
-          onMouseDown={(e) => e.preventDefault()}
-          onClick={() => onYearSelect(y)}
-          className={`${classNames.yearButton} ${y === year ? classNames.yearButtonSelected : classNames.yearButtonUnselected}`}
-        >
-          {y}
-        </button>
-      ))}
+    <div ref={yearListRef} className={gridClassName}>
+      {years.map((y) => {
+        const isSelected = y === year;
+        const buttonClassName = [
+          'rmd-year-button',
+          isSelected ? 'rmd-year-button-selected' : 'rmd-year-button-unselected',
+          classNames?.yearButton,
+          isSelected ? classNames?.yearButtonSelected : classNames?.yearButtonUnselected,
+        ].filter(Boolean).join(' ');
+
+        return (
+          <button
+            key={y}
+            data-selected={isSelected}
+            onMouseDown={(e) => e.preventDefault()}
+            onClick={() => onYearSelect(y)}
+            className={buttonClassName}
+          >
+            {y}
+          </button>
+        );
+      })}
     </div>
   );
 };

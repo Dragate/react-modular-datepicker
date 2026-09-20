@@ -109,7 +109,7 @@
   }
 
   .rmd-day {
-    @apply rmd:aspect-square rmd:flex rmd:items-center rmd:justify-center rmd:p-[1px] rmd:relative rmd:text-sm rmd:font-medium rmd:transition-all rmd:enabled:cursor-pointer rmd:rounded-full;
+    @apply rmd:aspect-square rmd:flex rmd:items-center rmd:justify-center rmd:p-[1px] rmd:relative rmd:text-sm rmd:font-medium rmd:transition-all rmd:enabled:cursor-pointer;
   }
 
   .rmd-day-selected {

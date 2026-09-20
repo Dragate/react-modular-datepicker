@@ -5,44 +5,59 @@ interface DayProps {
   dateObj: DateObj | null;
   getDateProps: (args: { dateObj: DateObj, [key: string]: any }) => any;
   dayProps?: Record<string, any>;
-  classNames: Required<CalendarClassNames>;
+  classNames?: CalendarClassNames;
 }
 
 export const Day: React.FC<DayProps> = ({ dateObj, getDateProps, dayProps, classNames }) => {
   if (!dateObj) {
-    return <div className={classNames.day.empty} />;
+    const emptyClassName = ['rmd-day-empty', classNames?.day?.empty].filter(Boolean).join(' ');
+    return <div className={emptyClassName} />;
   }
 
   const { date, selected, selectable, isRangeStart, isRangeEnd, isRangeBetween, isRangeHovering, isRangeActive } = dateObj;
-  const dayClasses = classNames.day;
+  const dayClasses = classNames?.day;
 
-  let stateClasses = '';
+  let semanticStateClass = '';
+  let customStateClass = '';
+
   if (isRangeStart && isRangeEnd) {
-    stateClasses = dayClasses.selected || '';
+    semanticStateClass = 'rmd-day-selected';
+    customStateClass = dayClasses?.selected || '';
   } else if (isRangeStart) {
-    stateClasses = `${dayClasses.rangeStart || ''} ${isRangeActive ? 'rmd-day-range-active' : ''}`;
+    semanticStateClass = ['rmd-day-range-start', isRangeActive ? 'rmd-day-range-active' : ''].filter(Boolean).join(' ');
+    customStateClass = dayClasses?.rangeStart || '';
   } else if (isRangeEnd) {
-    stateClasses = `${dayClasses.rangeEnd || ''} ${isRangeActive ? 'rmd-day-range-active' : ''}`;
+    semanticStateClass = ['rmd-day-range-end', isRangeActive ? 'rmd-day-range-active' : ''].filter(Boolean).join(' ');
+    customStateClass = dayClasses?.rangeEnd || '';
   } else if (isRangeBetween) {
-    stateClasses = dayClasses.rangeBetween || '';
+    semanticStateClass = 'rmd-day-range-between';
+    customStateClass = dayClasses?.rangeBetween || '';
   } else if (isRangeHovering) {
-    stateClasses = dayClasses.rangeHovering || '';
+    semanticStateClass = 'rmd-day-range-hovering';
+    customStateClass = dayClasses?.rangeHovering || '';
   } else if (selected) {
-    stateClasses = dayClasses.selected || '';
+    semanticStateClass = 'rmd-day-selected';
+    customStateClass = dayClasses?.selected || '';
   } else if (!selectable) {
-    stateClasses = dayClasses.disabled || '';
+    semanticStateClass = 'rmd-day-disabled';
+    customStateClass = dayClasses?.disabled || '';
   } else {
-    stateClasses = dayClasses.unselected || '';
+    semanticStateClass = 'rmd-day-unselected';
+    customStateClass = dayClasses?.unselected || '';
   }
 
   const modifierClasses = (dateObj.modifiers || [])
-    .map(m => (dayClasses as any)[m] || m)
+    .map(m => (dayClasses as any)?.[m] || m)
     .filter(Boolean)
     .join(' ');
 
-  const className = [dayClasses.day, stateClasses, modifierClasses]
-    .filter(Boolean)
-    .join(' ');
+  const className = [
+    'rmd-day',
+    dayClasses?.day,
+    semanticStateClass,
+    customStateClass,
+    modifierClasses
+  ].filter(Boolean).join(' ');
 
   return (
     <button

@@ -1,7 +1,7 @@
 import { act, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { describe, expect, test } from 'vitest';
-import { Calendar, defaultClassNames } from 'react-modular-datepicker';
+import { Calendar } from 'react-modular-datepicker';
 
 const customClassNames = {
   root: 'custom-root-style',
@@ -23,7 +23,7 @@ function StylingTestWrapper() {
 }
 
 describe('Custom Styling Recipe', () => {
-  test('should render custom styling component and semantic class names', () => {
+  test('should render custom styling component with semantic classes and custom overrides', () => {
     const container = document.createElement('div');
     document.body.appendChild(container);
     const root = createRoot(container);
@@ -33,19 +33,20 @@ describe('Custom Styling Recipe', () => {
     });
 
     const rootElement = container.querySelector('.rmd');
+    expect(rootElement?.className).toContain('rmd-root');
     expect(rootElement?.className).toContain('custom-root-style');
 
     const selectedDay = Array.from(container.querySelectorAll('button')).find(
       (btn) => btn.textContent?.trim() === '13'
     );
-    expect(selectedDay?.className).toContain('custom-selected-day');
     expect(selectedDay?.className).toContain('rmd-day');
-  });
+    expect(selectedDay?.className).toContain('rmd-day-selected');
+    expect(selectedDay?.className).toContain('custom-selected-day');
 
-  test('defaultClassNames uses semantic class names without inline utility classes', () => {
-    expect(defaultClassNames.root).toBe('rmd-root');
-    expect(defaultClassNames.header).toBe('rmd-header');
-    expect(defaultClassNames.day.day).toBe('rmd-day');
-    expect(defaultClassNames.day.selected).toBe('rmd-day-selected');
+    const unselectedDay = Array.from(container.querySelectorAll('button')).find(
+      (btn) => btn.textContent?.trim() === '14'
+    );
+    expect(unselectedDay?.className).toContain('rmd-day');
+    expect(unselectedDay?.className).toContain('rmd-day-unselected');
   });
 });
