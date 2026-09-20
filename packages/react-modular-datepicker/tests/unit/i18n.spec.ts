@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
-import { defaultAdapter } from '../../packages/react-modular-datepicker/src/adapters/dayjs';
-import { getDefaults, getTranslations } from '../../packages/react-modular-datepicker/src/i18n';
+import { defaultAdapter } from '../../src/adapters/dayjs';
+import { getDefaults, getTranslations } from '../../src/i18n';
 
 test.describe('i18n module', () => {
   test('getDefaults provides English month and weekday translations by default', () => {

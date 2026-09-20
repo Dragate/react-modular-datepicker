@@ -7,8 +7,9 @@
             "esnext",
             "dom"
         ],
-        "module": "NodeNext",
-        "moduleResolution": "nodenext",
+        "module": "ESNext",
+        "moduleResolution": "bundler",
+        "skipLibCheck": true,
         "noFallthroughCasesInSwitch": true,
         "noImplicitReturns": false,
         "noUnusedLocals": true,
@@ -20,7 +21,7 @@
         "incremental": true
     },
     "include": [
-        "./packages/**/*"
+        "./packages/react-modular-datepicker/**/*"
     ],
     "exclude": [
         "./**/dist",

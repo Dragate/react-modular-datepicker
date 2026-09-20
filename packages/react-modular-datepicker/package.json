@@ -70,7 +70,10 @@
     "dev:css": "tailwindcss -i src/index.css -o dist/index.css --watch",
     "build": "pnpm run build:js && pnpm run build:css",
     "build:js": "vite build",
-    "build:css": "tailwindcss -i src/index.css -o dist/index.css"
+    "build:css": "tailwindcss -i src/index.css -o dist/index.css",
+    "test": "playwright test",
+    "test:unit": "playwright test --project=unit",
+    "test:e2e": "playwright test --project=e2e"
   },
   "peerDependencies": {
     "dayjs": "^1.11.20",
@@ -83,6 +86,7 @@
     }
   },
   "devDependencies": {
+    "@playwright/test": "^1.63.0",
     "@tailwindcss/cli": "^4.3.3",
     "@tailwindcss/vite": "^4.3.3",
     "@types/react": "^19.3.0",
