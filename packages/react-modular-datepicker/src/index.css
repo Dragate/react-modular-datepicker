@@ -1,8 +1,3 @@
-@layer theme, components, utilities;
-
-@import "tailwindcss/theme.css" layer(theme);
-@import "tailwindcss/utilities.css" layer(utilities);
-
 :root, .rmd {
   --rmd-gold: #c5a059;
   --rmd-gray-light: #b5bec6;
@@ -10,76 +5,271 @@
   --rmd-text: #343a40;
 }
 
-@theme {
-  --color-rmd-gold: var(--rmd-gold);
-  --color-rmd-gray-light: var(--rmd-gray-light);
-  --color-rmd-gray-dark: var(--rmd-gray-dark);
-  --color-rmd-text: var(--rmd-text);
+.rmd {
+  width: fit-content;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  background-color: #ffffff;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
 }
 
-/*
- * Keep the date button defaults in the component layer. Consumer utilities
- * are emitted in Tailwind's utilities layer, so modifier classes can override
- * these defaults without !important or selector-specificity workarounds.
- */
-@layer components {
-  .rmd .rmd-day,
-  .rmd .rmd-day-empty {
-    aspect-ratio: 1;
-  }
+.rmd .rmd-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid color-mix(in oklab, var(--rmd-gray-light) 40%, transparent);
+  padding-bottom: 0.5rem;
+}
 
-  .rmd .rmd-day {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 1px;
-    position: relative;
-    font-size: 0.875rem;
-    line-height: 1.25rem;
-    font-weight: 500;
-    transition-property: all;
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    transition-duration: 0.15s;
-  }
+.rmd .rmd-header-multi-month {
+  border-bottom-width: 0;
+  padding-bottom: 0;
+}
 
-  .rmd .rmd-day:not(:disabled) {
-    cursor: pointer;
-  }
+.rmd .rmd-calendars-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
 
-  .rmd .rmd-day-empty,
-  .rmd .rmd-day-disabled {
-    background-color: #fff;
-  }
+.rmd .rmd-calendar-container {
+  flex: 1 1 0%;
+  min-width: 280px;
+  max-width: 100%;
+}
 
-  .rmd .rmd-day-disabled {
-    cursor: not-allowed;
-  }
+.rmd .rmd-nav-button-slot-start {
+  width: 2.25rem;
+  display: flex;
+  justify-content: flex-start;
+}
 
-  .rmd .rmd-day-selected,
-  .rmd .rmd-day-range-start,
-  .rmd .rmd-day-range-end {
-    background-color: var(--rmd-gold);
-    color: #fff;
-  }
+.rmd .rmd-nav-button-slot-end {
+  width: 2.25rem;
+  display: flex;
+  justify-content: flex-end;
+}
 
-  .rmd .rmd-day-selected {
-    border-radius: 9999px;
-  }
+.rmd .rmd-header-title-container {
+  font-weight: 600;
+  color: var(--rmd-text);
+  text-align: center;
+  flex: 1 1 0%;
+}
 
-  .rmd .rmd-day-unselected {
-    background-color: #fff;
-    color: var(--rmd-text);
-  }
+.rmd .rmd-weekday-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.25rem;
+  margin-bottom: 0.25rem;
+  border-bottom: 1px solid color-mix(in oklab, var(--rmd-gray-light) 40%, transparent);
+}
 
-  .rmd .rmd-day-unselected:hover {
-    background-color: color-mix(in oklab, var(--rmd-gold) 25%, transparent);
-  }
+.rmd .rmd-weekday {
+  text-align: center;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  color: #9ca3af;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
 
-  .rmd .rmd-day-range-between,
-  .rmd .rmd-day-range-hovering {
-    background-color: color-mix(in oklab, var(--rmd-gold) 25%, transparent);
-    color: var(--rmd-text);
-  }
+.rmd .rmd-days-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 1px;
+  background-color: color-mix(in oklab, var(--rmd-gray-light) 20%, transparent);
+}
+
+.rmd .rmd-footer {
+  margin-top: 1rem;
+}
+
+.rmd .rmd-nav-button {
+  padding: 0.5rem;
+  color: var(--rmd-text);
+  border-radius: 9999px;
+  transition: background-color 0.15s ease;
+  cursor: pointer;
+  border: 0;
+  background: transparent;
+}
+
+.rmd .rmd-nav-button:hover {
+  background-color: #f3f4f6;
+}
+
+.rmd .rmd-nav-button:disabled {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.rmd .rmd-nav-button-hidden {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.rmd .rmd-month-year-container {
+  display: flex;
+  gap: 2rem;
+}
+
+.rmd .rmd-month-year-label {
+  display: flex;
+  gap: 0.25rem;
+  align-items: center;
+  font-weight: 600;
+  color: var(--rmd-text);
+}
+
+.rmd .rmd-month-year-button {
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+}
+
+.rmd .rmd-month-year-button:hover {
+  background-color: #f3f4f6;
+}
+
+.rmd .rmd-day,
+.rmd .rmd-day-empty {
+  aspect-ratio: 1;
+}
+
+.rmd .rmd-day {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1px;
+  position: relative;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 0;
+  font: inherit;
+  background: transparent;
+}
+
+.rmd .rmd-day:not(:disabled) {
+  cursor: pointer;
+}
+
+.rmd .rmd-day-empty,
+.rmd .rmd-day-disabled {
+  background-color: #fff;
+}
+
+.rmd .rmd-day-disabled {
+  cursor: not-allowed;
+}
+
+.rmd .rmd-day-selected,
+.rmd .rmd-day-range-start,
+.rmd .rmd-day-range-end {
+  background-color: var(--rmd-gold);
+  color: #fff;
+}
+
+.rmd .rmd-day-selected {
+  border-radius: 9999px;
+}
+
+.rmd .rmd-day-unselected {
+  background-color: #fff;
+  color: var(--rmd-text);
+}
+
+.rmd .rmd-day-unselected:hover {
+  background-color: color-mix(in oklab, var(--rmd-gold) 25%, transparent);
+}
+
+.rmd .rmd-day-range-between,
+.rmd .rmd-day-range-hovering {
+  background-color: color-mix(in oklab, var(--rmd-gold) 25%, transparent);
+  color: var(--rmd-text);
+}
+
+.rmd .rmd-months-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+  animation: slideInFromTop 0.2s ease-out forwards;
+}
+
+.rmd .rmd-month-button {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-radius: 0.5rem;
+  transition: background-color 0.15s ease;
+  cursor: pointer;
+  border: 0;
+  font: inherit;
+  background: transparent;
+}
+
+.rmd .rmd-month-button:hover {
+  background-color: var(--rmd-gray-light);
+}
+
+.rmd .rmd-month-button:disabled {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.rmd .rmd-month-button-selected {
+  background-color: var(--rmd-gold);
+  color: #fff;
+}
+
+.rmd .rmd-month-button-unselected {
+  color: var(--rmd-text);
+}
+
+.rmd .rmd-years-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+  max-height: 210px;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+  animation: slideInFromTop 0.2s ease-out forwards;
+}
+
+.rmd .rmd-year-button {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-radius: 0.5rem;
+  transition: background-color 0.15s ease;
+  cursor: pointer;
+  border: 0;
+  font: inherit;
+  background: transparent;
+}
+
+.rmd .rmd-year-button:hover {
+  background-color: var(--rmd-gray-light);
+}
+
+.rmd .rmd-year-button:disabled {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.rmd .rmd-year-button-selected {
+  background-color: var(--rmd-gold);
+  color: #fff;
+}
+
+.rmd .rmd-year-button-unselected {
+  color: var(--rmd-text);
 }
 
 @keyframes slideInFromTop {

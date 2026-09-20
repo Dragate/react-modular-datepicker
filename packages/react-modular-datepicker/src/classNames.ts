@@ -12,24 +12,24 @@ export interface DayClassNames {
 }
 
 export const defaultClassNames = {
-  root: "w-fit flex flex-col p-4 bg-white rounded-lg shadow-lg",
-  header: "flex items-center justify-between border-b-2 border-rmd-gray-light/40 pb-2",
-  headerMultiMonth: "border-b-0 pb-0",
-  calendarsContainer: "flex flex-wrap gap-4",
-  calendarContainer: "flex-1 min-w-[280px] max-w-full",
-  navButtonSlotStart: "w-9 flex justify-start",
-  navButtonSlotEnd: "w-9 flex justify-end",
-  headerTitleContainer: "font-semibold text-rmd-text text-center flex-1",
-  weekdayGrid: "grid grid-cols-7 gap-1 mb-1 border-b border-rmd-gray-light/40",
-  weekday: "text-center text-xs text-gray-400 py-2",
-  daysGrid: "grid grid-cols-7 gap-px bg-rmd-gray-light/20",
-  footer: "mt-4",
+  root: "rmd-root",
+  header: "rmd-header",
+  headerMultiMonth: "rmd-header-multi-month",
+  calendarsContainer: "rmd-calendars-container",
+  calendarContainer: "rmd-calendar-container",
+  navButtonSlotStart: "rmd-nav-button-slot-start",
+  navButtonSlotEnd: "rmd-nav-button-slot-end",
+  headerTitleContainer: "rmd-header-title-container",
+  weekdayGrid: "rmd-weekday-grid",
+  weekday: "rmd-weekday",
+  daysGrid: "rmd-days-grid",
+  footer: "rmd-footer",
 
-  navButton: "p-2 text-rmd-text hover:bg-gray-100 rounded-full transition-colors cursor-pointer disabled:opacity-30 disabled:pointer-events-none",
-  navButtonHidden: "invisible pointer-events-none",
-  monthYearContainer: "flex gap-8",
-  monthYearLabel: "flex gap-1 items-center font-semibold text-rmd-text",
-  monthYearButton: "hover:bg-gray-100 px-2 py-1 rounded cursor-pointer",
+  navButton: "rmd-nav-button",
+  navButtonHidden: "rmd-nav-button-hidden",
+  monthYearContainer: "rmd-month-year-container",
+  monthYearLabel: "rmd-month-year-label",
+  monthYearButton: "rmd-month-year-button",
 
   day: {
     day: "rmd-day group",
@@ -43,15 +43,15 @@ export const defaultClassNames = {
     rangeHovering: "rmd-day-range-hovering",
   },
 
-  monthsGrid: "grid grid-cols-3 gap-2 animate-slide-in-top",
-  monthButton: "py-3 rounded-lg hover:bg-rmd-gray-light transition-colors cursor-pointer disabled:opacity-30 disabled:pointer-events-none",
-  monthButtonSelected: "bg-rmd-gold text-white",
-  monthButtonUnselected: "text-rmd-text",
+  monthsGrid: "rmd-months-grid",
+  monthButton: "rmd-month-button",
+  monthButtonSelected: "rmd-month-button-selected",
+  monthButtonUnselected: "rmd-month-button-unselected",
 
-  yearsGrid: "grid grid-cols-3 gap-2 max-h-[210px] overflow-y-auto pr-2 animate-slide-in-top rmd-scrollbar",
-  yearButton: "py-3 rounded-lg hover:bg-rmd-gray-light transition-colors cursor-pointer disabled:opacity-30 disabled:pointer-events-none",
-  yearButtonSelected: "bg-rmd-gold text-white",
-  yearButtonUnselected: "text-rmd-text",
+  yearsGrid: "rmd-years-grid rmd-scrollbar",
+  yearButton: "rmd-year-button",
+  yearButtonSelected: "rmd-year-button-selected",
+  yearButtonUnselected: "rmd-year-button-unselected",
 }
 
 export interface CalendarClassNames {
