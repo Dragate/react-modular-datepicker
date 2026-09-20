@@ -1,7 +1,7 @@
-import { expect, test } from '@playwright/test';
+import { describe, expect, test } from 'vitest';
 import { DayjsAdapter } from '../../src/adapters/dayjs';
 
-test.describe('DayjsAdapter', () => {
+describe('DayjsAdapter', () => {
   const adapter = new DayjsAdapter();
 
   test('creates date from string, number, or Date', () => {

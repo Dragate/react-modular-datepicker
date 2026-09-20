@@ -12,5 +12,6 @@ package-lock.json
 *.tsbuildinfo
 coverage
 .rollup.cache
+.vitest
 playwright-report
 test-results

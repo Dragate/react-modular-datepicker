@@ -1,7 +1,7 @@
-import { expect, test } from '@playwright/test';
+import { describe, expect, test } from 'vitest';
 import { defaultClassNames, mergeClassNames } from '../../src/classNames';
 
-test.describe('mergeClassNames', () => {
+describe('mergeClassNames', () => {
   test('returns defaultClassNames when no custom classNames are provided', () => {
     const merged = mergeClassNames();
     expect(merged).toEqual(defaultClassNames);
