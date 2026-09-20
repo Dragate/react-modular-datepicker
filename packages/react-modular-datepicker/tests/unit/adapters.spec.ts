@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { DayjsAdapter } from '../../src/adapters/dayjs';
+import { DayjsAdapter } from 'react-modular-datepicker';
 
 describe('DayjsAdapter', () => {
   const adapter = new DayjsAdapter();

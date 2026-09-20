@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { defaultAdapter } from '../../src/adapters/dayjs';
+import { defaultAdapter } from 'react-modular-datepicker';
 import {
   addMonth,
   composeEventHandlers,
@@ -7,7 +7,7 @@ import {
   isBackDisabled,
   isForwardDisabled,
   subtractMonth,
-} from '../../src/utils';
+} from 'react-modular-datepicker';
 
 describe('utils: composeEventHandlers', () => {
   test('calls each provided handler in sequence', () => {

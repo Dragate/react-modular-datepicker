@@ -1,9 +1,8 @@
-import React, { act, useState } from 'react';
+import { act, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { describe, expect, test } from 'vitest';
 import { useDates } from 'react-modular-datepicker';
 
-globalThis.IS_REACT_ACT_ENVIRONMENT = true;
 
 function HeadlessTestWrapper() {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());

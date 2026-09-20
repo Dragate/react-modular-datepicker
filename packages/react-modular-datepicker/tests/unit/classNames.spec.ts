@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { defaultClassNames, mergeClassNames } from '../../src/classNames';
+import { defaultClassNames, mergeClassNames } from 'react-modular-datepicker';
 
 describe('mergeClassNames', () => {
   test('returns defaultClassNames when no custom classNames are provided', () => {

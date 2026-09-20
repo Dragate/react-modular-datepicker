@@ -1,8 +1,8 @@
 import dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
-import isBetween from 'dayjs/plugin/isBetween.js';
-import customParseFormat from 'dayjs/plugin/customParseFormat.js';
-import localeData from 'dayjs/plugin/localeData.js';
+import isBetween from 'dayjs/plugin/isBetween';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+import localeData from 'dayjs/plugin/localeData';
 import type { DateAdapter } from '../types';
 
 dayjs.extend(isBetween);
@@ -54,7 +54,7 @@ export class DayjsAdapter implements DateAdapter<Dayjs> {
 
   format(date: Dayjs, formatStr: string, locale?: string): string {
     if (locale) {
-        return date.locale(locale).format(formatStr);
+      return date.locale(locale).format(formatStr);
     }
     return date.format(formatStr);
   }

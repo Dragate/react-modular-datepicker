@@ -1,9 +1,7 @@
-import React, { act, useEffect, useRef, useState } from 'react';
+import { act, useEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { describe, expect, test } from 'vitest';
 import { Calendar } from 'react-modular-datepicker';
-
-globalThis.IS_REACT_ACT_ENVIRONMENT = true;
+import { describe, expect, test } from 'vitest';
 
 function FormIntegrationTestWrapper() {
   const [date, setDate] = useState<Date | null>(null);

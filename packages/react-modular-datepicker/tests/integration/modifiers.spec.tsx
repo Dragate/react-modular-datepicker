@@ -1,9 +1,7 @@
-import React, { act, useState } from 'react';
+import { act, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { describe, expect, test } from 'vitest';
 import { Calendar } from 'react-modular-datepicker';
-
-globalThis.IS_REACT_ACT_ENVIRONMENT = true;
 
 function ModifiersTestWrapper() {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date(2025, 4, 15));

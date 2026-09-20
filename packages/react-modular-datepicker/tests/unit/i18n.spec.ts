@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
-import { defaultAdapter } from '../../src/adapters/dayjs';
-import { getDefaults, getTranslations } from '../../src/i18n';
+import { defaultAdapter } from 'react-modular-datepicker';
+import { getDefaults, getTranslations } from 'react-modular-datepicker';
 
 describe('i18n module', () => {
   test('getDefaults provides English month and weekday translations by default', () => {

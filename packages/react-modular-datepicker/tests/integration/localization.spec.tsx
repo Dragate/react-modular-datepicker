@@ -1,9 +1,7 @@
-import React, { act } from 'react';
+import { act } from 'react';
 import { createRoot } from 'react-dom/client';
 import { describe, expect, test } from 'vitest';
 import { Calendar } from 'react-modular-datepicker';
-
-globalThis.IS_REACT_ACT_ENVIRONMENT = true;
 
 const spanishTranslations = {
   months: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
