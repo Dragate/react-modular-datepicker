@@ -115,7 +115,7 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
   );
 
   return (
-    <div className={`rmdp ${classNames.root}`}>
+    <div className={`rmd ${classNames.root}`}>
       {typeof header === 'function' ? header({
         calendars,
         getBackProps: wrappedGetBackProps,
@@ -192,7 +192,7 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
                 <div key={day} className={classNames.weekday}>{day}</div>
               ))}
             </div>
-            <div key={`daysGrid-${calendar.month}-${calendar.year}`} className={`${classNames.daysGrid} ${slideDirection === 'left' ? 'animate-slide-in-left' : slideDirection === 'right' ? 'animate-slide-in-right' : ''}`}>
+            <div key={`daysGrid-${calendar.month}-${calendar.year}`} className={`${classNames.daysGrid} ${slideDirection === 'left' ? 'rmd:animate-slide-in-left' : slideDirection === 'right' ? 'rmd:animate-slide-in-right' : ''}`}>
               {calendar.weeks.map((week, wi) =>
                 week.map((dateObj, di) => (
                   <Day

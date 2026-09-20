@@ -34,7 +34,7 @@ describe('Modifiers Recipe', () => {
       root.render(<ModifiersTestWrapper />);
     });
 
-    const specialDay = Array.from(container.querySelectorAll('.rmdp button')).find((b) => b.textContent?.trim() === '15');
+    const specialDay = Array.from(container.querySelectorAll('.rmd button')).find((b) => b.textContent?.trim() === '15');
     expect(specialDay?.className).toContain('is-special');
   });
 });
