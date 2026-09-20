@@ -1,7 +1,7 @@
-import { act, useState } from 'react';
-import { createRoot } from 'react-dom/client';
-import { describe, expect, test } from 'vitest';
+import { useState } from 'react';
 import { Calendar, useDates } from 'react-modular-datepicker';
+import { describe, expect, test } from 'vitest';
+import { setupComponent } from '../test-utils';
 
 function EventScheduleTestWrapper() {
   const today = new Date();
@@ -47,31 +47,23 @@ function CustomLayoutScheduleTestWrapper() {
 }
 
 describe('Event & Schedule Recipe', () => {
-  test('should render event schedule calendar with dynamic data-tooltip attributes', () => {
-    const container = document.createElement('div');
-    document.body.appendChild(container);
-    const root = createRoot(container);
+  describe('EventScheduleTestWrapper', () => {
+    const env = setupComponent(<EventScheduleTestWrapper />);
 
-    act(() => {
-      root.render(<EventScheduleTestWrapper />);
+    test('should render event schedule calendar with dynamic data-tooltip attributes', () => {
+      const day5Btn = Array.from(env.container.querySelectorAll('button')).find((b) => b.textContent?.trim() === '5');
+      const day12Btn = Array.from(env.container.querySelectorAll('button')).find((b) => b.textContent?.trim() === '12');
+
+      expect(day5Btn?.getAttribute('data-tooltip')).toBe('2 events');
+      expect(day12Btn?.getAttribute('data-tooltip')).toBe('1 event');
     });
-
-    const day5Btn = Array.from(container.querySelectorAll('button')).find((b) => b.textContent?.trim() === '5');
-    const day12Btn = Array.from(container.querySelectorAll('button')).find((b) => b.textContent?.trim() === '12');
-
-    expect(day5Btn?.getAttribute('data-tooltip')).toBe('2 events');
-    expect(day12Btn?.getAttribute('data-tooltip')).toBe('1 event');
   });
 
-  test('should render custom layout schedule view with event badges', () => {
-    const container = document.createElement('div');
-    document.body.appendChild(container);
-    const root = createRoot(container);
+  describe('CustomLayoutScheduleTestWrapper', () => {
+    const env = setupComponent(<CustomLayoutScheduleTestWrapper />);
 
-    act(() => {
-      root.render(<CustomLayoutScheduleTestWrapper />);
+    test('should render custom layout schedule view with event badges', () => {
+      expect(env.container.querySelector('[data-testid="event-badge"]')?.textContent).toBe('Team Standup');
     });
-
-    expect(container.querySelector('[data-testid="event-badge"]')?.textContent).toBe('Team Standup');
   });
 });

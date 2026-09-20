@@ -1,8 +1,7 @@
-import { act, useState } from 'react';
-import { createRoot } from 'react-dom/client';
-import { describe, expect, test } from 'vitest';
+import { useState } from 'react';
 import { useDates } from 'react-modular-datepicker';
-
+import { describe, expect, test } from 'vitest';
+import { setupComponent } from '../test-utils';
 
 function HeadlessTestWrapper() {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
@@ -34,16 +33,10 @@ function HeadlessTestWrapper() {
 }
 
 describe('Headless Usage Recipe', () => {
+  const env = setupComponent(<HeadlessTestWrapper />);
+
   test('should render headless custom layout component', () => {
-    const container = document.createElement('div');
-    document.body.appendChild(container);
-    const root = createRoot(container);
-
-    act(() => {
-      root.render(<HeadlessTestWrapper />);
-    });
-
-    expect(container.querySelector('[data-testid="headless-container"]')).not.toBeNull();
-    expect(container.querySelector('[data-testid="month-year"]')).not.toBeNull();
+    expect(env.container.querySelector('[data-testid="headless-container"]')).not.toBeNull();
+    expect(env.container.querySelector('[data-testid="month-year"]')).not.toBeNull();
   });
 });

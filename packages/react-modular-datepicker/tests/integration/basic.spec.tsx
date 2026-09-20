@@ -1,7 +1,7 @@
 import { act, useState } from 'react';
-import { createRoot } from 'react-dom/client';
-import { describe, expect, test } from 'vitest';
 import { Calendar } from 'react-modular-datepicker';
+import { describe, expect, test } from 'vitest';
+import { setupComponent } from '../test-utils';
 
 function BasicTestWrapper() {
   const [selected, setSelected] = useState<Date | null>(null);
@@ -14,17 +14,11 @@ function BasicTestWrapper() {
 }
 
 describe('Basic Selection Recipe', () => {
+  const env = setupComponent(<BasicTestWrapper />);
+
   test('should render calendar and select a date', () => {
-    const container = document.createElement('div');
-    document.body.appendChild(container);
-    const root = createRoot(container);
-
-    act(() => {
-      root.render(<BasicTestWrapper />);
-    });
-
     const today = new Date().getDate().toString();
-    const dayBtn = Array.from(container.querySelectorAll('button')).find(
+    const dayBtn = Array.from(env.container.querySelectorAll('button')).find(
       (btn) => btn.textContent?.trim() === today
     );
 
@@ -34,7 +28,7 @@ describe('Basic Selection Recipe', () => {
       dayBtn?.click();
     });
 
-    const selectedText = container.querySelector('[data-testid="selected-text"]');
+    const selectedText = env.container.querySelector('[data-testid="selected-text"]');
     expect(selectedText).not.toBeNull();
     expect(selectedText?.textContent).toContain('Selected:');
   });

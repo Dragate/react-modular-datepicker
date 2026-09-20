@@ -1,7 +1,7 @@
-import { act, useState } from 'react';
-import { createRoot } from 'react-dom/client';
-import { describe, expect, test } from 'vitest';
+import { useState } from 'react';
 import { Calendar } from 'react-modular-datepicker';
+import { describe, expect, test } from 'vitest';
+import { setupComponent } from '../test-utils';
 
 function ModifiersTestWrapper() {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date(2025, 4, 15));
@@ -25,16 +25,10 @@ function ModifiersTestWrapper() {
 }
 
 describe('Modifiers Recipe', () => {
+  const env = setupComponent(<ModifiersTestWrapper />);
+
   test('should render modifiers demo with weekend and special highlights', () => {
-    const container = document.createElement('div');
-    document.body.appendChild(container);
-    const root = createRoot(container);
-
-    act(() => {
-      root.render(<ModifiersTestWrapper />);
-    });
-
-    const specialDay = Array.from(container.querySelectorAll('.rmdp button')).find((b) => b.textContent?.trim() === '15');
+    const specialDay = Array.from(env.container.querySelectorAll('.rmdp button')).find((b) => b.textContent?.trim() === '15');
     expect(specialDay?.className).toContain('is-special');
   });
 });

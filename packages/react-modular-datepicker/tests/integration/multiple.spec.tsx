@@ -1,7 +1,7 @@
 import { act, useState } from 'react';
-import { createRoot } from 'react-dom/client';
-import { describe, expect, test } from 'vitest';
 import { Calendar } from 'react-modular-datepicker';
+import { describe, expect, test } from 'vitest';
+import { setupComponent } from '../test-utils';
 
 function MultipleTestWrapper() {
   const [dates, setDates] = useState<Date[]>([new Date(2025, 4, 10), new Date(2025, 4, 15)]);
@@ -19,22 +19,16 @@ function MultipleTestWrapper() {
 }
 
 describe('Multiple Selection Recipe', () => {
+  const env = setupComponent(<MultipleTestWrapper />);
+
   test('should render multiple selection component', () => {
-    const container = document.createElement('div');
-    document.body.appendChild(container);
-    const root = createRoot(container);
+    expect(env.container.querySelector('[data-testid="count"]')?.textContent).toBe('Selected count: 2');
 
-    act(() => {
-      root.render(<MultipleTestWrapper />);
-    });
-
-    expect(container.querySelector('[data-testid="count"]')?.textContent).toBe('Selected count: 2');
-
-    const day20Btn = Array.from(container.querySelectorAll('.rmdp button')).find((b) => b.textContent?.trim() === '20');
+    const day20Btn = Array.from(env.container.querySelectorAll('.rmdp button')).find((b) => b.textContent?.trim() === '20');
     act(() => {
       day20Btn?.click();
     });
 
-    expect(container.querySelector('[data-testid="count"]')?.textContent).toBe('Selected count: 3');
+    expect(env.container.querySelector('[data-testid="count"]')?.textContent).toBe('Selected count: 3');
   });
 });

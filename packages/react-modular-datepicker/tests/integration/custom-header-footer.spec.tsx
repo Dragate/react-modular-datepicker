@@ -1,7 +1,7 @@
-import { act, useState } from 'react';
-import { createRoot } from 'react-dom/client';
-import { describe, expect, test } from 'vitest';
+import { useState } from 'react';
 import { Calendar } from 'react-modular-datepicker';
+import { describe, expect, test } from 'vitest';
+import { setupComponent } from '../test-utils';
 
 function HeaderFooterTestWrapper() {
   const [selected, setSelected] = useState<Date | null>(new Date());
@@ -16,17 +16,11 @@ function HeaderFooterTestWrapper() {
 }
 
 describe('Custom Header Footer Recipe', () => {
+  const env = setupComponent(<HeaderFooterTestWrapper />);
+
   test('should render header and footer', () => {
-    const container = document.createElement('div');
-    document.body.appendChild(container);
-    const root = createRoot(container);
-
-    act(() => {
-      root.render(<HeaderFooterTestWrapper />);
-    });
-
-    const header = container.querySelector('[data-testid="custom-header"]');
-    const footer = container.querySelector('[data-testid="custom-footer"]');
+    const header = env.container.querySelector('[data-testid="custom-header"]');
+    const footer = env.container.querySelector('[data-testid="custom-footer"]');
 
     expect(header).not.toBeNull();
     expect(header?.textContent).toContain('Custom Header Banner');

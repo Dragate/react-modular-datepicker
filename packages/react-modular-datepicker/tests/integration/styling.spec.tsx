@@ -1,7 +1,7 @@
-import { act, useState } from 'react';
-import { createRoot } from 'react-dom/client';
-import { describe, expect, test } from 'vitest';
+import { useState } from 'react';
 import { Calendar } from 'react-modular-datepicker';
+import { describe, expect, test } from 'vitest';
+import { setupComponent } from '../test-utils';
 
 const customClassNames = {
   root: 'custom-root-style',
@@ -20,16 +20,10 @@ function StylingTestWrapper() {
 }
 
 describe('Custom Styling Recipe', () => {
+  const env = setupComponent(<StylingTestWrapper />);
+
   test('should render custom styling component', () => {
-    const container = document.createElement('div');
-    document.body.appendChild(container);
-    const root = createRoot(container);
-
-    act(() => {
-      root.render(<StylingTestWrapper />);
-    });
-
-    const rootElement = container.querySelector('.rmdp');
+    const rootElement = env.container.querySelector('.rmdp');
     expect(rootElement?.className).toContain('custom-root-style');
   });
 });

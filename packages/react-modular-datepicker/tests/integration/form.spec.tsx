@@ -1,7 +1,7 @@
 import { act, useEffect, useRef, useState } from 'react';
-import { createRoot } from 'react-dom/client';
 import { Calendar } from 'react-modular-datepicker';
 import { describe, expect, test } from 'vitest';
+import { setupComponent } from '../test-utils';
 
 function FormIntegrationTestWrapper() {
   const [date, setDate] = useState<Date | null>(null);
@@ -49,39 +49,25 @@ function FormIntegrationTestWrapper() {
 }
 
 describe('Form Integration Recipe', () => {
+  const env = setupComponent(<FormIntegrationTestWrapper />);
+
   test('should render form integration component', () => {
-    const container = document.createElement('div');
-    document.body.appendChild(container);
-    const root = createRoot(container);
-
-    act(() => {
-      root.render(<FormIntegrationTestWrapper />);
-    });
-
-    const input = container.querySelector('input');
+    const input = env.container.querySelector('input');
     expect(input).not.toBeNull();
     expect(input?.placeholder).toBe('Pick a date...');
   });
 
   test('should close popover when clicking outside the input/calendar', () => {
-    const container = document.createElement('div');
-    document.body.appendChild(container);
-    const root = createRoot(container);
-
-    act(() => {
-      root.render(<FormIntegrationTestWrapper />);
-    });
-
-    const input = container.querySelector('input')!;
+    const input = env.container.querySelector('input')!;
 
     // Popover is initially closed
-    expect(container.querySelector('[data-testid="popover"]')).toBeNull();
+    expect(env.container.querySelector('[data-testid="popover"]')).toBeNull();
 
     // Click input to open popover
     act(() => {
       input.click();
     });
-    expect(container.querySelector('[data-testid="popover"]')).not.toBeNull();
+    expect(env.container.querySelector('[data-testid="popover"]')).not.toBeNull();
 
     // Click outside
     act(() => {
@@ -89,45 +75,37 @@ describe('Form Integration Recipe', () => {
       document.body.dispatchEvent(event);
     });
 
-    expect(container.querySelector('[data-testid="popover"]')).toBeNull();
+    expect(env.container.querySelector('[data-testid="popover"]')).toBeNull();
   });
 
   test('should open calendar to selected date month when reopened', () => {
-    const container = document.createElement('div');
-    document.body.appendChild(container);
-    const root = createRoot(container);
-
-    act(() => {
-      root.render(<FormIntegrationTestWrapper />);
-    });
-
-    const input = container.querySelector('input')!;
+    const input = env.container.querySelector('input')!;
 
     act(() => {
       input.click();
     });
 
-    const nextBtn = Array.from(container.querySelectorAll('button')).find((b) => b.getAttribute('aria-label') === 'Next month');
+    const nextBtn = Array.from(env.container.querySelectorAll('button')).find((b) => b.getAttribute('aria-label') === 'Next month');
     act(() => {
       nextBtn?.click();
     });
 
-    const dayBtn = Array.from(container.querySelectorAll('.rmdp button')).find((b) => b.textContent?.trim() === '15');
+    const dayBtn = Array.from(env.container.querySelectorAll('.rmdp button')).find((b) => b.textContent?.trim() === '15');
     act(() => {
       dayBtn?.click();
     });
 
     // Popover closes on date selection
-    expect(container.querySelector('[data-testid="popover"]')).toBeNull();
+    expect(env.container.querySelector('[data-testid="popover"]')).toBeNull();
     expect(input.value).not.toBe('');
 
     // Reopen calendar
     act(() => {
       input.click();
     });
-    expect(container.querySelector('[data-testid="popover"]')).not.toBeNull();
+    expect(env.container.querySelector('[data-testid="popover"]')).not.toBeNull();
 
-    const selectedDay = container.querySelector('.rmdp [aria-pressed="true"]');
+    const selectedDay = env.container.querySelector('.rmdp [aria-pressed="true"]');
     expect(selectedDay).not.toBeNull();
     expect(selectedDay?.textContent?.trim()).toBe('15');
   });

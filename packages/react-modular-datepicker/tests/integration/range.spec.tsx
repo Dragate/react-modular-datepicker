@@ -1,7 +1,7 @@
-import { act, useState } from 'react';
-import { createRoot } from 'react-dom/client';
-import { describe, expect, test } from 'vitest';
+import { useState } from 'react';
 import { Calendar } from 'react-modular-datepicker';
+import { describe, expect, test } from 'vitest';
+import { setupComponent } from '../test-utils';
 
 function RangeTestWrapper() {
   const [range, setRange] = useState<{ start?: Date; end?: Date }>({
@@ -25,15 +25,9 @@ function RangeTestWrapper() {
 }
 
 describe('Range Selection Recipe', () => {
+  const env = setupComponent(<RangeTestWrapper />);
+
   test('should render range selection component', () => {
-    const container = document.createElement('div');
-    document.body.appendChild(container);
-    const root = createRoot(container);
-
-    act(() => {
-      root.render(<RangeTestWrapper />);
-    });
-
-    expect(container.querySelector('[data-testid="range-display"]')?.textContent?.trim()).toBe('10 - 15');
+    expect(env.container.querySelector('[data-testid="range-display"]')?.textContent?.trim()).toBe('10 - 15');
   });
 });

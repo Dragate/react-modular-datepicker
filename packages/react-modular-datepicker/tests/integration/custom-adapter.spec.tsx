@@ -1,7 +1,7 @@
-import { act, useState } from 'react';
-import { createRoot } from 'react-dom/client';
-import { describe, expect, test } from 'vitest';
+import { useState } from 'react';
 import { Calendar, DateAdapter } from 'react-modular-datepicker';
+import { describe, expect, test } from 'vitest';
+import { setupComponent } from '../test-utils';
 
 class SimpleCustomAdapter implements DateAdapter<Date> {
   date(value?: any): Date { return value ? new Date(value) : new Date(); }
@@ -82,16 +82,10 @@ function CustomAdapterTestWrapper() {
 }
 
 describe('Custom Adapter Recipe', () => {
+  const env = setupComponent(<CustomAdapterTestWrapper />);
+
   test('should render calendar using custom adapter', () => {
-    const container = document.createElement('div');
-    document.body.appendChild(container);
-    const root = createRoot(container);
-
-    act(() => {
-      root.render(<CustomAdapterTestWrapper />);
-    });
-
-    expect(container.querySelector('[data-testid="adapter-info"]')?.textContent).toBe('Custom adapter rendered');
-    expect(container.querySelector('.rmdp')).not.toBeNull();
+    expect(env.container.querySelector('[data-testid="adapter-info"]')?.textContent).toBe('Custom adapter rendered');
+    expect(env.container.querySelector('.rmdp')).not.toBeNull();
   });
 });
