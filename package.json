@@ -8,9 +8,7 @@
     "dev:docs": "pnpm --filter docs dev",
     "build": "pnpm --filter react-modular-datepicker build",
     "build:docs": "pnpm --filter docs build",
-    "test": "pnpm --filter react-modular-datepicker test",
-    "test:unit": "pnpm --filter react-modular-datepicker test:unit",
-    "test:e2e": "pnpm --filter react-modular-datepicker test:e2e"
+    "test": "pnpm --filter react-modular-datepicker test"
   },
   "devDependencies": {
     "semver": "^7.8.5"

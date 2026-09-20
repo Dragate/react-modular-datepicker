@@ -1,7 +1,9 @@
+/// <reference types="vitest" />
+import path from 'path';
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import dts from 'unplugin-dts/vite';
-import { defineConfig } from 'vite';
+import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   plugins: [
@@ -12,6 +14,15 @@ export default defineConfig({
       tsconfigPath: './tsconfig.json',
     }),
   ],
+  resolve: {
+    alias: {
+      'react-modular-datepicker': path.resolve(import.meta.dirname, './dist/index.js'),
+    },
+  },
+  test: {
+    environment: 'jsdom',
+    include: ['tests/**/*.spec.ts', 'tests/**/*.spec.tsx', 'tests/**/*.test.ts', 'tests/**/*.test.tsx'],
+  },
   build: {
     outDir: 'dist',
     sourcemap: true,

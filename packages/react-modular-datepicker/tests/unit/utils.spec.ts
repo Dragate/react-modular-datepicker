@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { describe, expect, test } from 'vitest';
 import { defaultAdapter } from '../../src/adapters/dayjs';
 import {
   addMonth,
@@ -9,7 +9,7 @@ import {
   subtractMonth,
 } from '../../src/utils';
 
-test.describe('utils: composeEventHandlers', () => {
+describe('utils: composeEventHandlers', () => {
   test('calls each provided handler in sequence', () => {
     const order: number[] = [];
     const fn1 = () => { order.push(1); };
@@ -62,7 +62,7 @@ test.describe('utils: composeEventHandlers', () => {
   });
 });
 
-test.describe('utils: getCalendars and date object creation', () => {
+describe('utils: getCalendars and date object creation', () => {
   const baseDate = new Date(2025, 4, 15); // May 15, 2025
 
   test('generates expected calendar structure', () => {
@@ -237,7 +237,7 @@ test.describe('utils: getCalendars and date object creation', () => {
   });
 });
 
-test.describe('utils: navigation boundary checks (isBackDisabled / isForwardDisabled)', () => {
+describe('utils: navigation boundary checks (isBackDisabled / isForwardDisabled)', () => {
   const baseDate = new Date(2025, 4, 15); // May 2025
   const calendars = getCalendars({
     date: baseDate,
@@ -280,7 +280,7 @@ test.describe('utils: navigation boundary checks (isBackDisabled / isForwardDisa
   });
 });
 
-test.describe('utils: subtractMonth and addMonth', () => {
+describe('utils: subtractMonth and addMonth', () => {
   const baseDate = new Date(2025, 4, 15); // May 2025
   const calendars = getCalendars({
     date: baseDate,

@@ -25,12 +25,5 @@ jobs:
       - name: Build package
         run: pnpm run build
 
-      - name: Run unit tests
-        run: pnpm test:unit
-
-      - name: Install Playwright browsers
-        run: pnpm --filter react-modular-datepicker exec playwright install --with-deps chromium
-
-      - name: Run e2e & snapshot tests
-        run: pnpm test:e2e
-
+      - name: Run tests
+        run: pnpm test
