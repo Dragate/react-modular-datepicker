@@ -8,6 +8,8 @@ export interface DayClassNames {
   rangeEnd?: string;
   rangeBetween?: string;
   rangeHovering?: string;
+  today?: string;
+  outside?: string;
   [key: string]: string | undefined;
 }
 
@@ -41,6 +43,8 @@ export const defaultClassNames = {
     rangeEnd: "rmdp-day-range-end",
     rangeBetween: "rmdp-day-range-between",
     rangeHovering: "rmdp-day-range-hovering",
+    today: "rmdp-day-today",
+    outside: "rmdp-day-outside",
   },
 
   monthsGrid: "rmdp-months-grid animate-slide-in-top",

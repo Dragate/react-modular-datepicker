@@ -207,18 +207,15 @@ function createDateObj(
     month?: number,
     year?: number
 ): DateObj {
-    const { selected, isRangeStart, isRangeEnd, isRangeBetween, isRangeHovering, isRangeActive } = isSelected(selectedDates, date, adapter, selectionMode, hoveredDate);
+    const { selected, isRangeStart, isRangeEnd, isRangeBetween, isRangeHovering, isRangeActive } = isOutside
+        ? { selected: false, isRangeStart: false, isRangeEnd: false, isRangeBetween: false, isRangeHovering: false, isRangeActive: false }
+        : isSelected(selectedDates, date, adapter, selectionMode, hoveredDate);
+
     const isToday = adapter.isSame(adapter.date(date), adapter.date(), "day");
     const isPrevMonth = isOutside && adapter.isBefore(adapter.date(date), adapter.startOf(adapter.date(date), 'month'));
     const isNextMonth = isOutside && adapter.isAfter(adapter.date(date), adapter.endOf(adapter.date(date), 'month'));
 
-    const defaultModifiers: Record<string, (d: Date, m: number, y: number) => boolean> = {
-        'text-brand-gold border border-brand-gold': (d: Date) =>
-            adapter.isSame(adapter.date(d), adapter.date(), 'day'),
-        'text-white cursor-default!': (d: Date, m: number) =>
-            adapter.get(adapter.date(d), 'month') !== m
-    };
-    const mergedModifiers: Record<string, (d: Date, m: number, y: number) => boolean> = { ...defaultModifiers, ...modifiers };
+    const mergedModifiers: Record<string, (d: Date, m: number, y: number) => boolean> = { ...modifiers };
 
     const activeModifiers = Object.keys(mergedModifiers).filter(key =>
         mergedModifiers[key](date, month ?? adapter.get(adapter.date(date), 'month'), year ?? adapter.get(adapter.date(date), 'year'))

@@ -203,13 +203,27 @@
   opacity: 0.5;
 }
 
-.rmdp .rmdp-day-unselected {
+/* Zero specificity for default unselected day background/color so user custom modifier utility classes easily override them */
+:where(.rmdp .rmdp-day-unselected) {
   background-color: #ffffff;
   color: var(--rmdp-text);
 }
 
 .rmdp .rmdp-day-unselected:hover {
   background-color: color-mix(in oklab, var(--rmdp-gold) 25%, transparent);
+}
+
+.rmdp .rmdp-day-today:not(.rmdp-day-selected):not(.rmdp-day-range-start):not(.rmdp-day-range-end) {
+  color: var(--rmdp-gold);
+  border: 1px solid var(--rmdp-gold);
+  border-radius: 9999px;
+  font-weight: 600;
+}
+
+.rmdp .rmdp-day-outside {
+  color: #9ca3af;
+  opacity: 0.5;
+  background-color: #ffffff;
 }
 
 .rmdp .rmdp-day-selected {
