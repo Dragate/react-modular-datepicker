@@ -112,7 +112,7 @@ describe('Form Integration Recipe', () => {
       nextBtn?.click();
     });
 
-    const dayBtn = Array.from(container.querySelectorAll('.rmdp button')).find((b) => b.textContent?.trim() === '15');
+    const dayBtn = Array.from(container.querySelectorAll('.rmd button')).find((b) => b.textContent?.trim() === '15');
     act(() => {
       dayBtn?.click();
     });
@@ -127,7 +127,7 @@ describe('Form Integration Recipe', () => {
     });
     expect(container.querySelector('[data-testid="popover"]')).not.toBeNull();
 
-    const selectedDay = container.querySelector('.rmdp [aria-pressed="true"]');
+    const selectedDay = container.querySelector('.rmd [aria-pressed="true"]');
     expect(selectedDay).not.toBeNull();
     expect(selectedDay?.textContent?.trim()).toBe('15');
   });

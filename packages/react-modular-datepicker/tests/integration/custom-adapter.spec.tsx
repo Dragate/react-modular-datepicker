@@ -92,6 +92,6 @@ describe('Custom Adapter Recipe', () => {
     });
 
     expect(container.querySelector('[data-testid="adapter-info"]')?.textContent).toBe('Custom adapter rendered');
-    expect(container.querySelector('.rmdp')).not.toBeNull();
+    expect(container.querySelector('.rmd')).not.toBeNull();
   });
 });

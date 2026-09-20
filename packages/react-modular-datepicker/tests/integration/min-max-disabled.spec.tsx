@@ -31,9 +31,9 @@ describe('Min Max Disabled Recipe', () => {
       root.render(<BoundsTestWrapper />);
     });
 
-    const day4Btn = Array.from(container.querySelectorAll('.rmdp button')).find((b) => b.textContent?.trim() === '4');
-    const day10Btn = Array.from(container.querySelectorAll('.rmdp button')).find((b) => b.textContent?.trim() === '10');
-    const day15Btn = Array.from(container.querySelectorAll('.rmdp button')).find((b) => b.textContent?.trim() === '15');
+    const day4Btn = Array.from(container.querySelectorAll('.rmd button')).find((b) => b.textContent?.trim() === '4');
+    const day10Btn = Array.from(container.querySelectorAll('.rmd button')).find((b) => b.textContent?.trim() === '10');
+    const day15Btn = Array.from(container.querySelectorAll('.rmd button')).find((b) => b.textContent?.trim() === '15');
 
     expect(day4Btn?.hasAttribute('disabled')).toBe(true);
     expect(day10Btn?.hasAttribute('disabled')).toBe(true);

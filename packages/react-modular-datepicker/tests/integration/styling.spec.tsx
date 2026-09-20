@@ -29,7 +29,7 @@ describe('Custom Styling Recipe', () => {
       root.render(<StylingTestWrapper />);
     });
 
-    const rootElement = container.querySelector('.rmdp');
+    const rootElement = container.querySelector('.rmd');
     expect(rootElement?.className).toContain('custom-root-style');
   });
 });

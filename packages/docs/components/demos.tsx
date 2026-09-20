@@ -176,11 +176,11 @@ export function GoogleCalendarDemo() {
                 key={idx}
                 {...getDateProps({ dateObj })}
                 className={`bg-fd-background min-h-[75px] p-1 flex flex-col justify-start transition-colors cursor-pointer hover:bg-fd-accent/40 ${!dateObj.selectable ? 'opacity-40' : ''
-                  } ${dateObj.selected ? 'ring-2 ring-inset ring-brand-gold' : ''}`}
+                  } ${dateObj.selected ? 'ring-2 ring-inset ring-rmd-gold' : ''}`}
               >
                 <div className="flex items-center justify-between mb-1">
                   <span
-                    className={`text-xs font-medium px-1.5 py-0.5 rounded-full inline-block ${dateObj.today ? 'bg-brand-gold text-white font-bold' : 'text-fd-foreground'
+                    className={`text-xs font-medium px-1.5 py-0.5 rounded-full inline-block ${dateObj.today ? 'bg-rmd-gold text-white font-bold' : 'text-fd-foreground'
                       }`}
                   >
                     {dateObj.date.getDate()}
@@ -254,7 +254,7 @@ export function EventScheduleDemo() {
         classNames={{
           day: {
             hasEvents:
-              'font-bold relative after:content-["•"] after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:text-brand-gold after:text-xs ' +
+              'font-bold relative after:content-["•"] after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:text-rmd-gold after:text-xs ' +
               'before:content-[attr(data-tooltip)] before:absolute before:bottom-full before:left-1/2 before:-translate-x-1/2 before:mb-1.5 before:hidden hover:before:block ' +
               'before:px-2 before:py-1 before:bg-gray-800 before:text-white before:text-[10px] before:rounded before:whitespace-nowrap before:z-20 before:shadow-md',
           },
@@ -320,7 +320,7 @@ export function AvailabilityDemo() {
             onMonthChange={handleMonthChange}
             disabledDates={bookedDays}
             classNames={{
-              daysGrid: 'grid grid-cols-7 gap-px bg-brand-gray-light/20 relative',
+              daysGrid: 'grid grid-cols-7 gap-px bg-rmd-gray-light/20 relative',
               day: {
                 disabled: 'text-red-400 line-through cursor-not-allowed',
                 outside: 'bg-white dark:bg-zinc-900 text-transparent border-none opacity-0 select-none pointer-events-none',
@@ -354,7 +354,7 @@ export function AvailabilityDemo() {
                     type="button"
                     onClick={() => setSelectedSlot(slot)}
                     className={`py-1.5 px-2 text-xs rounded-lg border transition-colors ${selectedSlot === slot
-                      ? 'bg-brand-gold text-white font-bold border-brand-gold'
+                      ? 'bg-rmd-gold text-white font-bold border-rmd-gold'
                       : 'border-fd-border bg-fd-background hover:bg-fd-accent text-fd-foreground'
                       }`}
                   >
