@@ -86,7 +86,7 @@ For full API reference, recipes, and interactive demos, check out the documentat
 
 To run the documentation site locally:
 ```bash
-pnpm run dev:docs
+pnpm run dev
 ```
 
 ---

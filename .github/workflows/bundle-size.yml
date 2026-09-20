@@ -28,7 +28,7 @@ jobs:
         run: pnpm i --frozen-lockfile --ignore-scripts
 
       - name: Build PR branch
-        run: pnpm run build
+        run: pnpm run build:rmd
 
       - name: Capture PR bundle sizes
         run: |
@@ -57,7 +57,7 @@ jobs:
         run: pnpm i --frozen-lockfile --ignore-scripts
 
       - name: Build main branch
-        run: pnpm run build
+        run: pnpm run build:rmd
 
       - name: Capture main bundle sizes
         run: |
