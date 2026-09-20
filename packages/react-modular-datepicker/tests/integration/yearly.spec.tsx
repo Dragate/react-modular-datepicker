@@ -18,7 +18,7 @@ describe('Yearly View Recipe', () => {
       );
     });
 
-    const monthContainers = container.querySelectorAll('.rmdp > div:last-child > div');
+    const monthContainers = container.querySelectorAll('.rmd > div:last-child > div');
     expect(monthContainers.length).toBe(12);
   });
 });

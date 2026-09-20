@@ -16,13 +16,13 @@ export const Day: React.FC<DayProps> = ({ dateObj, getDateProps, dayProps, class
   const { date, selected, selectable, isRangeStart, isRangeEnd, isRangeBetween, isRangeHovering, isRangeActive } = dateObj;
   const dayClasses = classNames.day;
 
-  let stateClasses = "rounded-full";
+  let stateClasses = "rmd:rounded-full";
   if (isRangeStart && isRangeEnd) {
-    stateClasses = `${dayClasses.selected} rounded-full`;
+    stateClasses = `${dayClasses.selected} rmd:rounded-full`;
   } else if (isRangeStart) {
-    stateClasses = `${dayClasses.rangeStart} ${isRangeActive ? 'rounded-l-full rounded-r-none' : 'rounded-full'}`;
+    stateClasses = `${dayClasses.rangeStart} ${isRangeActive ? 'rmd:rounded-l-full rmd:rounded-r-none' : 'rmd:rounded-full'}`;
   } else if (isRangeEnd) {
-    stateClasses = `${dayClasses.rangeEnd} ${isRangeActive ? 'rounded-r-full rounded-l-none' : 'rounded-full'}`;
+    stateClasses = `${dayClasses.rangeEnd} ${isRangeActive ? 'rmd:rounded-r-full rmd:rounded-l-none' : 'rmd:rounded-full'}`;
   } else if (isRangeBetween) {
     stateClasses = dayClasses.rangeBetween || '';
   } else if (isRangeHovering) {

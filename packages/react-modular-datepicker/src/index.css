@@ -4,128 +4,18 @@
  */
 @layer theme, base, components, utilities;
 
-@import "tailwindcss/theme.css" layer(theme);
-@import "tailwindcss/utilities.css" layer(utilities);
+@import "tailwindcss/theme.css" layer(theme) prefix(rmd);
+@import "tailwindcss/utilities.css" layer(utilities) prefix(rmd);
 
 @theme {
   --color-brand-gold: #c5a059;
   --color-brand-gray-light: #b5bec6;
   --color-brand-gray-dark: #4a5660;
   --color-brand-text: #343a40;
-}
 
-/* Keep the component reset inside the datepicker boundary. */
-@layer base {
-  .rmdp,
-  .rmdp *,
-  .rmdp ::after,
-  .rmdp ::before,
-  .rmdp ::backdrop,
-  .rmdp ::file-selector-button {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    border: 0 solid;
-  }
-
-  .rmdp button,
-  .rmdp input,
-  .rmdp select,
-  .rmdp optgroup,
-  .rmdp textarea,
-  .rmdp ::file-selector-button {
-    font: inherit;
-    font-feature-settings: inherit;
-    font-variation-settings: inherit;
-    letter-spacing: inherit;
-    color: inherit;
-    border-radius: 0;
-    background-color: transparent;
-    opacity: 1;
-  }
-
-  .rmdp img,
-  .rmdp svg,
-  .rmdp video,
-  .rmdp canvas,
-  .rmdp audio,
-  .rmdp iframe,
-  .rmdp embed,
-  .rmdp object {
-    display: block;
-    vertical-align: middle;
-  }
-
-  .rmdp img,
-  .rmdp video {
-    max-width: 100%;
-    height: auto;
-  }
-}
-
-/*
- * Keep the date button defaults in the component layer. Consumer utilities
- * are emitted in Tailwind's utilities layer, so modifier classes can override
- * these defaults without !important or selector-specificity workarounds.
- */
-@layer components {
-  .rmdp .rmdp-day,
-  .rmdp .rmdp-day-empty {
-    aspect-ratio: 1;
-  }
-
-  .rmdp .rmdp-day {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 1px;
-    position: relative;
-    font-size: 0.875rem;
-    line-height: 1.25rem;
-    font-weight: 500;
-    transition-property: all;
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    transition-duration: 0.15s;
-  }
-
-  .rmdp .rmdp-day:not(:disabled) {
-    cursor: pointer;
-  }
-
-  .rmdp .rmdp-day-empty,
-  .rmdp .rmdp-day-disabled {
-    background-color: #fff;
-  }
-
-  .rmdp .rmdp-day-disabled {
-    cursor: not-allowed;
-  }
-
-  .rmdp .rmdp-day-selected,
-  .rmdp .rmdp-day-range-start,
-  .rmdp .rmdp-day-range-end {
-    background-color: var(--color-brand-gold);
-    color: #fff;
-  }
-
-  .rmdp .rmdp-day-selected {
-    border-radius: 9999px;
-  }
-
-  .rmdp .rmdp-day-unselected {
-    background-color: #fff;
-    color: var(--color-brand-text);
-  }
-
-  .rmdp .rmdp-day-unselected:hover {
-    background-color: color-mix(in oklab, var(--color-brand-gold) 25%, transparent);
-  }
-
-  .rmdp .rmdp-day-range-between,
-  .rmdp .rmdp-day-range-hovering {
-    background-color: color-mix(in oklab, var(--color-brand-gold) 25%, transparent);
-    color: var(--color-brand-text);
-  }
+  --animate-slide-in-top: slideInFromTop 0.2s ease-out forwards;
+  --animate-slide-in-right: slideInRight 0.2s ease-out forwards;
+  --animate-slide-in-left: slideInLeft 0.2s ease-out forwards;
 }
 
 @keyframes slideInFromTop {
@@ -139,10 +29,6 @@
   }
 }
 
-.rmdp .animate-slide-in-top {
-  animation: slideInFromTop 0.2s ease-out forwards;
-}
-
 @keyframes slideInRight {
   from { opacity: 0; transform: translateX(20px); }
   to { opacity: 1; transform: translateX(0); }
@@ -151,35 +37,4 @@
 @keyframes slideInLeft {
   from { opacity: 0; transform: translateX(-20px); }
   to { opacity: 1; transform: translateX(0); }
-}
-
-.rmdp .animate-slide-in-right {
-  animation: slideInRight 0.2s ease-out forwards;
-}
-
-.rmdp .animate-slide-in-left {
-  animation: slideInLeft 0.2s ease-out forwards;
-}
-
-/* Custom scrollbar styling for year selector and other scrollable areas */
-.rmdp .rmdp-scrollbar {
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-brand-gray-light) transparent;
-}
-
-.rmdp .rmdp-scrollbar::-webkit-scrollbar {
-  width: 6px;
-}
-
-.rmdp .rmdp-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.rmdp .rmdp-scrollbar::-webkit-scrollbar-thumb {
-  background-color: var(--color-brand-gray-light);
-  border-radius: 9999px;
-}
-
-.rmdp .rmdp-scrollbar::-webkit-scrollbar-thumb:hover {
-  background-color: var(--color-brand-gray-dark);
 }

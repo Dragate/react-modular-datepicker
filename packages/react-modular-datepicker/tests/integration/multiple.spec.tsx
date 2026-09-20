@@ -30,7 +30,7 @@ describe('Multiple Selection Recipe', () => {
 
     expect(container.querySelector('[data-testid="count"]')?.textContent).toBe('Selected count: 2');
 
-    const day20Btn = Array.from(container.querySelectorAll('.rmdp button')).find((b) => b.textContent?.trim() === '20');
+    const day20Btn = Array.from(container.querySelectorAll('.rmd button')).find((b) => b.textContent?.trim() === '20');
     act(() => {
       day20Btn?.click();
     });
