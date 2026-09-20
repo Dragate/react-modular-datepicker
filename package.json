@@ -5,7 +5,6 @@
     "dev": "pnpm run -p \"/^dev:.*/\"",
     "dev:rmd": "pnpm --filter react-modular-datepicker dev",
     "dev:docs": "pnpm --filter docs dev",
-    "build": "pnpm run build:rmd && pnpm run build:docs",
     "build:rmd": "pnpm --filter react-modular-datepicker build",
     "build:docs": "pnpm --filter docs build",
     "test": "pnpm --filter react-modular-datepicker test"
