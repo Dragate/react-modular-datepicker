@@ -43,11 +43,12 @@ export function AvailabilityExample() {
   );
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleMonthChange = (date: Date) => {
+  const handleMonthChange = (dates: Date[]) => {
     setIsLoading(true);
     setTimeout(() => {
-      const targetYear = date.getFullYear();
-      const targetMonth = date.getMonth();
+      const firstDate = dates[0] || new Date();
+      const targetYear = firstDate.getFullYear();
+      const targetMonth = firstDate.getMonth();
 
       setBookedDays(getRandomDatesInMonth(targetYear, targetMonth));
       setIsLoading(false);

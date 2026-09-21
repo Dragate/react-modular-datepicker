@@ -16,39 +16,69 @@ Use the `modifiers` prop to dynamically flag dates matching custom rules (e.g. w
 ```tsx
 import { useState } from 'react';
 import { Calendar } from 'react-modular-datepicker';
+import 'react-modular-datepicker/dist/index.css';
 
-export function ModifiersExample() {
-  const [selected, setSelected] = useState<Date>(new Date());
+export function ModifiersDemo() {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = today.getMonth();
 
-  const birthdays = ['2026-9-12', '2026-9-24'];
-  const holidays = ['2026-9-1', '2026-9-25'];
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date(year, month, 15));
+
+  const birthdays = [`${year}-${month + 1}-18`];
+  const holidays = [`${year}-${month + 1}-1`, `${year}-${month + 1}-25`];
 
   const getKey = (d: Date) => `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
 
   return (
-    <Calendar
-      selected={selected}
-      onChange={(d) => setSelected(d as Date)}
-      modifiers={{
-        weekend: (date) => date.getDay() === 0 || date.getDay() === 6,
-        birthday: (date) => birthdays.includes(getKey(date)),
-        holiday: (date) => holidays.includes(getKey(date)),
-      }}
-      getDayProps={(dateObj) => {
-        const key = getKey(dateObj.date);
-        if (birthdays.includes(key)) return { 'data-tooltip': '🎂 Birthday!' };
-        if (holidays.includes(key)) return { 'data-tooltip': '🎉 Holiday' };
-        if (dateObj.date.getDay() === 0 || dateObj.date.getDay() === 6) return { 'data-tooltip': '🌴 Weekend' };
-        return {};
-      }}
-      classNames={{
-        day: {
-          weekend: 'bg-indigo-100/70 text-indigo-900 font-bold',
-          holiday: 'border-2 border-emerald-500 font-bold',
-          birthday: 'text-pink-600 font-black scale-105',
-        },
-      }}
-    />
+    <div>
+      <Calendar
+        selected={selectedDate}
+        onChange={(d) => setSelectedDate(d as Date)}
+        modifiers={{
+          weekend: (date) => date.getDay() === 0 || date.getDay() === 6,
+          birthday: (date) => birthdays.includes(getKey(date)),
+          holiday: (date) => holidays.includes(getKey(date)),
+        }}
+        getDayProps={(dateObj) => {
+          const key = getKey(dateObj.date);
+          if (birthdays.includes(key)) {
+            return { 'data-tooltip': '🎂 Birthday Party!' };
+          }
+          if (holidays.includes(key)) {
+            return { 'data-tooltip': '🎉 Holiday' };
+          }
+          if (dateObj.date.getDay() === 0 || dateObj.date.getDay() === 6) {
+            return { 'data-tooltip': '🌴 Weekend' };
+          }
+          return {};
+        }}
+        classNames={{
+          day: {
+            weekend: 'text-red-700',
+            holiday:
+              'border-2 border-emerald-500 relative ' +
+              'before:content-[attr(data-tooltip)] before:absolute before:bottom-full before:left-1/2 before:-translate-x-1/2 before:mb-1 before:hidden hover:before:block ' +
+              'before:px-2 before:py-0.5 before:bg-gray-800 before:text-white before:text-[10px] before:rounded before:whitespace-nowrap before:z-20',
+            birthday:
+              'text-pink-600 dark:text-pink-400 font-bold relative ' +
+              'before:content-[attr(data-tooltip)] before:absolute before:bottom-full before:left-1/2 before:-translate-x-1/2 before:mb-1 before:hidden hover:before:block ' +
+              'before:px-2 before:py-0.5 before:bg-gray-800 before:text-white before:text-[10px] before:rounded before:whitespace-nowrap before:z-20',
+          },
+        }}
+      />
+      <div className="mt-4 flex flex-wrap gap-3 justify-center text-xs">
+        <span className="flex items-center gap-1.5 px-2.5 py-1 rounded text-red-700 font-medium border border-red-200">
+          <span className="w-2.5 h-2.5 rounded-full bg-red-900 inline-block" /> Weekend (Red Text)
+        </span>
+        <span className="flex items-center gap-1.5 px-2.5 py-1 rounded border-2 border-emerald-500 text-emerald-800 font-medium">
+          <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block" /> 🎉 Holiday (Border Highlight)
+        </span>
+        <span className="flex items-center gap-1.5 px-2.5 py-1 rounded text-pink-600 font-bold border border-pink-200">
+          <span className="w-2.5 h-2.5 rounded-full bg-pink-500 inline-block" /> 🎂 Birthday Party (Pink Bold Text)
+        </span>
+      </div>
+    </div>
   );
 }
 ```

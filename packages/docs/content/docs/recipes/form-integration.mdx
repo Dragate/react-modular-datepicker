@@ -16,8 +16,9 @@ Embed `<Calendar />` inside popovers or form fields.
 ```tsx
 import { useState, useRef, useEffect } from 'react';
 import { Calendar } from 'react-modular-datepicker';
+import 'react-modular-datepicker/dist/index.css';
 
-export function PopoverDatePicker() {
+export function FormIntegrationDemo() {
   const [date, setDate] = useState<Date | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -38,18 +39,27 @@ export function PopoverDatePicker() {
   }, [isOpen]);
 
   return (
-    <div ref={containerRef} className="relative inline-block">
-      <input
-        type="text"
-        readOnly
-        value={date ? date.toLocaleDateString() : ''}
-        placeholder="Select date..."
-        onClick={() => setIsOpen(!isOpen)}
-        className="px-3 py-2 border rounded cursor-pointer"
-      />
-
+    <div ref={containerRef} className="relative inline-block text-left">
+      <label className="block text-xs font-semibold mb-1 text-gray-500">Select Travel Date</label>
+      <div className="flex gap-2">
+        <input
+          type="text"
+          readOnly
+          value={date ? date.toLocaleDateString() : ''}
+          placeholder="Pick a date..."
+          onClick={() => setIsOpen(!isOpen)}
+          className="px-3 py-2 rounded-lg border text-sm cursor-pointer min-w-[200px]"
+        />
+        <button
+          type="button"
+          onClick={() => setIsOpen(!isOpen)}
+          className="px-4 py-2 bg-slate-900 text-white text-sm font-medium rounded-lg"
+        >
+          📅 Calendar
+        </button>
+      </div>
       {isOpen && (
-        <div className="absolute top-full left-0 mt-2 z-50 bg-white border rounded shadow-lg p-2">
+        <div className="absolute top-full left-0 mt-2 z-50 bg-white border rounded-xl shadow-2xl p-2">
           <Calendar
             date={date || undefined}
             selected={date || undefined}

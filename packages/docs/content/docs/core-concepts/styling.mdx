@@ -1,6 +1,6 @@
 ---
 title: Styling & Customization
-description: Learn how to customize class names, override themes, and integrate Tailwind CSS v4.
+description: Learn how to customize class names, override themes, understand element slot placement, and integrate Tailwind CSS v4.
 ---
 
 # Styling & Customization
@@ -19,63 +19,99 @@ import 'react-modular-datepicker/dist/index.css';
 
 ---
 
-## The `classNames` Prop
+## Component Visual Anatomy
 
-The `Calendar` component accepts a `classNames` prop of type `CalendarClassNames` allowing you to target specific component sections:
+Understanding where each class name slot applies in the DOM hierarchy makes custom styling straightforward. Below is the visual structural tree for `<Calendar />`:
 
-```typescript
-export interface CalendarClassNames {
-  root?: string;
-  header?: string;
-  headerMultiMonth?: string;
-  calendarsContainer?: string;
-  calendarContainer?: string;
-  navButtonSlotStart?: string;
-  navButtonSlotEnd?: string;
-  headerTitleContainer?: string;
-  weekdayGrid?: string;
-  weekday?: string;
-  daysGrid?: string;
-  footer?: string;
-
-  navButton?: string;
-  navButtonHidden?: string;
-  monthYearContainer?: string;
-  monthYearLabel?: string;
-  monthYearButton?: string;
-
-  day?: DayClassNames;
-
-  monthsGrid?: string;
-  monthButton?: string;
-  monthButtonSelected?: string;
-  monthButtonUnselected?: string;
-
-  yearsGrid?: string;
-  yearButton?: string;
-  yearButtonSelected?: string;
-  yearButtonUnselected?: string;
-}
+```text
+root
+ ├── header (or header + headerMultiMonth for 12-month views)
+ │    ├── navButton (Previous month/year navigation arrow)
+ │    ├── monthYearContainer
+ │    │    └── monthYearLabel
+ │    │         ├── monthYearButton (Month trigger button)
+ │    │         └── monthYearButton (Year trigger button)
+ │    └── navButton (Next month/year navigation arrow)
+ ├── calendarsContainer
+ │    └── calendarContainer (Sheet wrapper for each displayed month)
+ │         ├── [Multi-month sheet header (if 1 < monthsToDisplay < 12)]
+ │         │    ├── navButtonSlotStart -> navButton
+ │         │    ├── headerTitleContainer
+ │         │    └── navButtonSlotEnd -> navButton
+ │         ├── weekdayGrid (Header row for weekday labels)
+ │         │    └── weekday (Individual column header cell, e.g., "SUN")
+ │         ├── daysGrid (Grid matrix container for day cells)
+ │         │    └── day (Individual day cell button and state wrappers)
+ │         │         ├── unselected / selected
+ │         │         ├── disabled / empty
+ │         │         └── rangeStart / rangeEnd / rangeBetween / rangeHovering
+ │         ├── monthsGrid (Displayed when selecting month view)
+ │         │    └── monthButton -> monthButtonSelected | monthButtonUnselected
+ │         └── yearsGrid (Displayed when selecting year view)
+ │              └── yearButton -> yearButtonSelected | yearButtonUnselected
+ └── footer (Optional footer node container)
 ```
 
 ---
 
-## `DayClassNames` Nested States
+## Detailed Slot Guide (`CalendarClassNames`)
 
-The `day` property under `classNames` allows customizing specific date cell states:
+Every key in `CalendarClassNames` targets a specific DOM element:
+
+### Container Slots
+- **`root`**: Root container `<div>` (`.rmd-root`) wrapping the entire calendar.
+- **`calendarsContainer`**: Flex container (`.rmd-calendars-container`) wrapping one or more month sheets.
+- **`calendarContainer`**: Wrapper `<div>` (`.rmd-calendar-container`) for an individual month sheet grid.
+- **`footer`**: Footer container `<div>` (`.rmd-footer`) rendered at the bottom when the `footer` prop is provided.
+
+### Top Header & Navigation Slots
+- **`header`**: Header container (`.rmd-header`) containing month/year controls and navigation arrows.
+- **`headerMultiMonth`**: Additional class applied to `header` when displaying 12 months (yearly view).
+- **`navButton`**: Navigation arrow buttons (`.rmd-nav-button`) for previous/next navigation.
+- **`navButtonHidden`**: Class applied to navigation buttons when hidden in month/year selection views.
+- **`monthYearContainer`**: Centered title container (`.rmd-month-year-container`).
+- **`monthYearLabel`**: Label wrapper (`.rmd-month-year-label`) supporting slide transition animations.
+- **`monthYearButton`**: Interactive buttons (`.rmd-month-year-button`) that trigger month or year view modes.
+- **`navButtonSlotStart`**: Start slot (`.rmd-nav-button-slot-start`) inside individual sheet headers in multi-month views.
+- **`navButtonSlotEnd`**: End slot (`.rmd-nav-button-slot-end`) inside individual sheet headers in multi-month views.
+- **`headerTitleContainer`**: Title text container (`.rmd-header-title-container`) inside individual multi-month sheet headers.
+
+### Days & Weekdays View
+- **`weekdayGrid`**: CSS grid row (`.rmd-weekday-grid`) holding weekday headers.
+- **`weekday`**: Individual weekday cell (`.rmd-weekday`) (e.g., `SUN`, `MON`).
+- **`daysGrid`**: CSS grid container (`.rmd-days-grid`) holding day cell buttons.
+- **`day`**: Nested configuration object (`DayClassNames`) for date cell states.
+
+### Month Selection View
+- **`monthsGrid`**: CSS grid container (`.rmd-months-grid`) displayed when selecting a month.
+- **`monthButton`**: Button element (`.rmd-month-button`) for each month item.
+- **`monthButtonSelected`**: Modifier class (`.rmd-month-button-selected`) applied to the currently active month.
+- **`monthButtonUnselected`**: Modifier class (`.rmd-month-button-unselected`) applied to unselected months.
+
+### Year Selection View
+- **`yearsGrid`**: Scrollable grid container (`.rmd-years-grid`) displayed when selecting a year.
+- **`yearButton`**: Button element (`.rmd-year-button`) for each year item.
+- **`yearButtonSelected`**: Modifier class (`.rmd-year-button-selected`) applied to the currently active year.
+- **`yearButtonUnselected`**: Modifier class (`.rmd-year-button-unselected`) applied to unselected years.
+
+---
+
+## Detailed Day State Guide (`DayClassNames`)
+
+The `day` property under `classNames` accepts a `DayClassNames` object to style specific date states:
 
 ```typescript
 export interface DayClassNames {
-  day?: string;
-  selected?: string;
-  unselected?: string;
-  disabled?: string;
-  empty?: string;
-  rangeStart?: string;
-  rangeEnd?: string;
-  rangeBetween?: string;
-  rangeHovering?: string;
-  [key: string]: string | undefined; // Custom modifier classes
+  day?: string;              // Applied to every day cell button element (.rmd-day)
+  selected?: string;         // Applied when date is selected (.rmd-day-selected)
+  unselected?: string;       // Applied when date is selectable but not selected (.rmd-day-unselected)
+  disabled?: string;         // Applied when date is disabled or outside min/max bounds (.rmd-day-disabled)
+  empty?: string;            // Applied to empty leading/trailing padding cells (.rmd-day-empty)
+  rangeStart?: string;       // Applied to the start date of a selected range (.rmd-day-range-start)
+  rangeEnd?: string;         // Applied to the end date of a selected range (.rmd-day-range-end)
+  rangeBetween?: string;     // Applied to dates inside an active selection range (.rmd-day-range-between)
+  rangeHovering?: string;    // Applied to dates covered during range hover preview (.rmd-day-range-hovering)
+  [key: string]: string | undefined; // Custom modifier class names (e.g., weekend, birthday, holiday)
 }
 ```
 

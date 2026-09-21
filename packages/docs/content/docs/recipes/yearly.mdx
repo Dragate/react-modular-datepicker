@@ -14,28 +14,60 @@ Set `monthsToDisplay` to `12` to display a full year calendar. Clicking next or 
 ## Code Example
 
 ```tsx
-import { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Calendar } from 'react-modular-datepicker';
+import 'react-modular-datepicker/dist/index.css';
 
-export function YearlyExample() {
+export function YearlyDemo() {
+  const currentYear = new Date().getFullYear();
+  const startOfYear = new Date(currentYear, 0, 1);
   const [selected, setSelected] = useState<Date | null>(null);
 
+  const eventDatesSet = useMemo(() => {
+    const set = new Set<string>();
+    const getKey = (y: number, m: number, d: number) => `${y}-${m + 1}-${d}`;
+    for (let m = 0; m < 12; m++) {
+      const daysInMonth = new Date(currentYear, m + 1, 0).getDate();
+      const d1 = ((m * 7 + 3) % daysInMonth) + 1;
+      const d2 = ((m * 11 + 14) % daysInMonth) + 1;
+      set.add(getKey(currentYear, m, d1));
+      set.add(getKey(currentYear, m, d2));
+    }
+    return set;
+  }, [currentYear]);
+
   return (
-    <Calendar
-      monthsToDisplay={12}
-      selected={selected || undefined}
-      onChange={(d) => setSelected(d as Date)}
-      modifiers={{
-        weekend: (date) => date.getDay() === 0 || date.getDay() === 6,
-      }}
-      classNames={{
-        calendarsContainer: 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-3 w-full',
-        day: {
-          day: 'aspect-square flex items-center justify-center text-xs font-medium p-0',
-          weekend: 'text-red-600 dark:text-red-400 font-semibold',
-        },
-      }}
-    />
+    <div className="flex flex-col justify-center w-full items-center">
+      <Calendar
+        date={startOfYear}
+        monthsToDisplay={12}
+        selected={selected || undefined}
+        onChange={(d) => setSelected(d as Date)}
+        modifiers={{
+          weekend: (date) => date.getDay() === 0 || date.getDay() === 6,
+          hasEvents: (date) => {
+            const key = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+            return eventDatesSet.has(key);
+          },
+        }}
+        classNames={{
+          calendarsContainer: 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-3 w-full',
+          calendarContainer: 'min-w-0',
+          day: {
+            day: 'aspect-square flex items-center justify-center text-xs font-medium transition-all relative group cursor-pointer p-0',
+            weekend: 'text-red-700',
+            hasEvents:
+              'font-bold relative after:content-["•"] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:text-amber-500 after:text-[10px]',
+          },
+          weekday: 'text-center text-xs text-gray-400 py-1',
+        }}
+      />
+      {selected && (
+        <div className="mt-4 text-sm text-center text-gray-600">
+          Selected: <span className="font-semibold text-gray-900">{selected.toDateString()}</span>
+        </div>
+      )}
+    </div>
   );
 }
 ```
