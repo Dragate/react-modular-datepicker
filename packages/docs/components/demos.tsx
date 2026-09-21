@@ -380,11 +380,15 @@ export function AvailabilityDemo() {
 }
 
 export function RangeDemo() {
-  const [range, setRange] = useState<{ start?: Date; end?: Date }>({});
+  const [range, setRange] = useState<{ start?: Date; end?: Date }>({
+    start: new Date(2026, 8, 10),
+    end: new Date(2026, 9, 21),
+  });
   return (
     <DemoContainer title="Live Preview: Date Range Selection">
       <Calendar
         selectionMode="range"
+        date={new Date(2026, 8, 1)}
         monthsToDisplay={2}
         selected={range}
         onChange={(r) => setRange(r as { start?: Date; end?: Date })}

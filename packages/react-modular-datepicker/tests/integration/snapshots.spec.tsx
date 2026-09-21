@@ -18,6 +18,28 @@ describe('Component Snapshot Tests', () => {
     expect(container.innerHTML).toMatchSnapshot();
   });
 
+  test('renders multi-month range selection calendar DOM snapshot without highlighting outside buffer days', () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+    const root = createRoot(container);
+
+    const startDate = new Date(2026, 8, 10);
+    const endDate = new Date(2026, 9, 21);
+
+    act(() => {
+      root.render(
+        <Calendar
+          selectionMode="range"
+          date={new Date(2026, 8, 1)}
+          monthsToDisplay={2}
+          selected={{ start: startDate, end: endDate }}
+        />
+      );
+    });
+
+    expect(container.innerHTML).toMatchSnapshot();
+  });
+
   test('renders date range selection calendar DOM snapshot', () => {
     const container = document.createElement('div');
     document.body.appendChild(container);
