@@ -106,7 +106,7 @@ export function ModifiersDemo() {
   );
 }
 
-export function GoogleCalendarDemo() {
+export function FullMonthScheduleDemo() {
   const today = new Date();
   const year = today.getFullYear();
   const month = today.getMonth();
@@ -140,7 +140,7 @@ export function GoogleCalendarDemo() {
   const getKey = (d: Date) => `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
 
   return (
-    <DemoContainer title="Live Preview: Google Calendar Style View">
+    <DemoContainer title="Live Preview: Full Month Schedule View">
       <div className="w-full max-w-2xl bg-fd-card rounded-xl border border-fd-border p-4 shadow-sm">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
@@ -323,13 +323,13 @@ export function AvailabilityDemo() {
               daysGrid: 'grid grid-cols-7 gap-px bg-brand-gray-light/20 relative',
               day: {
                 disabled: 'text-red-400 line-through cursor-not-allowed',
-                outside: 'bg-white dark:bg-zinc-900 text-transparent border-none opacity-0 select-none pointer-events-none',
+                outside: 'bg-white dark:bg-zinc-900 text-transparent border-none select-none pointer-events-none',
               },
             }}
           />
 
           {isLoading && (
-            <div className="absolute inset-x-0 bottom-0 top-12 bg-transparent backdrop-blur-md flex flex-col items-center justify-center rounded-b-lg z-20">
+            <div className="absolute inset-0 bg-white/85 dark:bg-zinc-900/85 backdrop-blur-sm flex flex-col items-center justify-center rounded-lg z-20">
               <div className="w-7 h-7 border-3 border-[#c5a059] border-t-transparent rounded-full animate-spin mb-2" />
               <span className="text-xs font-bold text-fd-foreground drop-shadow-sm">Fetching availabilities...</span>
             </div>
@@ -806,22 +806,53 @@ export function MinMaxDisabledDemo() {
 export function YearlyDemo() {
   const currentYear = new Date().getFullYear();
   const startOfYear = new Date(currentYear, 0, 1);
+  const [selected, setSelected] = useState<Date | null>(null);
+
+  const eventDatesSet = React.useMemo(() => {
+    const set = new Set<string>();
+    const getKey = (y: number, m: number, d: number) => `${y}-${m + 1}-${d}`;
+    for (let m = 0; m < 12; m++) {
+      const daysInMonth = new Date(currentYear, m + 1, 0).getDate();
+      const d1 = ((m * 7 + 3) % daysInMonth) + 1;
+      const d2 = ((m * 11 + 14) % daysInMonth) + 1;
+      set.add(getKey(currentYear, m, d1));
+      set.add(getKey(currentYear, m, d2));
+    }
+    return set;
+  }, [currentYear]);
 
   return (
     <DemoContainer title="Live Preview: Yearly View">
-      <div className="flex flex-col justify-center">
+      <div className="flex flex-col justify-center w-full items-center">
         <Calendar
           date={startOfYear}
           monthsToDisplay={12}
+          selected={selected || undefined}
+          onChange={(d) => setSelected(d as Date)}
+          modifiers={{
+            weekend: (date) => date.getDay() === 0 || date.getDay() === 6,
+            hasEvents: (date) => {
+              const key = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+              return eventDatesSet.has(key);
+            },
+          }}
           classNames={{
             calendarsContainer: 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-3 w-full',
             calendarContainer: 'min-w-0',
             day: {
               day: 'aspect-square flex items-center justify-center text-xs font-medium transition-all relative group cursor-pointer p-0',
+              weekend: 'text-red-600 dark:text-red-400 font-semibold',
+              hasEvents:
+                'font-bold relative after:content-["•"] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:text-brand-gold after:text-[10px]',
             },
             weekday: 'text-center text-xs text-gray-400 py-1',
           }}
         />
+        {selected && (
+          <div className="mt-4 text-sm text-center text-fd-muted-foreground">
+            Selected: <span className="font-semibold text-fd-foreground">{selected.toDateString()}</span>
+          </div>
+        )}
       </div>
     </DemoContainer>
   );

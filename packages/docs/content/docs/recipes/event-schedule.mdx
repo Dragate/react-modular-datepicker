@@ -1,6 +1,6 @@
 ---
 title: Event & Schedule Calendar
-description: Build event or schedule calendars with event indicators, CSS-only tooltips, or full Google Calendar style month views.
+description: Build event or schedule calendars with event indicators, CSS-only tooltips, or full month schedule views.
 ---
 
 # Event & Schedule Calendar
@@ -75,15 +75,15 @@ export function EventScheduleExample() {
 
 ---
 
-## Google Calendar Style View
+## Full Month Schedule View
 
 Using the headless `useDates` hook, you can render full-sized date cells containing event badges with titles and times.
 
-<GoogleCalendarDemo />
+<FullMonthScheduleDemo />
 
 ---
 
-### Google Calendar Code Example
+### Full Month Schedule Code Example
 
 ```tsx
 import { useState } from 'react';
@@ -105,7 +105,7 @@ const eventsData: Record<string, EventItem[]> = {
   ],
 };
 
-export function GoogleCalendarExample() {
+export function FullMonthScheduleExample() {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date(2025, 2, 5));
   const { calendars, getBackProps, getForwardProps, getDateProps } = useDates({
     selected: selectedDate,
