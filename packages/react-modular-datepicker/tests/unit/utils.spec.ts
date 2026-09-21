@@ -21,9 +21,9 @@ describe('utils: composeEventHandlers', () => {
   });
 
   test('passes event arguments to handlers', () => {
-    let capturedEvent: any = null;
-    let capturedArg: any = null;
-    const fn = (e: any, arg: any) => {
+    let capturedEvent: unknown = null;
+    let capturedArg: unknown = null;
+    const fn = (e: unknown, arg: unknown) => {
       capturedEvent = e;
       capturedArg = arg;
     };
@@ -47,7 +47,7 @@ describe('utils: composeEventHandlers', () => {
 
   test('halts execution when defaultPrevented is set to true', () => {
     let secondCalled = false;
-    const fn1 = (e: any) => {
+    const fn1 = (e: { defaultPrevented?: boolean }) => {
       e.defaultPrevented = true;
     };
     const fn2 = () => {

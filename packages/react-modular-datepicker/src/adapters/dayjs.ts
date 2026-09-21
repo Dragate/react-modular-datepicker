@@ -10,8 +10,8 @@ dayjs.extend(customParseFormat);
 dayjs.extend(localeData);
 
 export class DayjsAdapter implements DateAdapter<Dayjs> {
-  date(value?: any): Dayjs {
-    return dayjs(value);
+  date(value?: unknown): Dayjs {
+    return dayjs(value as dayjs.ConfigType);
   }
 
   add(date: Dayjs, amount: number, unit: 'day' | 'month' | 'year'): Dayjs {

@@ -4,8 +4,8 @@ import type { CalendarClassNames, DateAdapter, DateObj } from '../types';
 
 interface DayProps {
   dateObj: DateObj | null;
-  getDateProps: (args: { dateObj: DateObj, [key: string]: any }) => any;
-  dayProps?: Record<string, any>;
+  getDateProps: (args: { dateObj: DateObj, [key: string]: unknown }) => Record<string, unknown>;
+  dayProps?: Record<string, unknown>;
   classNames?: CalendarClassNames;
   tabIndex?: number;
   adapter?: DateAdapter;
@@ -64,7 +64,7 @@ export const Day: React.FC<DayProps> = ({
   }
 
   const modifierClasses = (dateObj.modifiers || [])
-    .map(m => (dayClasses as any)?.[m] || m)
+    .map(m => (dayClasses as Record<string, string | undefined> | undefined)?.[m] || m)
     .filter(Boolean);
 
   const formattedDateLabel = adapter
@@ -73,7 +73,7 @@ export const Day: React.FC<DayProps> = ({
 
   const isSelected = !!(selected || isRangeStart || isRangeEnd);
 
-  const baseProps = getDateProps({ dateObj, ...dayProps });
+  const baseProps = getDateProps({ dateObj, ...dayProps }) as React.ButtonHTMLAttributes<HTMLButtonElement>;
 
   return (
     <button
@@ -82,7 +82,7 @@ export const Day: React.FC<DayProps> = ({
       aria-disabled={!selectable}
       aria-label={formattedDateLabel}
       tabIndex={tabIndex}
-      {...baseProps}
+      {...(baseProps as React.HTMLAttributes<HTMLButtonElement>)}
       ref={buttonRef}
       onKeyDown={(e) => {
         baseProps.onKeyDown?.(e);

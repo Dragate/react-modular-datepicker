@@ -1,7 +1,7 @@
 import type { CalendarClassNames } from './classNames';
 
-export interface DateAdapter<T = any> {
-  date(value?: any): T;
+export interface DateAdapter<T = unknown> {
+  date(value?: unknown): T;
   add(date: T, amount: number, unit: 'day' | 'month' | 'year'): T;
   subtract(date: T, amount: number, unit: 'day' | 'month' | 'year'): T;
   startOf(date: T, unit: 'day' | 'month' | 'year'): T;

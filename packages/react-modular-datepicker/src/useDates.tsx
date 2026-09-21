@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import type { DateAdapter, DateObj, SelectionMode, Calendar } from './types';
 import { defaultAdapter } from './adapters/dayjs';
 import {
@@ -18,12 +18,12 @@ function getOffset(prop?: number, state: number = 0): number {
     return isOffsetControlled(prop) ? prop! : state;
 }
 
-function getDateProps(
-    onDateSelected: (dateObj: DateObj, event: any) => void,
-    { onClick, dateObj, ...rest }: { onClick?: (event: any) => void, dateObj: DateObj, [key: string]: any }
+function getDateProps<E extends { defaultPrevented?: boolean } = React.SyntheticEvent>(
+    onDateSelected: (dateObj: DateObj, event: E) => void,
+    { onClick, dateObj, ...rest }: { onClick?: (event: E) => void, dateObj: DateObj, [key: string]: unknown }
 ) {
     return {
-        onClick: composeEventHandlers(onClick, (event: any) => {
+        onClick: composeEventHandlers(onClick, (event: E) => {
             onDateSelected(dateObj, event);
         }),
         disabled: !dateObj.selectable,
@@ -33,14 +33,14 @@ function getDateProps(
     };
 }
 
-function getBackProps(
+function getBackProps<E extends { defaultPrevented?: boolean } = React.SyntheticEvent>(
     { minDate, offsetMonth, handleOffsetChanged, adapter }: { minDate?: Date, offsetMonth: number, handleOffsetChanged: (newOffset: number) => void, adapter: DateAdapter },
     {
         onClick,
         offset = 1,
-        calendars,
+        calendars = [],
         ...rest
-    }: { onClick?: (event: any) => void, offset?: number, calendars: Calendar[], [key: string]: any }
+    }: { onClick?: (event: E) => void, offset?: number, calendars?: Calendar[], [key: string]: unknown } = {}
 ) {
     return {
         onClick: composeEventHandlers(onClick, () => {
@@ -53,14 +53,14 @@ function getBackProps(
     };
 }
 
-function getForwardProps(
+function getForwardProps<E extends { defaultPrevented?: boolean } = React.SyntheticEvent>(
     { maxDate, offsetMonth, handleOffsetChanged, adapter }: { maxDate?: Date, offsetMonth: number, handleOffsetChanged: (newOffset: number) => void, adapter: DateAdapter },
     {
         onClick,
         offset = 1,
-        calendars,
+        calendars = [],
         ...rest
-    }: { onClick?: (event: any) => void, offset?: number, calendars: Calendar[], [key: string]: any }
+    }: { onClick?: (event: E) => void, offset?: number, calendars?: Calendar[], [key: string]: unknown } = {}
 ) {
     return {
         onClick: composeEventHandlers(onClick, () => {
@@ -73,7 +73,7 @@ function getForwardProps(
     };
 }
 
-export interface UseDatesProps {
+export interface UseDatesProps<E extends { defaultPrevented?: boolean } = React.SyntheticEvent> {
     date?: Date;
     maxDate?: Date;
     minDate?: Date;
@@ -81,7 +81,7 @@ export interface UseDatesProps {
     monthsToDisplay?: number;
     firstDayOfWeek?: number;
     offset?: number;
-    onDateSelected?: (dateObj: DateObj, event: any) => void;
+    onDateSelected?: (dateObj: DateObj, event: E) => void;
     onOffsetChanged?: (newOffset: number) => void;
     selected?: Date | Date[] | { start?: Date, end?: Date };
     modifiers?: Record<string, (date: Date, month: number, year: number) => boolean>;
@@ -92,7 +92,7 @@ export interface UseDatesProps {
     onYearChange?: (date: Date) => void;
 }
 
-export function useDates({
+export function useDates<E extends { defaultPrevented?: boolean } = React.SyntheticEvent>({
     date = new Date(),
     maxDate,
     minDate,
@@ -109,7 +109,7 @@ export function useDates({
     onChange,
     onMonthChange,
     onYearChange
-}: UseDatesProps) {
+}: UseDatesProps<E> = {}) {
     const [stateOffset, setStateOffset] = useState(0);
     const [hoveredDate, setHoveredDate] = useState<Date | undefined>(undefined);
     const offsetMonth = getOffset(offset, stateOffset);
@@ -130,7 +130,7 @@ export function useDates({
         onYearChange?.(newDate);
     }, [offset, onOffsetChanged, date, adapter, monthsToDisplay, onMonthChange, onYearChange]);
 
-    const handleDateSelected = useCallback((dateObj: DateObj, event: any) => {
+    const handleDateSelected = useCallback((dateObj: DateObj, event: E) => {
         onDateSelected?.(dateObj, event);
 
         if (!onChange) return;
@@ -176,8 +176,10 @@ export function useDates({
 
     return {
         calendars,
-        getDateProps: (args: { onClick?: (event: any) => void, dateObj: DateObj, [key: string]: any }) => {
-            const props = getDateProps(handleDateSelected, args);
+        getDateProps: <EventE extends { defaultPrevented?: boolean } = E>(
+            args: { onClick?: (event: EventE) => void, onMouseEnter?: (event: EventE) => void, onMouseLeave?: (event: EventE) => void, dateObj: DateObj, [key: string]: unknown }
+        ) => {
+            const props = getDateProps<EventE>(handleDateSelected as unknown as (dateObj: DateObj, event: EventE) => void, args);
             return {
                 ...props,
                 onMouseEnter: composeEventHandlers(args.onMouseEnter, () => {

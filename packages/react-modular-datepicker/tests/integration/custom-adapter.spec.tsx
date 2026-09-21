@@ -4,7 +4,7 @@ import { describe, expect, test } from 'vitest';
 import { Calendar, DateAdapter } from 'react-modular-datepicker';
 
 class SimpleCustomAdapter implements DateAdapter<Date> {
-  date(value?: any): Date { return value ? new Date(value) : new Date(); }
+  date(value?: unknown): Date { return value ? new Date(value as string | number | Date) : new Date(); }
   add(date: Date, amount: number, unit: 'day' | 'month' | 'year'): Date {
     const d = new Date(date);
     if (unit === 'day') d.setDate(d.getDate() + amount);

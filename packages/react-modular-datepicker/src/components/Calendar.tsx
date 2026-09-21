@@ -4,7 +4,7 @@ import { defaultAdapter } from '../adapters/dayjs';
 import { getTranslations, Translations } from '../i18n';
 import { CalendarClassNames, DateObj } from '../types';
 import { useDates, UseDatesProps } from '../useDates';
-import { CalendarHeader, ChevronLeftIcon, ChevronRightIcon } from './CalendarHeader';
+import { CalendarHeader, ChevronLeftIcon, ChevronRightIcon, HeaderProps } from './CalendarHeader';
 import { Day } from './Day';
 import { MonthSelection } from './MonthSelection';
 import { YearSelection } from './YearSelection';
@@ -13,9 +13,9 @@ interface CalendarProps extends UseDatesProps {
   classNames?: CalendarClassNames;
   locale?: string;
   translations?: Partial<Translations>;
-  header?: React.ReactNode | ((props: any) => React.ReactNode);
+  header?: React.ReactNode | ((props: HeaderProps) => React.ReactNode);
   footer?: React.ReactNode;
-  getDayProps?: (dateObj: DateObj) => Record<string, any>;
+  getDayProps?: (dateObj: DateObj) => Record<string, unknown>;
 }
 
 type CalendarView = 'days' | 'months' | 'years';
@@ -168,22 +168,22 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
 
   const stepOffset = useDatesProps.monthsToDisplay || 1;
 
-  const wrappedGetBackProps = (args: any) => {
-    const props = getBackProps({ offset: stepOffset, ...args });
+  const wrappedGetBackProps = (args?: Record<string, unknown>) => {
+    const props = getBackProps({ offset: stepOffset, ...args }) as { onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void; [key: string]: unknown };
     return {
       ...props,
-      onClick: (e: any) => {
+      onClick: (e: React.MouseEvent<HTMLButtonElement>) => {
         setSlideDirection('left');
         props.onClick?.(e);
       }
     };
   };
 
-  const wrappedGetForwardProps = (args: any) => {
-    const props = getForwardProps({ offset: stepOffset, ...args });
+  const wrappedGetForwardProps = (args?: Record<string, unknown>) => {
+    const props = getForwardProps({ offset: stepOffset, ...args }) as { onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void; [key: string]: unknown };
     return {
       ...props,
-      onClick: (e: any) => {
+      onClick: (e: React.MouseEvent<HTMLButtonElement>) => {
         setSlideDirection('right');
         props.onClick?.(e);
       }
@@ -340,7 +340,7 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
                 <div className={clsx('rmd-nav-button-slot-start', classNames?.navButtonSlotStart)}>
                   {index === 0 && calendars.length < 12 && (
                     <button
-                      {...wrappedGetBackProps({ calendars })}
+                      {...(wrappedGetBackProps({ calendars }) as React.ButtonHTMLAttributes<HTMLButtonElement>)}
                       className={clsx('rmd-nav-button', classNames?.navButton)}
                       aria-label={t.back}
                     >
@@ -355,7 +355,7 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
                 <div className={clsx('rmd-nav-button-slot-end', classNames?.navButtonSlotEnd)}>
                   {index === calendars.length - 1 && calendars.length < 12 && (
                     <button
-                      {...wrappedGetForwardProps({ calendars })}
+                      {...(wrappedGetForwardProps({ calendars }) as React.ButtonHTMLAttributes<HTMLButtonElement>)}
                       className={clsx('rmd-nav-button', classNames?.navButton)}
                       aria-label={t.forward}
                     >
