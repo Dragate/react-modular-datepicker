@@ -61,7 +61,6 @@ export function getCalendars({
     maxDate,
     offset,
     firstDayOfWeek,
-    showOutsideDays,
     adapter,
     selectionMode,
     hoveredDate
@@ -75,7 +74,6 @@ export function getCalendars({
     maxDate?: Date,
     offset: number,
     firstDayOfWeek: number,
-    showOutsideDays: boolean,
     adapter: DateAdapter,
     selectionMode: SelectionMode,
     hoveredDate?: Date
@@ -94,7 +92,6 @@ export function getCalendars({
             minDate,
             maxDate,
             firstDayOfWeek,
-            showOutsideDays,
             adapter,
             selectionMode,
             hoveredDate
@@ -113,7 +110,6 @@ function getMonthData({
     minDate,
     maxDate,
     firstDayOfWeek,
-    showOutsideDays,
     adapter,
     selectionMode,
     hoveredDate
@@ -126,7 +122,6 @@ function getMonthData({
     minDate?: Date,
     maxDate?: Date,
     firstDayOfWeek: number,
-    showOutsideDays: boolean,
     adapter: DateAdapter,
     selectionMode: 'single' | 'range' | 'multiple',
     hoveredDate?: Date
@@ -155,7 +150,6 @@ function getMonthData({
         disabledDates,
         modifiers,
         firstDayOfWeek,
-        showOutsideDays,
         adapter,
         selectionMode,
         hoveredDate,
@@ -171,7 +165,6 @@ function getMonthData({
         disabledDates,
         modifiers,
         firstDayOfWeek,
-        showOutsideDays,
         adapter,
         selectionMode,
         hoveredDate,
@@ -255,7 +248,6 @@ function fillFrontWeek({
     disabledDates,
     modifiers,
     firstDayOfWeek,
-    showOutsideDays,
     adapter,
     selectionMode,
     hoveredDate,
@@ -269,7 +261,6 @@ function fillFrontWeek({
     disabledDates?: Date[],
     modifiers?: Record<string, (date: Date, month: number, year: number) => boolean>,
     firstDayOfWeek: number,
-    showOutsideDays: boolean,
     adapter: DateAdapter,
     selectionMode: any,
     hoveredDate?: Date,
@@ -284,9 +275,6 @@ function fillFrontWeek({
         const date = adapter.toDate(current);
         const dateObj = createDateObj(date, selectedDates, disabledDates, modifiers, minDate, maxDate, adapter, selectionMode, true, hoveredDate, month, year);
         dateObj.prevMonth = true;
-        if (!showOutsideDays) {
-            dateObj.selectable = false;
-        }
         dates.unshift(dateObj);
         current = adapter.subtract(current, 1, "day");
     }
@@ -302,7 +290,6 @@ function fillBackWeek({
     disabledDates,
     modifiers,
     firstDayOfWeek,
-    showOutsideDays,
     adapter,
     selectionMode,
     hoveredDate,
@@ -316,7 +303,6 @@ function fillBackWeek({
     disabledDates?: Date[],
     modifiers?: Record<string, (date: Date, month: number, year: number) => boolean>,
     firstDayOfWeek: number,
-    showOutsideDays: boolean,
     adapter: DateAdapter,
     selectionMode: any,
     hoveredDate?: Date,
@@ -331,9 +317,6 @@ function fillBackWeek({
         const date = adapter.toDate(current);
         const dateObj = createDateObj(date, selectedDates, disabledDates, modifiers, minDate, maxDate, adapter, selectionMode, true, hoveredDate, month, year);
         dateObj.nextMonth = true;
-        if (!showOutsideDays) {
-            dateObj.selectable = false;
-        }
         dates.push(dateObj);
         current = adapter.add(current, 1, "day");
     }

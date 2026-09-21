@@ -22,14 +22,13 @@ The `<Calendar />` component renders a full datepicker UI with single, multiple,
 | `disabledDates` | `Date[]` | `undefined` | Array of specific dates to disable. |
 | `monthsToDisplay` | `number` | `1` | Number of concurrent month sheets to display. |
 | `firstDayOfWeek` | `number` | `0` | Starting day of the week (0 = Sunday, 1 = Monday). |
-| `showOutsideDays` | `boolean` | `false` | Whether to display buffer days from adjacent months. |
 | `classNames` | `CalendarClassNames` | `undefined` | Custom CSS class overrides. |
 | `locale` | `string` | `undefined` | Locale string for date formatting. |
 | `translations` | `Partial<Translations>` | `undefined` | Custom month and weekday name translations. |
 | `adapter` | `DateAdapter` | `defaultAdapter` | Date management adapter implementation. |
 | `header` | `React.ReactNode` | `undefined` | Custom header content placed above month sheet headers. |
 | `footer` | `React.ReactNode` | `undefined` | Custom footer content placed below calendar sheets. |
-| `onMonthChange` | `(date: Date) => void` | `undefined` | Callback fired when month navigation occurs. |
+| `onMonthChange` | `(dates: Date[]) => void` | `undefined` | Callback fired when month navigation occurs, providing an array of the first day of each displayed month. |
 | `getDayProps` | `(dateObj: DateObj) => Record<string, any>` | `undefined` | Function to return custom props/attributes (e.g. `data-tooltip`) for day buttons. |
 | `modifiers` | `Record<string, (date: Date, month: number, year: number) => boolean>` | `undefined` | Custom modifier rules. |
 

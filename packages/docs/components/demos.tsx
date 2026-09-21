@@ -293,11 +293,12 @@ export function AvailabilityDemo() {
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
   const [confirmed, setConfirmed] = useState(false);
 
-  const handleMonthChange = (date: Date) => {
+  const handleMonthChange = (dates: Date[]) => {
     setIsLoading(true);
     setTimeout(() => {
-      const targetYear = date.getFullYear();
-      const targetMonth = date.getMonth();
+      const firstDate = dates[0] || new Date();
+      const targetYear = firstDate.getFullYear();
+      const targetMonth = firstDate.getMonth();
 
       setBookedDays(getRandomDatesInMonth(targetYear, targetMonth));
       setIsLoading(false);
@@ -728,7 +729,7 @@ export function HeaderFooterDemo() {
         date={currentDate}
         selected={selected || undefined}
         onChange={(val) => setSelected(val as Date)}
-        onMonthChange={(d) => setCurrentDate(d)}
+        onMonthChange={(dates) => setCurrentDate(dates[0])}
         header={
           <div className="px-4 py-3 text-slate-950 flex items-center justify-between rounded-t-lg">
             <span className="text-xs font-bold tracking-wide flex items-center gap-2">

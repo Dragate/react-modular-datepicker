@@ -23,9 +23,12 @@ export const YearSelection: React.FC<YearSelectionProps> = ({
 
   useEffect(() => {
     if (yearListRef.current) {
-      const selectedYearBtn = yearListRef.current.querySelector('[data-selected="true"]');
-      if (selectedYearBtn && typeof selectedYearBtn.scrollIntoView === 'function') {
-        selectedYearBtn.scrollIntoView({ block: 'center' });
+      const container = yearListRef.current;
+      const selectedYearBtn = container.querySelector('[data-selected="true"]') as HTMLElement | null;
+      if (selectedYearBtn) {
+        const targetScrollTop =
+          selectedYearBtn.offsetTop - container.clientHeight / 2 + selectedYearBtn.clientHeight / 2;
+        container.scrollTop = Math.max(0, targetScrollTop);
       }
     }
   }, []);
