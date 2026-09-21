@@ -177,143 +177,187 @@ export default async function Image() {
           </div>
         </div>
 
-        {/* Right Column: Visual Calendar Preview matching Basic Demo */}
+        {/* Right Column: Visual Calendar Preview matching Live Preview Single Date Selection */}
         <div
           style={{
             display: 'flex',
             flexDirection: 'column',
-            width: '380px',
-            backgroundColor: '#ffffff',
-            border: '1px solid #e5e7eb',
-            borderRadius: '12px',
-            padding: '20px',
-            boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.2)',
+            alignItems: 'center',
+            justifyContent: 'center',
           }}
         >
-          {/* Header */}
+          {/* Calendar Card */}
           <div
             style={{
               display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              marginBottom: '12px',
-              paddingBottom: '10px',
-              borderBottom: '2px solid rgba(181, 190, 198, 0.4)',
+              flexDirection: 'column',
+              width: '360px',
+              backgroundColor: '#ffffff',
+              border: '1px solid #e5e7eb',
+              borderRadius: '12px',
+              padding: '16px',
+              boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.2)',
             }}
           >
+            {/* Header */}
             <div
               style={{
                 display: 'flex',
+                flexDirection: 'row',
                 alignItems: 'center',
-                justifyContent: 'center',
-                width: '32px',
-                height: '32px',
-                borderRadius: '9999px',
-                color: '#343a40',
-                fontSize: '18px',
+                justifyContent: 'space-between',
+                paddingBottom: '8px',
+                borderBottom: '2px solid rgba(181, 190, 198, 0.4)',
+                marginBottom: '12px',
               }}
             >
-              ‹
-            </div>
-            <span style={{ fontSize: '16px', fontWeight: 600, color: '#343a40' }}>
-              October 2025
-            </span>
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: '32px',
-                height: '32px',
-                borderRadius: '9999px',
-                color: '#343a40',
-                fontSize: '18px',
-              }}
-            >
-              ›
-            </div>
-          </div>
-
-          {/* Weekday Labels */}
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              marginBottom: '8px',
-              paddingBottom: '4px',
-              borderBottom: '1px solid rgba(181, 190, 198, 0.4)',
-            }}
-          >
-            {daysHeader.map((day, i) => (
+              {/* Back Button */}
               <div
-                key={i}
                 style={{
-                  width: '42px',
-                  height: '24px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  fontSize: '12px',
-                  fontWeight: 400,
-                  color: '#9ca3af',
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '9999px',
+                  color: '#343a40',
                 }}
               >
-                {day}
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#343a40" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="15 18 9 12 15 6" />
+                </svg>
               </div>
-            ))}
-          </div>
 
-          {/* Weeks Grid */}
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            {weeks.map((week, wIdx) => (
+              {/* Month/Year Title */}
+              <div style={{ display: 'flex', flexDirection: 'row', gap: '8px' }}>
+                <span style={{ fontSize: '15px', fontWeight: 600, color: '#343a40' }}>
+                  October
+                </span>
+                <span style={{ fontSize: '15px', fontWeight: 600, color: '#343a40' }}>
+                  2025
+                </span>
+              </div>
+
+              {/* Forward Button */}
               <div
-                key={wIdx}
                 style={{
                   display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  marginBottom: '2px',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '9999px',
+                  color: '#343a40',
                 }}
               >
-                {week.map((item, dIdx) => {
-                  let bgColor = '#ffffff';
-                  let textColor = '#343a40';
-                  let borderRadius = '0px';
-                  let fontWeight: number | string = 500;
-
-                  if (item.outside) {
-                    textColor = '#9ca3af';
-                  } else if (item.selected) {
-                    bgColor = '#c5a059';
-                    textColor = '#ffffff';
-                    borderRadius = '9999px';
-                    fontWeight = 700;
-                  }
-
-                  return (
-                    <div
-                      key={dIdx}
-                      style={{
-                        width: '42px',
-                        height: '42px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        backgroundColor: bgColor,
-                        color: textColor,
-                        borderRadius: borderRadius,
-                        fontWeight: fontWeight,
-                        fontSize: '14px',
-                      }}
-                    >
-                      {item.num}
-                    </div>
-                  );
-                })}
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#343a40" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="9 18 15 12 9 6" />
+                </svg>
               </div>
-            ))}
+            </div>
+
+            {/* Weekdays Row */}
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                marginBottom: '6px',
+                paddingBottom: '4px',
+                borderBottom: '1px solid rgba(181, 190, 198, 0.4)',
+              }}
+            >
+              {daysHeader.map((day, i) => (
+                <div
+                  key={i}
+                  style={{
+                    width: '42px',
+                    height: '24px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '12px',
+                    color: '#9ca3af',
+                  }}
+                >
+                  {day}
+                </div>
+              ))}
+            </div>
+
+            {/* Days Grid with 1px border gap look */}
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                backgroundColor: 'rgba(181, 190, 198, 0.25)',
+              }}
+            >
+              {weeks.map((week, wIdx) => (
+                <div
+                  key={wIdx}
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    marginBottom: '1px',
+                  }}
+                >
+                  {week.map((item, dIdx) => {
+                    let bgColor = '#ffffff';
+                    let textColor = '#343a40';
+                    let borderRadius = '0px';
+                    let fontWeight: number | string = 500;
+
+                    if (item.outside) {
+                      textColor = '#9ca3af';
+                    } else if (item.selected) {
+                      bgColor = '#c5a059';
+                      textColor = '#ffffff';
+                      borderRadius = '9999px';
+                      fontWeight = 700;
+                    }
+
+                    return (
+                      <div
+                        key={dIdx}
+                        style={{
+                          width: '44px',
+                          height: '42px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          backgroundColor: bgColor,
+                          color: textColor,
+                          borderRadius: borderRadius,
+                          fontWeight: fontWeight,
+                          fontSize: '14px',
+                        }}
+                      >
+                        {item.num}
+                      </div>
+                    );
+                  })}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Selected Date indicator matching BasicDemo */}
+          <div
+            style={{
+              marginTop: '16px',
+              fontSize: '14px',
+              color: '#9ca3af',
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}
+          >
+            <span>Selected: </span>
+            <span style={{ fontWeight: 600, color: '#f3f4f6', marginLeft: '6px' }}>
+              Wed Oct 15 2025
+            </span>
           </div>
         </div>
       </div>
