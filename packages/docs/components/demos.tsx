@@ -79,9 +79,9 @@ export function ModifiersDemo() {
         }}
         classNames={{
           day: {
-            weekend: 'text-red-950 dark:text-red-200 font-normal',
+            weekend: 'text-red-700',
             holiday:
-              'border-2 border-emerald-500 font-normal relative ' +
+              'border-2 border-emerald-500 relative ' +
               'before:content-[attr(data-tooltip)] before:absolute before:bottom-full before:left-1/2 before:-translate-x-1/2 before:mb-1 before:hidden hover:before:block ' +
               'before:px-2 before:py-0.5 before:bg-gray-800 before:text-white before:text-[10px] before:rounded before:whitespace-nowrap before:z-20',
             birthday:
@@ -92,8 +92,8 @@ export function ModifiersDemo() {
         }}
       />
       <div className="mt-4 flex flex-wrap gap-3 justify-center text-xs">
-        <span className="flex items-center gap-1.5 px-2.5 py-1 rounded text-red-950 dark:text-red-200 font-medium border border-red-200 dark:border-red-900/40">
-          <span className="w-2.5 h-2.5 rounded-full bg-red-900 dark:bg-red-300 inline-block" /> Weekend (Dark Red Text)
+        <span className="flex items-center gap-1.5 px-2.5 py-1 rounded text-red-700 dark:text-red-200 font-medium border border-red-200 dark:border-red-900/40">
+          <span className="w-2.5 h-2.5 rounded-full bg-red-900 dark:bg-red-300 inline-block" /> Weekend (Red Text)
         </span>
         <span className="flex items-center gap-1.5 px-2.5 py-1 rounded border-2 border-emerald-500 text-emerald-800 dark:text-emerald-200 font-medium">
           <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block" /> 🎉 Holiday (Border Highlight)
@@ -730,24 +730,27 @@ export function HeaderFooterDemo() {
         onChange={(val) => setSelected(val as Date)}
         onMonthChange={(d) => setCurrentDate(d)}
         header={
-          <div className="px-4 py-3 bg-slate-900 dark:bg-slate-950 text-white border-b border-slate-800 flex items-center justify-between rounded-t-lg shadow-sm">
+          <div className="px-4 py-3 text-slate-950 flex items-center justify-between rounded-t-lg">
             <span className="text-xs font-bold tracking-wide flex items-center gap-2">
-              <span className="text-brand-gold text-sm">📅</span> Appointment Booking
+              <span className="text-sm">📅</span> Appointment Booking
             </span>
-            <span className="text-[11px] font-medium text-slate-300 bg-slate-800/80 px-2 py-0.5 rounded-full">
+            <span className="text-[11px] font-medium text-slate-300 bg-slate-800 px-2 py-0.5 rounded-full">
               Step 1 of 2
             </span>
           </div>
         }
+        classNames={{
+          root: "min-w-[320px]"
+        }}
         footer={
-          <div className="px-4 py-3 bg-slate-900 dark:bg-slate-950 text-white border-t border-slate-800 flex items-center justify-between rounded-b-lg shadow-sm text-xs">
+          <div className="px-4 py-3 text-slate-950 flex items-center justify-between rounded-b-lg text-xs">
             <div className="flex-1 min-w-0 h-5 flex items-center pr-2">
               {selected ? (
-                <span className="text-slate-200 font-medium truncate">
-                  Selected: <strong className="font-bold text-brand-gold">{selected.toLocaleDateString()}</strong>
+                <span className="font-medium truncate">
+                  Selected: <strong className="font-bold ml-2 text-slate-950">{selected.toLocaleDateString()}</strong>
                 </span>
               ) : (
-                <span className="text-slate-400 italic truncate">No date selected</span>
+                <span className="italic truncate">No date selected</span>
               )}
             </div>
             <div className="flex items-center gap-2 shrink-0">
