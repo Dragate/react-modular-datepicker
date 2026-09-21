@@ -1,7 +1,5 @@
 import { ImageResponse } from 'next/og';
 
-export const runtime = 'edge';
-
 export const alt = 'React Modular Datepicker - Modular, Lightweight & Type-Safe Datepicker for React';
 export const size = {
   width: 1200,
@@ -10,7 +8,59 @@ export const size = {
 
 export const contentType = 'image/png';
 
+interface CalendarDayItem {
+  num: string;
+  outside?: boolean;
+  selectedStart?: boolean;
+  selectedMid?: boolean;
+  selectedEnd?: boolean;
+}
+
 export default async function Image() {
+  const daysHeader = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+
+  const week1: CalendarDayItem[] = [
+    { num: '28', outside: true },
+    { num: '29', outside: true },
+    { num: '30', outside: true },
+    { num: '1', outside: false },
+    { num: '2', outside: false },
+    { num: '3', outside: false },
+    { num: '4', outside: false },
+  ];
+
+  const week2: CalendarDayItem[] = [
+    { num: '5', outside: false },
+    { num: '6', outside: false },
+    { num: '7', outside: false },
+    { num: '8', outside: false },
+    { num: '9', outside: false },
+    { num: '10', outside: false },
+    { num: '11', outside: false },
+  ];
+
+  const week3: CalendarDayItem[] = [
+    { num: '12', selectedStart: true },
+    { num: '13', selectedMid: true },
+    { num: '14', selectedMid: true },
+    { num: '15', selectedMid: true },
+    { num: '16', selectedMid: true },
+    { num: '17', selectedMid: true },
+    { num: '18', selectedEnd: true },
+  ];
+
+  const week4: CalendarDayItem[] = [
+    { num: '19', outside: false },
+    { num: '20', outside: false },
+    { num: '21', outside: false },
+    { num: '22', outside: false },
+    { num: '23', outside: false },
+    { num: '24', outside: false },
+    { num: '25', outside: false },
+  ];
+
+  const weeks = [week1, week2, week3, week4];
+
   return new ImageResponse(
     (
       <div
@@ -23,7 +73,7 @@ export default async function Image() {
           justifyContent: 'space-between',
           backgroundColor: '#0a0d14',
           backgroundImage:
-            'radial-gradient(circle at 15% 20%, rgba(197, 160, 89, 0.18) 0%, transparent 45%), radial-gradient(circle at 85% 80%, rgba(197, 160, 89, 0.12) 0%, transparent 40%)',
+            'radial-gradient(circle at 15% 20%, rgba(197, 160, 89, 0.22) 0%, transparent 45%), radial-gradient(circle at 85% 80%, rgba(197, 160, 89, 0.15) 0%, transparent 40%)',
           padding: '60px',
           fontFamily: 'sans-serif',
           color: '#f3f4f6',
@@ -43,7 +93,6 @@ export default async function Image() {
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: '10px',
               backgroundColor: 'rgba(197, 160, 89, 0.15)',
               border: '1px solid rgba(197, 160, 89, 0.35)',
               color: '#d8b467',
@@ -52,10 +101,9 @@ export default async function Image() {
               fontSize: '18px',
               fontWeight: 600,
               marginBottom: '28px',
-              width: 'fit-content',
             }}
           >
-            <span>📅</span>
+            <span style={{ marginRight: '8px' }}>📅</span>
             <span>react-modular-datepicker</span>
           </div>
 
@@ -80,11 +128,11 @@ export default async function Image() {
               lineHeight: 1.5,
             }}
           >
-            Modular, lightweight, accessible, and type-safe datepicker for React. Powered by Tailwind CSS & pluggable date adapters.
+            Modular, lightweight, accessible, and type-safe datepicker for React. Compatible with Tailwind CSS, CSS variables, & custom CSS.
           </p>
 
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
-            {['🏗️ Headless Hook', '🎨 Tailwind CSS', '🛡️ Type-Safe', '⚡ Pluggable Adapters'].map((tag, idx) => (
+          <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
+            {['🏗️ Headless Hook', '🎨 CSS & Tailwind Ready', '🛡️ Type-Safe', '⚡ Pluggable Adapters'].map((tag, idx) => (
               <div
                 key={idx}
                 style={{
@@ -95,6 +143,8 @@ export default async function Image() {
                   borderRadius: '8px',
                   fontSize: '16px',
                   fontWeight: 500,
+                  marginRight: '12px',
+                  marginBottom: '12px',
                 }}
               >
                 {tag}
@@ -110,16 +160,17 @@ export default async function Image() {
             flexDirection: 'column',
             width: '420px',
             backgroundColor: '#111827',
-            border: '1px solid rgba(197, 160, 89, 0.3)',
+            border: '1px solid rgba(197, 160, 89, 0.35)',
             borderRadius: '20px',
             padding: '24px',
-            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 30px rgba(197, 160, 89, 0.15)',
+            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
           }}
         >
           {/* Header */}
           <div
             style={{
               display: 'flex',
+              flexDirection: 'row',
               alignItems: 'center',
               justifyContent: 'space-between',
               marginBottom: '20px',
@@ -162,27 +213,27 @@ export default async function Image() {
             </div>
           </div>
 
-          {/* Weekday Labels */}
+          {/* Weekday Labels (Flexbox row instead of Grid) */}
           <div
             style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(7, 1fr)',
-              gap: '6px',
-              textAlign: 'center',
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
               marginBottom: '12px',
             }}
           >
-            {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map((day, i) => (
+            {daysHeader.map((day, i) => (
               <div
                 key={i}
                 style={{
-                  fontSize: '14px',
-                  fontWeight: 600,
-                  color: '#6b7280',
+                  width: '48px',
                   height: '32px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
+                  fontSize: '14px',
+                  fontWeight: 600,
+                  color: '#6b7280',
                 }}
               >
                 {day}
@@ -190,77 +241,65 @@ export default async function Image() {
             ))}
           </div>
 
-          {/* Dates Grid */}
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(7, 1fr)',
-              gap: '6px',
-            }}
-          >
-            {/* Week 1 */}
-            <div style={{ height: '38px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#374151', fontSize: '15px' }}>28</div>
-            <div style={{ height: '38px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#374151', fontSize: '15px' }}>29</div>
-            <div style={{ height: '38px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#374151', fontSize: '15px' }}>30</div>
-            <div style={{ height: '38px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#d1d5db', fontSize: '15px' }}>1</div>
-            <div style={{ height: '38px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#d1d5db', fontSize: '15px' }}>2</div>
-            <div style={{ height: '38px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#d1d5db', fontSize: '15px' }}>3</div>
-            <div style={{ height: '38px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#d1d5db', fontSize: '15px' }}>4</div>
+          {/* Weeks (Flexbox rows instead of Grid) */}
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            {weeks.map((week, wIdx) => (
+              <div
+                key={wIdx}
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  marginBottom: '6px',
+                }}
+              >
+                {week.map((item, dIdx) => {
+                  let bgColor = 'transparent';
+                  let textColor = '#d1d5db';
+                  let borderRadius = '8px';
+                  let fontWeight: number | string = 400;
 
-            {/* Week 2 */}
-            <div style={{ height: '38px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#d1d5db', fontSize: '15px' }}>5</div>
-            <div style={{ height: '38px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#d1d5db', fontSize: '15px' }}>6</div>
-            <div style={{ height: '38px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#d1d5db', fontSize: '15px' }}>7</div>
-            <div style={{ height: '38px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#d1d5db', fontSize: '15px' }}>8</div>
-            <div style={{ height: '38px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#d1d5db', fontSize: '15px' }}>9</div>
-            <div style={{ height: '38px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#d1d5db', fontSize: '15px' }}>10</div>
-            <div style={{ height: '38px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#d1d5db', fontSize: '15px' }}>11</div>
+                  if (item.outside) {
+                    textColor = '#374151';
+                  } else if (item.selectedStart) {
+                    bgColor = '#c5a059';
+                    textColor = '#ffffff';
+                    borderRadius = '10px 0 0 10px';
+                    fontWeight = 700;
+                  } else if (item.selectedEnd) {
+                    bgColor = '#c5a059';
+                    textColor = '#ffffff';
+                    borderRadius = '0 10px 10px 0';
+                    fontWeight = 700;
+                  } else if (item.selectedMid) {
+                    bgColor = 'rgba(197, 160, 89, 0.25)';
+                    textColor = '#f3f4f6';
+                    borderRadius = '0px';
+                    fontWeight = 600;
+                  }
 
-            {/* Range Selection Highlight (12 to 18) */}
-            <div
-              style={{
-                height: '38px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                backgroundColor: '#c5a059',
-                color: '#ffffff',
-                borderRadius: '10px 0 0 10px',
-                fontWeight: 700,
-                fontSize: '15px',
-              }}
-            >
-              12
-            </div>
-            <div style={{ height: '38px', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(197, 160, 89, 0.25)', color: '#f3f4f6', fontWeight: 600, fontSize: '15px' }}>13</div>
-            <div style={{ height: '38px', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(197, 160, 89, 0.25)', color: '#f3f4f6', fontWeight: 600, fontSize: '15px' }}>14</div>
-            <div style={{ height: '38px', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(197, 160, 89, 0.25)', color: '#f3f4f6', fontWeight: 600, fontSize: '15px' }}>15</div>
-            <div style={{ height: '38px', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(197, 160, 89, 0.25)', color: '#f3f4f6', fontWeight: 600, fontSize: '15px' }}>16</div>
-            <div style={{ height: '38px', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(197, 160, 89, 0.25)', color: '#f3f4f6', fontWeight: 600, fontSize: '15px' }}>17</div>
-            <div
-              style={{
-                height: '38px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                backgroundColor: '#c5a059',
-                color: '#ffffff',
-                borderRadius: '0 10px 10px 0',
-                fontWeight: 700,
-                fontSize: '15px',
-              }}
-            >
-              18
-            </div>
-
-            {/* Week 4 */}
-            <div style={{ height: '38px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#d1d5db', fontSize: '15px' }}>19</div>
-            <div style={{ height: '38px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#d1d5db', fontSize: '15px' }}>20</div>
-            <div style={{ height: '38px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#d1d5db', fontSize: '15px' }}>21</div>
-            <div style={{ height: '38px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#d1d5db', fontSize: '15px' }}>22</div>
-            <div style={{ height: '38px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#d1d5db', fontSize: '15px' }}>23</div>
-            <div style={{ height: '38px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#d1d5db', fontSize: '15px' }}>24</div>
-            <div style={{ height: '38px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#d1d5db', fontSize: '15px' }}>25</div>
+                  return (
+                    <div
+                      key={dIdx}
+                      style={{
+                        width: '48px',
+                        height: '38px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        backgroundColor: bgColor,
+                        color: textColor,
+                        borderRadius: borderRadius,
+                        fontWeight: fontWeight,
+                        fontSize: '15px',
+                      }}
+                    >
+                      {item.num}
+                    </div>
+                  );
+                })}
+              </div>
+            ))}
           </div>
         </div>
       </div>

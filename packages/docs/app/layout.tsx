@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     default: 'React Modular Datepicker - Headless & Modular React Calendar Component',
   },
   description:
-    'A modular, lightweight, accessible, and type-safe React datepicker library. Supports single, multiple, and date range selections, Tailwind CSS styling, headless useDates hook, and pluggable date adapters.',
+    'A modular, lightweight, accessible, and type-safe React datepicker library. Supports single, multiple, and date range selections with Tailwind CSS, CSS variables, CSS modules, or custom CSS classes, headless useDates hook, and pluggable date adapters.',
   keywords: [
     'react',
     'datepicker',
@@ -27,6 +27,7 @@ export const metadata: Metadata = {
     'date-range-picker',
     'headless-ui',
     'tailwind-css',
+    'css-variables',
     'typescript',
     'react-component',
     'useDates',
@@ -44,7 +45,7 @@ export const metadata: Metadata = {
     url: 'https://react-modular-datepicker.vercel.app',
     title: 'React Modular Datepicker - Headless & Modular React Calendar Component',
     description:
-      'Modular, lightweight, accessible, and type-safe React datepicker library. Styled with Tailwind CSS with headless hook support.',
+      'Modular, lightweight, accessible, and type-safe React datepicker library. Flexible styling with Tailwind CSS, CSS variables, or custom CSS with headless hook support.',
     siteName: 'React Modular Datepicker',
     images: [
       {
@@ -59,7 +60,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'React Modular Datepicker',
     description:
-      'Modular, lightweight, accessible, and type-safe React datepicker library with Tailwind CSS support.',
+      'Modular, lightweight, accessible, and type-safe React datepicker library with versatile CSS styling.',
     images: ['/opengraph-image'],
   },
   verification: {
