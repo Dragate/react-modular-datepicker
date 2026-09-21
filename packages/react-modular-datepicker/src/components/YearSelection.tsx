@@ -24,7 +24,7 @@ export const YearSelection: React.FC<YearSelectionProps> = ({
   useEffect(() => {
     if (yearListRef.current) {
       const selectedYearBtn = yearListRef.current.querySelector('[data-selected="true"]');
-      if (selectedYearBtn) {
+      if (selectedYearBtn && typeof selectedYearBtn.scrollIntoView === 'function') {
         selectedYearBtn.scrollIntoView({ block: 'center' });
       }
     }
