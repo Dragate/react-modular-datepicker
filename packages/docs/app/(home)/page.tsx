@@ -1,9 +1,10 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import {
-  Calendar as CalendarIcon,
   Layers,
   Cpu,
   Palette,
+  CheckCircle2,
   ArrowRight,
   Code2,
 } from 'lucide-react';
@@ -22,7 +23,7 @@ export default function HomePage() {
       <main className="w-full max-w-6xl mx-auto px-4 py-12 md:py-20 flex flex-col items-center text-center">
         {/* Version Badge */}
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs md:text-sm font-semibold bg-[#c5a059]/10 border border-[#c5a059]/30 text-[#c5a059] mb-8 shadow-sm cursor-default">
-          <CalendarIcon className="w-4 h-4 text-[#c5a059]" />
+          <Image src="/icon0.svg" alt="logo" width={18} height={18} className="w-4 h-4" />
           <span>react-modular-datepicker v0.0.8</span>
           <span className="bg-[#c5a059]/20 text-[#c5a059] px-1.5 py-0.5 rounded text-[10px] uppercase font-bold tracking-wider">
             Latest
@@ -37,7 +38,7 @@ export default function HomePage() {
         {/* Hero Subtitle */}
         <p className="text-base sm:text-lg md:text-xl text-fd-muted-foreground mb-10 max-w-2xl leading-relaxed">
           Build date range pickers, single selection calendars, or headless custom layouts for React.
-          Flexible styling with Tailwind CSS, CSS variables, CSS modules, or custom CSS classes.
+          Customizable styling, single/range modes, and pluggable date adapters.
         </p>
 
         {/* Call-to-action Buttons */}
@@ -54,19 +55,46 @@ export default function HomePage() {
             href="/docs/recipes/basic"
             className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl font-semibold bg-fd-secondary text-fd-secondary-foreground hover:bg-fd-accent hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 border border-fd-border"
           >
-            <CalendarIcon className="w-4 h-4 text-[#c5a059]" />
+            <Code2 className="w-4 h-4 text-[#c5a059]" />
             <span>Explore Demos</span>
           </Link>
         </div>
 
-        {/* Interactive Calendar Showcase Section */}
-        <div className="w-full max-w-4xl mb-20 flex flex-col items-center justify-center">
-          <div className="mb-6 flex items-center gap-2 px-3 py-1 rounded-md text-xs font-semibold bg-[#c5a059]/10 text-[#c5a059]">
-            <Code2 className="w-4 h-4" />
-            <span>Interactive Live Demo</span>
+        {/* Interactive Calendar Showcase Section (Two Columns, direct demo rendering) */}
+        <div className="w-full max-w-5xl mb-20 flex flex-col md:flex-row items-center justify-between gap-12 text-left">
+          <div className="flex-1 space-y-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md text-xs font-semibold bg-[#c5a059]/10 text-[#c5a059]">
+              <Code2 className="w-4 h-4" />
+              <span>Interactive Live Demo</span>
+            </div>
+            <h2 className="text-2xl md:text-4xl font-extrabold text-fd-foreground leading-tight">
+              Ready out of the box, fully customizable inside.
+            </h2>
+            <p className="text-sm md:text-base text-fd-muted-foreground leading-relaxed">
+              Full keyboard navigation, accessible WAI-ARIA grid semantics, and seamless theme overriding.
+            </p>
+
+            <ul className="grid grid-cols-2 gap-3 text-xs md:text-sm font-medium text-fd-muted-foreground pt-2">
+              <li className="flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-[#c5a059]" />
+                <span>Single & Range mode</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-[#c5a059]" />
+                <span>WAI-ARIA accessible</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-[#c5a059]" />
+                <span>RTL Support</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-[#c5a059]" />
+                <span>Day.js / Native adapters</span>
+              </li>
+            </ul>
           </div>
 
-          <div className="p-4 sm:p-6 rounded-2xl border border-fd-border bg-fd-card shadow-2xl">
+          <div className="flex justify-center items-center">
             <BasicDemo />
           </div>
         </div>
@@ -97,9 +125,9 @@ export default function HomePage() {
             <div className="p-3 rounded-xl bg-[#c5a059]/10 text-[#c5a059] w-fit mb-4">
               <Palette className="w-6 h-6" />
             </div>
-            <h3 className="font-bold text-lg mb-2 text-fd-card-foreground">Versatile Styling</h3>
+            <h3 className="font-bold text-lg mb-2 text-fd-card-foreground">Customizable Styling</h3>
             <p className="text-sm text-fd-muted-foreground leading-relaxed">
-              Compatible with Tailwind CSS, CSS variables, CSS modules, and custom class names (<code className="text-xs bg-fd-muted px-1.5 py-0.5 rounded text-[#c5a059] font-mono">rmd-*</code>).
+              Style easily with custom CSS, Tailwind CSS, or CSS variables using semantic <code className="text-xs bg-fd-muted px-1.5 py-0.5 rounded text-[#c5a059] font-mono">rmd-*</code> class names.
             </p>
           </div>
         </div>

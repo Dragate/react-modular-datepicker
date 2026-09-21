@@ -11,9 +11,7 @@ export const contentType = 'image/png';
 interface CalendarDayItem {
   num: string;
   outside?: boolean;
-  selectedStart?: boolean;
-  selectedMid?: boolean;
-  selectedEnd?: boolean;
+  selected?: boolean;
 }
 
 export default async function Image() {
@@ -40,13 +38,13 @@ export default async function Image() {
   ];
 
   const week3: CalendarDayItem[] = [
-    { num: '12', selectedStart: true },
-    { num: '13', selectedMid: true },
-    { num: '14', selectedMid: true },
-    { num: '15', selectedMid: true },
-    { num: '16', selectedMid: true },
-    { num: '17', selectedMid: true },
-    { num: '18', selectedEnd: true },
+    { num: '12', outside: false },
+    { num: '13', outside: false },
+    { num: '14', outside: false },
+    { num: '15', selected: true },
+    { num: '16', outside: false },
+    { num: '17', outside: false },
+    { num: '18', outside: false },
   ];
 
   const week4: CalendarDayItem[] = [
@@ -59,7 +57,17 @@ export default async function Image() {
     { num: '25', outside: false },
   ];
 
-  const weeks = [week1, week2, week3, week4];
+  const week5: CalendarDayItem[] = [
+    { num: '26', outside: false },
+    { num: '27', outside: false },
+    { num: '28', outside: false },
+    { num: '29', outside: false },
+    { num: '30', outside: false },
+    { num: '31', outside: false },
+    { num: '1', outside: true },
+  ];
+
+  const weeks = [week1, week2, week3, week4, week5];
 
   return new ImageResponse(
     (
@@ -89,6 +97,7 @@ export default async function Image() {
             maxWidth: '560px',
           }}
         >
+          {/* Logo Badge */}
           <div
             style={{
               display: 'flex',
@@ -96,14 +105,29 @@ export default async function Image() {
               backgroundColor: 'rgba(197, 160, 89, 0.15)',
               border: '1px solid rgba(197, 160, 89, 0.35)',
               color: '#d8b467',
-              padding: '8px 16px',
+              padding: '8px 18px',
               borderRadius: '9999px',
               fontSize: '18px',
               fontWeight: 600,
               marginBottom: '28px',
             }}
           >
-            <span style={{ marginRight: '8px' }}>📅</span>
+            {/* Embedded Logo SVG */}
+            <svg
+              width="22"
+              height="22"
+              viewBox="0 0 200 200"
+              style={{ marginRight: '10px' }}
+            >
+              <rect x="25" y="25" width="150" height="150" rx="30" fill="none" stroke="#C5A059" strokeWidth="12" />
+              <line x1="25" y1="68" x2="175" y2="68" stroke="#C5A059" strokeWidth="8" opacity="0.85" />
+              <rect x="48" y="86" width="28" height="28" rx="8" fill="#C5A059" opacity="0.2" />
+              <rect x="86" y="86" width="28" height="28" rx="8" fill="#C5A059" opacity="0.2" />
+              <rect x="124" y="86" width="28" height="28" rx="8" fill="#C5A059" opacity="0.2" />
+              <rect x="48" y="124" width="28" height="28" rx="8" fill="#C5A059" opacity="0.2" />
+              <rect x="86" y="124" width="28" height="28" rx="8" fill="#C5A059" />
+              <rect x="124" y="124" width="28" height="28" rx="8" fill="#C5A059" />
+            </svg>
             <span>react-modular-datepicker</span>
           </div>
 
@@ -128,18 +152,18 @@ export default async function Image() {
               lineHeight: 1.5,
             }}
           >
-            Modular, lightweight, accessible, and type-safe datepicker for React. Compatible with Tailwind CSS, CSS variables, & custom CSS.
+            Modular, lightweight, accessible, and type-safe datepicker for React with customizable styling.
           </p>
 
           <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
-            {['🏗️ Headless Hook', '🎨 CSS & Tailwind Ready', '🛡️ Type-Safe', '⚡ Pluggable Adapters'].map((tag, idx) => (
+            {['🏗️ Headless Hook', '🛡️ Type-Safe', '⚡ Pluggable Adapters'].map((tag, idx) => (
               <div
                 key={idx}
                 style={{
                   backgroundColor: '#161d2a',
                   border: '1px solid #2a3447',
                   color: '#e5e7eb',
-                  padding: '8px 14px',
+                  padding: '8px 16px',
                   borderRadius: '8px',
                   fontSize: '16px',
                   fontWeight: 500,
@@ -153,17 +177,17 @@ export default async function Image() {
           </div>
         </div>
 
-        {/* Right Column: Visual Calendar Preview */}
+        {/* Right Column: Visual Calendar Preview matching Basic Demo */}
         <div
           style={{
             display: 'flex',
             flexDirection: 'column',
-            width: '420px',
+            width: '380px',
             backgroundColor: '#111827',
-            border: '1px solid rgba(197, 160, 89, 0.35)',
-            borderRadius: '20px',
-            padding: '24px',
-            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
+            border: '1px solid #374151',
+            borderRadius: '16px',
+            padding: '20px',
+            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.6), 0 0 30px rgba(197, 160, 89, 0.1)',
           }}
         >
           {/* Header */}
@@ -173,8 +197,8 @@ export default async function Image() {
               flexDirection: 'row',
               alignItems: 'center',
               justifyContent: 'space-between',
-              marginBottom: '20px',
-              paddingBottom: '14px',
+              marginBottom: '16px',
+              paddingBottom: '12px',
               borderBottom: '1px solid #1f2937',
             }}
           >
@@ -193,7 +217,7 @@ export default async function Image() {
             >
               ‹
             </div>
-            <span style={{ fontSize: '20px', fontWeight: 700, color: '#f9fafb' }}>
+            <span style={{ fontSize: '18px', fontWeight: 700, color: '#f9fafb' }}>
               October 2025
             </span>
             <div
@@ -213,25 +237,25 @@ export default async function Image() {
             </div>
           </div>
 
-          {/* Weekday Labels (Flexbox row instead of Grid) */}
+          {/* Weekday Labels */}
           <div
             style={{
               display: 'flex',
               flexDirection: 'row',
               justifyContent: 'space-between',
-              marginBottom: '12px',
+              marginBottom: '10px',
             }}
           >
             {daysHeader.map((day, i) => (
               <div
                 key={i}
                 style={{
-                  width: '48px',
-                  height: '32px',
+                  width: '42px',
+                  height: '28px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  fontSize: '14px',
+                  fontSize: '13px',
                   fontWeight: 600,
                   color: '#6b7280',
                 }}
@@ -241,7 +265,7 @@ export default async function Image() {
             ))}
           </div>
 
-          {/* Weeks (Flexbox rows instead of Grid) */}
+          {/* Weeks Grid */}
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             {weeks.map((week, wIdx) => (
               <div
@@ -250,39 +274,29 @@ export default async function Image() {
                   display: 'flex',
                   flexDirection: 'row',
                   justifyContent: 'space-between',
-                  marginBottom: '6px',
+                  marginBottom: '4px',
                 }}
               >
                 {week.map((item, dIdx) => {
                   let bgColor = 'transparent';
-                  let textColor = '#d1d5db';
+                  let textColor = '#e5e7eb';
                   let borderRadius = '8px';
-                  let fontWeight: number | string = 400;
+                  let fontWeight: number | string = 500;
 
                   if (item.outside) {
                     textColor = '#374151';
-                  } else if (item.selectedStart) {
+                  } else if (item.selected) {
                     bgColor = '#c5a059';
-                    textColor = '#ffffff';
-                    borderRadius = '10px 0 0 10px';
+                    textColor = '#000000';
+                    borderRadius = '9999px';
                     fontWeight = 700;
-                  } else if (item.selectedEnd) {
-                    bgColor = '#c5a059';
-                    textColor = '#ffffff';
-                    borderRadius = '0 10px 10px 0';
-                    fontWeight = 700;
-                  } else if (item.selectedMid) {
-                    bgColor = 'rgba(197, 160, 89, 0.25)';
-                    textColor = '#f3f4f6';
-                    borderRadius = '0px';
-                    fontWeight = 600;
                   }
 
                   return (
                     <div
                       key={dIdx}
                       style={{
-                        width: '48px',
+                        width: '42px',
                         height: '38px',
                         display: 'flex',
                         alignItems: 'center',
