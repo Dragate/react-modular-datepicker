@@ -49,7 +49,7 @@ export function ModifiersDemo() {
 
   const [selectedDate, setSelectedDate] = useState<Date>(new Date(year, month, 15));
 
-  const birthdays = [`${year}-${month + 1}-12`, `${year}-${month + 1}-24`];
+  const birthdays = [`${year}-${month + 1}-18`];
   const holidays = [`${year}-${month + 1}-1`, `${year}-${month + 1}-25`];
 
   const getKey = (d: Date) => `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
@@ -67,7 +67,7 @@ export function ModifiersDemo() {
         getDayProps={(dateObj) => {
           const key = getKey(dateObj.date);
           if (birthdays.includes(key)) {
-            return { 'data-tooltip': '🎂 Birthday!' };
+            return { 'data-tooltip': '🎂 Birthday Party!' };
           }
           if (holidays.includes(key)) {
             return { 'data-tooltip': '🎉 Holiday' };
@@ -79,27 +79,27 @@ export function ModifiersDemo() {
         }}
         classNames={{
           day: {
-            weekend: 'bg-indigo-100/70 dark:bg-indigo-950/50 text-indigo-900 dark:text-indigo-200 font-bold',
+            weekend: 'text-red-700 dark:text-red-400 font-bold',
             holiday:
               'border-2 border-emerald-500 font-bold relative ' +
               'before:content-[attr(data-tooltip)] before:absolute before:bottom-full before:left-1/2 before:-translate-x-1/2 before:mb-1 before:hidden hover:before:block ' +
               'before:px-2 before:py-0.5 before:bg-gray-800 before:text-white before:text-[10px] before:rounded before:whitespace-nowrap before:z-20',
             birthday:
-              'text-pink-600 dark:text-pink-400 font-black scale-105 relative ' +
+              'text-pink-600 dark:text-pink-400 font-bold relative ' +
               'before:content-[attr(data-tooltip)] before:absolute before:bottom-full before:left-1/2 before:-translate-x-1/2 before:mb-1 before:hidden hover:before:block ' +
               'before:px-2 before:py-0.5 before:bg-gray-800 before:text-white before:text-[10px] before:rounded before:whitespace-nowrap before:z-20',
           },
         }}
       />
       <div className="mt-4 flex flex-wrap gap-3 justify-center text-xs">
-        <span className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-indigo-100/70 dark:bg-indigo-950/50 text-indigo-900 dark:text-indigo-200 font-semibold">
-          <span className="w-2.5 h-2.5 rounded-full bg-indigo-500 inline-block" /> Weekend (Background Color)
+        <span className="flex items-center gap-1.5 px-2.5 py-1 rounded text-red-700 dark:text-red-400 font-bold border border-red-200 dark:border-red-900/40">
+          <span className="w-2.5 h-2.5 rounded-full bg-red-600 inline-block" /> Weekend (Dark Red Text)
         </span>
         <span className="flex items-center gap-1.5 px-2.5 py-1 rounded border-2 border-emerald-500 text-emerald-800 dark:text-emerald-200 font-bold">
           <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block" /> 🎉 Holiday (Border Highlight)
         </span>
-        <span className="flex items-center gap-1.5 px-2.5 py-1 rounded text-pink-600 dark:text-pink-400 font-black">
-          <span className="w-2.5 h-2.5 rounded-full bg-pink-500 inline-block" /> 🎂 Birthday (Text Color)
+        <span className="flex items-center gap-1.5 px-2.5 py-1 rounded text-pink-600 dark:text-pink-400 font-bold border border-pink-200 dark:border-pink-900/40">
+          <span className="w-2.5 h-2.5 rounded-full bg-pink-500 inline-block" /> 🎂 Birthday Party (Pink Bold Text)
         </span>
       </div>
     </DemoContainer>
@@ -711,13 +711,64 @@ export function FormIntegrationDemo() {
 
 export function HeaderFooterDemo() {
   const [selected, setSelected] = useState<Date | null>(new Date());
+  const [currentDate, setCurrentDate] = useState<Date>(new Date());
+
+  const handleSelectToday = () => {
+    const today = new Date();
+    setSelected(today);
+    setCurrentDate(today);
+  };
+
+  const handleClear = () => {
+    setSelected(null);
+  };
+
   return (
     <DemoContainer title="Live Preview: Custom Header & Footer">
       <Calendar
+        date={currentDate}
         selected={selected || undefined}
         onChange={(val) => setSelected(val as Date)}
-        header={<div className="p-2 bg-blue-500/20 text-blue-700 dark:text-blue-300 font-bold text-center rounded-t-lg">🌟 Custom Header Banner</div>}
-        footer={<div className="p-2 bg-fd-muted text-fd-muted-foreground text-xs text-center rounded-b-lg border-t border-fd-border">Custom Footer: Select any date</div>}
+        onMonthChange={(d) => setCurrentDate(d)}
+        header={
+          <div className="px-4 py-2.5 bg-fd-muted/50 border-b border-fd-border flex items-center justify-between rounded-t-lg">
+            <span className="text-xs font-bold text-fd-foreground flex items-center gap-1.5">
+              <span>📅</span> Appointment Booking
+            </span>
+            <span className="text-[11px] text-fd-muted-foreground font-medium">
+              Step 1 of 2
+            </span>
+          </div>
+        }
+        footer={
+          <div className="px-4 py-3 bg-fd-muted/30 border-t border-fd-border flex items-center justify-between gap-2 text-xs rounded-b-lg">
+            <div className="truncate">
+              {selected ? (
+                <span className="text-fd-foreground font-medium">
+                  Selected: <strong className="font-bold text-brand-gold">{selected.toLocaleDateString()}</strong>
+                </span>
+              ) : (
+                <span className="text-fd-muted-foreground italic">No date selected</span>
+              )}
+            </div>
+            <div className="flex items-center gap-1.5 shrink-0">
+              <button
+                type="button"
+                onClick={handleSelectToday}
+                className="px-2.5 py-1 text-[11px] font-semibold rounded bg-brand-gold text-white hover:opacity-90 transition-opacity cursor-pointer"
+              >
+                Today
+              </button>
+              <button
+                type="button"
+                onClick={handleClear}
+                className="px-2.5 py-1 text-[11px] font-semibold rounded border border-fd-border bg-fd-background text-fd-foreground hover:bg-fd-accent transition-colors cursor-pointer"
+              >
+                Clear
+              </button>
+            </div>
+          </div>
+        }
       />
     </DemoContainer>
   );
