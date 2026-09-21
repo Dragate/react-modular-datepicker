@@ -183,11 +183,11 @@ export default async function Image() {
             display: 'flex',
             flexDirection: 'column',
             width: '380px',
-            backgroundColor: '#111827',
-            border: '1px solid #374151',
-            borderRadius: '16px',
+            backgroundColor: '#ffffff',
+            border: '1px solid #e5e7eb',
+            borderRadius: '12px',
             padding: '20px',
-            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.6), 0 0 30px rgba(197, 160, 89, 0.1)',
+            boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.2)',
           }}
         >
           {/* Header */}
@@ -197,9 +197,9 @@ export default async function Image() {
               flexDirection: 'row',
               alignItems: 'center',
               justifyContent: 'space-between',
-              marginBottom: '16px',
-              paddingBottom: '12px',
-              borderBottom: '1px solid #1f2937',
+              marginBottom: '12px',
+              paddingBottom: '10px',
+              borderBottom: '2px solid rgba(181, 190, 198, 0.4)',
             }}
           >
             <div
@@ -209,15 +209,14 @@ export default async function Image() {
                 justifyContent: 'center',
                 width: '32px',
                 height: '32px',
-                borderRadius: '8px',
-                backgroundColor: '#1f2937',
-                color: '#9ca3af',
-                fontSize: '16px',
+                borderRadius: '9999px',
+                color: '#343a40',
+                fontSize: '18px',
               }}
             >
               ‹
             </div>
-            <span style={{ fontSize: '18px', fontWeight: 700, color: '#f9fafb' }}>
+            <span style={{ fontSize: '16px', fontWeight: 600, color: '#343a40' }}>
               October 2025
             </span>
             <div
@@ -227,10 +226,9 @@ export default async function Image() {
                 justifyContent: 'center',
                 width: '32px',
                 height: '32px',
-                borderRadius: '8px',
-                backgroundColor: '#1f2937',
-                color: '#9ca3af',
-                fontSize: '16px',
+                borderRadius: '9999px',
+                color: '#343a40',
+                fontSize: '18px',
               }}
             >
               ›
@@ -243,7 +241,9 @@ export default async function Image() {
               display: 'flex',
               flexDirection: 'row',
               justifyContent: 'space-between',
-              marginBottom: '10px',
+              marginBottom: '8px',
+              paddingBottom: '4px',
+              borderBottom: '1px solid rgba(181, 190, 198, 0.4)',
             }}
           >
             {daysHeader.map((day, i) => (
@@ -251,13 +251,13 @@ export default async function Image() {
                 key={i}
                 style={{
                   width: '42px',
-                  height: '28px',
+                  height: '24px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  fontSize: '13px',
-                  fontWeight: 600,
-                  color: '#6b7280',
+                  fontSize: '12px',
+                  fontWeight: 400,
+                  color: '#9ca3af',
                 }}
               >
                 {day}
@@ -274,20 +274,20 @@ export default async function Image() {
                   display: 'flex',
                   flexDirection: 'row',
                   justifyContent: 'space-between',
-                  marginBottom: '4px',
+                  marginBottom: '2px',
                 }}
               >
                 {week.map((item, dIdx) => {
-                  let bgColor = 'transparent';
-                  let textColor = '#e5e7eb';
-                  let borderRadius = '8px';
+                  let bgColor = '#ffffff';
+                  let textColor = '#343a40';
+                  let borderRadius = '0px';
                   let fontWeight: number | string = 500;
 
                   if (item.outside) {
-                    textColor = '#374151';
+                    textColor = '#9ca3af';
                   } else if (item.selected) {
                     bgColor = '#c5a059';
-                    textColor = '#000000';
+                    textColor = '#ffffff';
                     borderRadius = '9999px';
                     fontWeight = 700;
                   }
@@ -297,7 +297,7 @@ export default async function Image() {
                       key={dIdx}
                       style={{
                         width: '42px',
-                        height: '38px',
+                        height: '42px',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -305,7 +305,7 @@ export default async function Image() {
                         color: textColor,
                         borderRadius: borderRadius,
                         fontWeight: fontWeight,
-                        fontSize: '15px',
+                        fontSize: '14px',
                       }}
                     >
                       {item.num}
