@@ -20,6 +20,9 @@ interface CalendarProps extends UseDatesProps {
 
 type CalendarView = 'days' | 'months' | 'years';
 
+const getDateKey = (d: Date): string =>
+  `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+
 export const Calendar: React.FC<CalendarProps> = (props) => {
   const {
     classNames,
@@ -41,6 +44,7 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
 
   const daysContainerRef = useRef<HTMLDivElement | null>(null);
   const rootRef = useRef<HTMLDivElement | null>(null);
+  const dayButtonRefs = useRef<Map<string, HTMLButtonElement>>(new Map());
   const isKeyboardNavigating = useRef<boolean>(false);
 
   const t = getTranslations(adapter, locale, customTranslations);
@@ -77,11 +81,15 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
 
   useEffect(() => {
     if (view === 'days' && calendars.length > 0) {
-      setAnnouncement(
-        calendars.length === 1
-          ? `${monthNames[calendars[0].month]} ${calendars[0].year}`
-          : `${monthNames[calendars[0].month]} ${calendars[0].year} to ${monthNames[calendars[calendars.length - 1].month]} ${calendars[calendars.length - 1].year}`
-      );
+      if (calendars.length === 1) {
+        setAnnouncement(`${monthNames[calendars[0].month]} ${calendars[0].year}`);
+      } else {
+        setAnnouncement(
+          `${monthNames[calendars[0].month]} ${calendars[0].year} to ${
+            monthNames[calendars[calendars.length - 1].month]
+          } ${calendars[calendars.length - 1].year}`
+        );
+      }
     } else if (view === 'months') {
       setAnnouncement('Month selection view');
     } else if (view === 'years') {
@@ -89,27 +97,47 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
     }
   }, [view, calendars, monthNames]);
 
+  // Determine default active focused date if focusedDate is not set
   const defaultFocusedDate = useMemo(() => {
-    let todayDate: Date | null = null;
-    let monthDate: Date | null = null;
     for (const cal of calendars) {
       for (const week of cal.weeks) {
-        for (const d of week) {
-          if (!d?.selectable) continue;
-          if (d.selected) return d.date;
-          if (d.today && !todayDate) todayDate = d.date;
-          if (!d.prevMonth && !d.nextMonth && !monthDate) monthDate = d.date;
+        for (const dateObj of week) {
+          if (dateObj?.selectable && dateObj.selected) {
+            return dateObj.date;
+          }
         }
       }
     }
-    return todayDate || monthDate || calendars[0]?.weeks[0]?.find((d) => d?.selectable)?.date || new Date();
+    for (const cal of calendars) {
+      for (const week of cal.weeks) {
+        for (const dateObj of week) {
+          if (dateObj?.selectable && dateObj.today) {
+            return dateObj.date;
+          }
+        }
+      }
+    }
+    for (const cal of calendars) {
+      for (const week of cal.weeks) {
+        for (const dateObj of week) {
+          if (dateObj?.selectable && !dateObj.prevMonth && !dateObj.nextMonth) {
+            return dateObj.date;
+          }
+        }
+      }
+    }
+    return calendars[0]?.weeks[0]?.find((d) => d?.selectable)?.date || new Date();
   }, [calendars]);
 
   const currentFocusedDate = focusedDate || defaultFocusedDate;
 
   useEffect(() => {
     if (view === 'days' && currentFocusedDate && isKeyboardNavigating.current) {
-      rootRef.current?.querySelector<HTMLButtonElement>('.rmd-day[tabindex="0"]')?.focus();
+      const key = getDateKey(currentFocusedDate);
+      const btn = dayButtonRefs.current.get(key);
+      if (btn) {
+        btn.focus();
+      }
     }
   }, [currentFocusedDate, calendars, view]);
 
@@ -249,13 +277,7 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
   );
 
   return (
-    <div
-      ref={rootRef}
-      className={clsx('rmd', 'rmd-root', classNames?.root)}
-      onPointerDown={() => {
-        isKeyboardNavigating.current = false;
-      }}
-    >
+    <div ref={rootRef} className={clsx('rmd', 'rmd-root', classNames?.root)}>
       <div className="rmd-sr-only" aria-live="polite" aria-atomic="true">
         {announcement}
       </div>
@@ -357,6 +379,7 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
             </div>
             <div
               key={`daysGrid-${calendar.month}-${calendar.year}`}
+              role="row"
               className={clsx(
                 'rmd-days-grid',
                 slideDirection === 'left' && 'rmd-slide-left',
@@ -364,45 +387,51 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
                 classNames?.daysGrid
               )}
             >
-              {calendar.weeks.map((week, wi) => (
-                <div key={wi} role="row" className="rmd-week-row">
-                  {week.map((dateObj, di) => {
-                    if (!dateObj) {
-                      return (
-                        <Day
-                          key={`${wi}-${di}`}
-                          dateObj={null}
-                          getDateProps={getDateProps}
-                          classNames={classNames}
-                        />
-                      );
-                    }
-
-                    const isFocused = adapter.isSame(
-                      adapter.date(dateObj.date),
-                      adapter.date(currentFocusedDate),
-                      'day'
-                    );
-
+              {calendar.weeks.map((week, wi) =>
+                week.map((dateObj, di) => {
+                  if (!dateObj) {
                     return (
                       <Day
                         key={`${wi}-${di}`}
-                        dateObj={dateObj}
+                        dateObj={null}
                         getDateProps={getDateProps}
-                        dayProps={getDayProps?.(dateObj)}
                         classNames={classNames}
-                        tabIndex={isFocused ? 0 : -1}
-                        adapter={adapter}
-                        locale={locale}
-                        onKeyDown={handleDayKeyDown}
-                        onFocus={(dObj) => {
-                          setFocusedDate(dObj.date);
-                        }}
                       />
                     );
-                  })}
-                </div>
-              ))}
+                  }
+
+                  const dateKey = getDateKey(dateObj.date);
+                  const isFocused = adapter.isSame(
+                    adapter.date(dateObj.date),
+                    adapter.date(currentFocusedDate),
+                    'day'
+                  );
+
+                  return (
+                    <Day
+                      key={`${wi}-${di}`}
+                      dateObj={dateObj}
+                      getDateProps={getDateProps}
+                      dayProps={getDayProps?.(dateObj)}
+                      classNames={classNames}
+                      tabIndex={isFocused ? 0 : -1}
+                      adapter={adapter}
+                      locale={locale}
+                      onKeyDown={handleDayKeyDown}
+                      onFocus={(dObj) => {
+                        setFocusedDate(dObj.date);
+                      }}
+                      buttonRef={(el) => {
+                        if (el) {
+                          dayButtonRefs.current.set(dateKey, el);
+                        } else {
+                          dayButtonRefs.current.delete(dateKey);
+                        }
+                      }}
+                    />
+                  );
+                })
+              )}
             </div>
           </div>
         ))}

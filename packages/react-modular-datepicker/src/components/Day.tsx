@@ -74,17 +74,15 @@ export const Day: React.FC<DayProps> = ({
   const isSelected = !!(selected || isRangeStart || isRangeEnd);
 
   const baseProps = getDateProps({ dateObj, ...dayProps });
-  const { role: _role, ...restBaseProps } = baseProps;
 
   return (
     <button
       role="gridcell"
       aria-selected={isSelected}
-      aria-pressed={isSelected}
       aria-disabled={!selectable}
       aria-label={formattedDateLabel}
       tabIndex={tabIndex}
-      {...restBaseProps}
+      {...baseProps}
       ref={buttonRef}
       onKeyDown={(e) => {
         baseProps.onKeyDown?.(e);
