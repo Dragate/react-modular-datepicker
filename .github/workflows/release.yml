@@ -59,4 +59,4 @@ jobs:
       env:
         GH_TOKEN: ${{ github.token }}
     - name: Publish package
-      run: pnpm --filter react-modular-datepicker publish --no-git-checks --access public ${{ github.event.inputs.releaseType != 'stable' && format('--tag {0}', github.event.inputs.releaseType) || '' }}
+      run: pnpm --filter react-modular-datepicker publish --provenance --no-git-checks --access public ${{ github.event.inputs.releaseType != 'stable' && format('--tag {0}', github.event.inputs.releaseType) || '' }}
