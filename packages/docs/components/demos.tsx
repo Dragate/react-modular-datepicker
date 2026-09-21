@@ -331,7 +331,7 @@ export function AvailabilityDemo() {
           {isLoading && (
             <div className="absolute inset-x-0 bottom-0 top-12 bg-transparent backdrop-blur-md flex flex-col items-center justify-center rounded-b-lg z-20">
               <div className="w-7 h-7 border-3 border-[#c5a059] border-t-transparent rounded-full animate-spin mb-2" />
-              <span className="text-xs font-bold text-fd-foreground drop-shadow-sm">Fetching availabilities...</span>
+              <span className="text-xs font-extrabold text-slate-900 dark:text-slate-100 bg-white/80 dark:bg-zinc-900/80 px-2.5 py-1 rounded-md shadow-xs">Fetching availabilities...</span>
             </div>
           )}
         </div>
