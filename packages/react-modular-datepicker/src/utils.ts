@@ -207,7 +207,9 @@ function createDateObj(
     month?: number,
     year?: number
 ): DateObj {
-    const { selected, isRangeStart, isRangeEnd, isRangeBetween, isRangeHovering, isRangeActive } = isSelected(selectedDates, date, adapter, selectionMode, hoveredDate);
+    const { selected, isRangeStart, isRangeEnd, isRangeBetween, isRangeHovering, isRangeActive } = isOutside
+        ? { selected: false, isRangeStart: false, isRangeEnd: false, isRangeBetween: false, isRangeHovering: false, isRangeActive: false }
+        : isSelected(selectedDates, date, adapter, selectionMode, hoveredDate);
     const isToday = adapter.isSame(adapter.date(date), adapter.date(), "day");
     const isPrevMonth = isOutside && adapter.isBefore(adapter.date(date), adapter.startOf(adapter.date(date), 'month'));
     const isNextMonth = isOutside && adapter.isAfter(adapter.date(date), adapter.endOf(adapter.date(date), 'month'));

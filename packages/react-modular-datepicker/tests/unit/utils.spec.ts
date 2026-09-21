@@ -174,6 +174,43 @@ describe('utils: getCalendars and date object creation', () => {
     expect(startDay?.isRangeActive).toBe(true);
   });
 
+  test('outside buffer days in range selection are not highlighted or selected', () => {
+    const range = {
+      start: new Date(2026, 8, 10), // Sept 10, 2026
+      end: new Date(2026, 9, 21),   // Oct 21, 2026
+    };
+    const calendars = getCalendars({
+      date: new Date(2026, 8, 1),
+      selected: range,
+      monthsToDisplay: 2,
+      offset: 0,
+      firstDayOfWeek: 0,
+      showOutsideDays: true,
+      adapter: defaultAdapter,
+      selectionMode: 'range',
+    });
+
+    const septOutsideDays = calendars[0].weeks.flat().filter((d): d is NonNullable<typeof d> => Boolean(d && (d.prevMonth || d.nextMonth)));
+    const octOutsideDays = calendars[1].weeks.flat().filter((d): d is NonNullable<typeof d> => Boolean(d && (d.prevMonth || d.nextMonth)));
+
+    expect(septOutsideDays.length).toBeGreaterThan(0);
+    expect(octOutsideDays.length).toBeGreaterThan(0);
+
+    septOutsideDays.forEach(d => {
+      expect(d.selected).toBe(false);
+      expect(d.isRangeBetween).toBe(false);
+      expect(d.isRangeStart).toBe(false);
+      expect(d.isRangeEnd).toBe(false);
+    });
+
+    octOutsideDays.forEach(d => {
+      expect(d.selected).toBe(false);
+      expect(d.isRangeBetween).toBe(false);
+      expect(d.isRangeStart).toBe(false);
+      expect(d.isRangeEnd).toBe(false);
+    });
+  });
+
   test('respects minDate, maxDate, and disabledDates', () => {
     const minDate = new Date(2025, 4, 5);
     const maxDate = new Date(2025, 4, 25);
