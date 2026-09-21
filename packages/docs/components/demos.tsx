@@ -505,7 +505,7 @@ export function CustomStylingDemo() {
     weekday: 'text-center text-xs font-bold text-purple-300 uppercase tracking-wider',
     daysGrid: 'grid grid-cols-7 gap-2 bg-transparent',
     day: {
-      day: 'aspect-square flex items-center justify-center text-xs font-semibold rounded-full transition-all text-purple-100 hover:bg-purple-800/40',
+      day: 'aspect-square flex items-center justify-center text-xs font-semibold rounded-full transition-all text-purple-100 hover:bg-purple-800/40 bg-purple-900/60',
       selected: 'bg-purple-900/60 text-white font-bold ring-2 ring-pink-500 ring-offset-2 ring-offset-[#1e073e] rounded-full shadow-[0_0_12px_rgba(236,72,153,0.7)]',
       unselected: 'text-purple-100',
       disabled: 'bg-purple-950/40 text-purple-400/30 cursor-not-allowed',
@@ -541,33 +541,30 @@ export function CustomStylingDemo() {
         <button
           type="button"
           onClick={() => setTheme('adaptive')}
-          className={`px-3 py-1.5 text-xs rounded-lg font-semibold transition-all ${
-            theme === 'adaptive'
-              ? 'bg-emerald-600 text-white shadow-md'
-              : 'bg-fd-secondary text-fd-secondary-foreground hover:bg-fd-accent'
-          }`}
+          className={`px-3 py-1.5 text-xs rounded-lg font-semibold transition-all ${theme === 'adaptive'
+            ? 'bg-emerald-600 text-white shadow-md'
+            : 'bg-fd-secondary text-fd-secondary-foreground hover:bg-fd-accent'
+            }`}
         >
           Adaptive Glass (Light & Dark)
         </button>
         <button
           type="button"
           onClick={() => setTheme('cyberpunk')}
-          className={`px-3 py-1.5 text-xs rounded-lg font-semibold transition-all ${
-            theme === 'cyberpunk'
-              ? 'bg-cyan-500 text-black shadow-md'
-              : 'bg-fd-secondary text-fd-secondary-foreground hover:bg-fd-accent'
-          }`}
+          className={`px-3 py-1.5 text-xs rounded-lg font-semibold transition-all ${theme === 'cyberpunk'
+            ? 'bg-cyan-500 text-black shadow-md'
+            : 'bg-fd-secondary text-fd-secondary-foreground hover:bg-fd-accent'
+            }`}
         >
           Cyberpunk Cyan
         </button>
         <button
           type="button"
           onClick={() => setTheme('purple')}
-          className={`px-3 py-1.5 text-xs rounded-lg font-semibold transition-all ${
-            theme === 'purple'
-              ? 'bg-purple-600 text-white shadow-md'
-              : 'bg-fd-secondary text-fd-secondary-foreground hover:bg-fd-accent'
-          }`}
+          className={`px-3 py-1.5 text-xs rounded-lg font-semibold transition-all ${theme === 'purple'
+            ? 'bg-purple-600 text-white shadow-md'
+            : 'bg-fd-secondary text-fd-secondary-foreground hover:bg-fd-accent'
+            }`}
         >
           Royal Purple
         </button>
