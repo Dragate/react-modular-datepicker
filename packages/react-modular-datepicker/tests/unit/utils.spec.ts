@@ -71,7 +71,6 @@ describe('utils: getCalendars and date object creation', () => {
       monthsToDisplay: 1,
       offset: 0,
       firstDayOfWeek: 0,
-      showOutsideDays: true,
       adapter: defaultAdapter,
       selectionMode: 'single',
     });
@@ -94,7 +93,6 @@ describe('utils: getCalendars and date object creation', () => {
       monthsToDisplay: 3,
       offset: 0,
       firstDayOfWeek: 0,
-      showOutsideDays: true,
       adapter: defaultAdapter,
       selectionMode: 'single',
     });
@@ -113,7 +111,6 @@ describe('utils: getCalendars and date object creation', () => {
       monthsToDisplay: 1,
       offset: 0,
       firstDayOfWeek: 0,
-      showOutsideDays: true,
       adapter: defaultAdapter,
       selectionMode: 'single',
     });
@@ -136,7 +133,6 @@ describe('utils: getCalendars and date object creation', () => {
       monthsToDisplay: 1,
       offset: 0,
       firstDayOfWeek: 0,
-      showOutsideDays: true,
       adapter: defaultAdapter,
       selectionMode: 'multiple',
     });
@@ -157,7 +153,6 @@ describe('utils: getCalendars and date object creation', () => {
       monthsToDisplay: 1,
       offset: 0,
       firstDayOfWeek: 0,
-      showOutsideDays: true,
       adapter: defaultAdapter,
       selectionMode: 'range',
     });
@@ -185,7 +180,6 @@ describe('utils: getCalendars and date object creation', () => {
       monthsToDisplay: 2,
       offset: 0,
       firstDayOfWeek: 0,
-      showOutsideDays: true,
       adapter: defaultAdapter,
       selectionMode: 'range',
     });
@@ -224,7 +218,6 @@ describe('utils: getCalendars and date object creation', () => {
       monthsToDisplay: 1,
       offset: 0,
       firstDayOfWeek: 0,
-      showOutsideDays: true,
       adapter: defaultAdapter,
       selectionMode: 'single',
     });
@@ -259,7 +252,6 @@ describe('utils: getCalendars and date object creation', () => {
       monthsToDisplay: 1,
       offset: 0,
       firstDayOfWeek: 0,
-      showOutsideDays: true,
       adapter: defaultAdapter,
       selectionMode: 'single',
     });
@@ -281,7 +273,6 @@ describe('utils: navigation boundary checks (isBackDisabled / isForwardDisabled)
     monthsToDisplay: 1,
     offset: 0,
     firstDayOfWeek: 0,
-    showOutsideDays: true,
     adapter: defaultAdapter,
     selectionMode: 'single',
   });
@@ -324,7 +315,6 @@ describe('utils: subtractMonth and addMonth', () => {
     monthsToDisplay: 1,
     offset: 0,
     firstDayOfWeek: 0,
-    showOutsideDays: true,
     adapter: defaultAdapter,
     selectionMode: 'single',
   });

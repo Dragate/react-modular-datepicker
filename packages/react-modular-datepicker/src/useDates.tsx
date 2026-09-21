@@ -80,7 +80,6 @@ export interface UseDatesProps {
     disabledDates?: Date[];
     monthsToDisplay?: number;
     firstDayOfWeek?: number;
-    showOutsideDays?: boolean;
     offset?: number;
     onDateSelected?: (dateObj: DateObj, event: any) => void;
     onOffsetChanged?: (newOffset: number) => void;
@@ -89,7 +88,7 @@ export interface UseDatesProps {
     selectionMode?: SelectionMode;
     adapter?: DateAdapter;
     onChange?: (selected: Date | Date[] | { start?: Date, end?: Date } | null) => void;
-    onMonthChange?: (date: Date) => void;
+    onMonthChange?: (dates: Date[]) => void;
     onYearChange?: (date: Date) => void;
 }
 
@@ -100,7 +99,6 @@ export function useDates({
     disabledDates,
     monthsToDisplay = 1,
     firstDayOfWeek = 0,
-    showOutsideDays = false,
     offset,
     onDateSelected,
     onOffsetChanged = () => { },
@@ -122,10 +120,15 @@ export function useDates({
         }
         onOffsetChanged(newOffset);
 
-        const newDate = adapter.toDate(adapter.add(adapter.startOf(adapter.date(date), 'month'), newOffset, 'month'));
-        onMonthChange?.(newDate);
+        const startDate = adapter.add(adapter.startOf(adapter.date(date), 'month'), newOffset, 'month');
+        const firstDays = Array.from({ length: monthsToDisplay }, (_, i) =>
+            adapter.toDate(adapter.startOf(adapter.add(startDate, i, 'month'), 'month'))
+        );
+        onMonthChange?.(firstDays);
+
+        const newDate = adapter.toDate(startDate);
         onYearChange?.(newDate);
-    }, [offset, onOffsetChanged, date, adapter, onMonthChange, onYearChange]);
+    }, [offset, onOffsetChanged, date, adapter, monthsToDisplay, onMonthChange, onYearChange]);
 
     const handleDateSelected = useCallback((dateObj: DateObj, event: any) => {
         onDateSelected?.(dateObj, event);
@@ -166,7 +169,6 @@ export function useDates({
         maxDate,
         offset: offsetMonth,
         firstDayOfWeek,
-        showOutsideDays,
         adapter,
         selectionMode,
         hoveredDate
