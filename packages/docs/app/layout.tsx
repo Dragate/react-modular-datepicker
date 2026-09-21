@@ -16,8 +16,7 @@ export const metadata: Metadata = {
     template: '%s | React Modular Datepicker',
     default: 'React Modular Datepicker - Headless & Modular React Calendar Component',
   },
-  description:
-    'A modular, lightweight, accessible, and type-safe React datepicker library. Customizable styling, single/range modes, headless useDates hook, and pluggable date adapters.',
+  description: 'A modular, lightweight, accessible, and type-safe React datepicker library. Customizable styling, single/range modes, headless useDates hook, and pluggable date adapters.',
   keywords: [
     'react',
     'datepicker',
@@ -37,38 +36,29 @@ export const metadata: Metadata = {
     'accessible-datepicker',
     'wai-aria',
   ],
-  authors: [{ name: 'Dragate' }, { name: 'spidfair', url: 'https://www.spidfair.com' }],
   creator: 'https://www.spidfair.com',
   openGraph: {
     type: 'website',
-    locale: 'en_US',
+    locale: 'en',
     url: 'https://react-modular-datepicker.vercel.app',
     title: 'React Modular Datepicker - Headless & Modular React Calendar Component',
-    description:
-      'Modular, lightweight, accessible, and type-safe React datepicker library. Customizable styling with single/range modes and headless hook support.',
+    description: 'Modular, lightweight, accessible, and type-safe React datepicker library. Customizable styling with single/range modes and headless hook support.',
     siteName: 'React Modular Datepicker',
-    images: [
-      {
-        url: '/opengraph-image',
-        width: 1200,
-        height: 630,
-        alt: 'React Modular Datepicker - Modular, Lightweight & Type-Safe Datepicker',
-      },
-    ],
+    images: [{
+      url: '/opengraph-image',
+      width: 1200,
+      height: 630,
+      alt: 'React Modular Datepicker - Modular, Lightweight & Type-Safe Datepicker',
+    }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'React Modular Datepicker',
-    description:
-      'Modular, lightweight, accessible, and type-safe React datepicker library.',
+    description: 'Modular, lightweight, accessible, and type-safe React datepicker library.',
     images: ['/opengraph-image'],
   },
   verification: {
     google: 'cPwTWWsKpgpJaiwv1lo8Q16c19J9l6bztgp4-o5BXiw',
-  },
-  robots: {
-    index: true,
-    follow: true,
   },
 };
 
