@@ -89,7 +89,7 @@
   }
 
   .rmd-nav-button {
-    @apply rmd:p-2 rmd:text-brand-text rmd:hover:bg-gray-100 rmd:rounded-full rmd:transition-colors rmd:cursor-pointer rmd:disabled:opacity-30 rmd:disabled:pointer-events-none;
+    @apply rmd:p-2 rmd:text-brand-text rmd:hover:bg-gray-100 rmd:rounded-full rmd:transition-colors rmd:cursor-pointer rmd:disabled:invisible rmd:disabled:pointer-events-none;
   }
 
   .rmd-nav-button-hidden {
@@ -157,12 +157,11 @@
   }
 
   .rmd-month-button {
-    color: black;
     @apply rmd:flex rmd:items-center rmd:justify-center rmd:p-1 rmd:text-[13px] rmd:font-medium rmd:rounded-md rmd:hover:bg-brand-gray-light/30 rmd:transition-colors rmd:cursor-pointer rmd:disabled:opacity-30 rmd:disabled:pointer-events-none;
   }
 
   .rmd-month-button-selected {
-    @apply rmd:bg-brand-gold rmd:text-white;
+    @apply rmd:bg-brand-gold rmd:text-white rmd:hover:bg-brand-gold/85 rmd:hover:text-white;
   }
 
   .rmd-month-button-unselected {
@@ -197,7 +196,7 @@
   }
 
   .rmd-year-button-selected {
-    @apply rmd:bg-brand-gold rmd:text-white;
+    @apply rmd:bg-brand-gold rmd:text-white rmd:hover:bg-brand-gold/85 rmd:hover:text-white;
   }
 
   .rmd-year-button-unselected {
