@@ -16,26 +16,32 @@ Restrict selection with `minDate`, `maxDate`, and `disabledDates`.
 ```tsx
 import { useState } from 'react';
 import { Calendar } from 'react-modular-datepicker';
+import 'react-modular-datepicker/dist/index.css';
 
-export function BoundsExample() {
+export function MinMaxDisabledDemo() {
   const [selected, setSelected] = useState<Date | null>(new Date());
-
   const today = new Date();
   const minDate = new Date(today.getFullYear(), today.getMonth(), 5);
   const maxDate = new Date(today.getFullYear(), today.getMonth(), 25);
   const disabledDates = [
     new Date(today.getFullYear(), today.getMonth(), 10),
     new Date(today.getFullYear(), today.getMonth(), 12),
+    new Date(today.getFullYear(), today.getMonth(), 18),
   ];
 
   return (
-    <Calendar
-      selected={selected}
-      onChange={(d) => setSelected(d as Date)}
-      minDate={minDate}
-      maxDate={maxDate}
-      disabledDates={disabledDates}
-    />
+    <div>
+      <Calendar
+        selected={selected || undefined}
+        onChange={(d) => setSelected(d as Date)}
+        minDate={minDate}
+        maxDate={maxDate}
+        disabledDates={disabledDates}
+      />
+      <div className="mt-4 text-xs text-gray-600 text-center">
+        Allowed: {minDate.getDate()}th – {maxDate.getDate()}th (10th, 12th, 18th disabled)
+      </div>
+    </div>
   );
 }
 ```
