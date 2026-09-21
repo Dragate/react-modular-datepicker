@@ -57,7 +57,7 @@
   }
 
   .rmd-calendar-container {
-    @apply rmd:flex-1 rmd:min-w-[280px] rmd:max-w-full;
+    @apply rmd:flex-1 rmd:min-w-[240px] rmd:max-w-full;
   }
 
   .rmd-nav-button-slot-start {
