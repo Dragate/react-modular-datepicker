@@ -35,6 +35,8 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
 
   const [view, setView] = useState<CalendarView>('days');
   const [slideDirection, setSlideDirection] = useState<'left' | 'right' | null>(null);
+  const [daysHeight, setDaysHeight] = useState<number | null>(null);
+  const daysContainerRef = React.useRef<HTMLDivElement | null>(null);
 
   const t = getTranslations(adapter, locale, customTranslations);
   const weekdayNames = t.weekdays;
@@ -47,6 +49,26 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
     getDateProps,
     setOffset
   } = useDates({ ...useDatesProps, adapter, firstDayOfWeek });
+
+  React.useEffect(() => {
+    if (view === 'days' && daysContainerRef.current) {
+      const el = daysContainerRef.current;
+      const updateHeight = () => {
+        if (el.offsetHeight > 0) {
+          setDaysHeight(el.offsetHeight);
+        }
+      };
+      updateHeight();
+
+      if (typeof ResizeObserver !== 'undefined') {
+        const observer = new ResizeObserver(() => {
+          updateHeight();
+        });
+        observer.observe(el);
+        return () => observer.disconnect();
+      }
+    }
+  }, [view, calendars]);
 
   // Adjust weekday names based on firstDayOfWeek
   const sortedWeekdays = [...weekdayNames.slice(firstDayOfWeek), ...weekdayNames.slice(0, firstDayOfWeek)];
@@ -127,7 +149,11 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
 
       <div className={clsx('rmd-calendars-container', classNames?.calendarsContainer)}>
         {view === 'months' && calendars.map((calendar) => (
-          <div key={`months-${calendar.year}`} className={clsx('rmd-calendar-container', classNames?.calendarContainer)}>
+          <div
+            key={`months-${calendar.year}`}
+            className={clsx('rmd-calendar-container', classNames?.calendarContainer)}
+            style={daysHeight ? { height: `${daysHeight}px` } : undefined}
+          >
             <MonthSelection
               year={calendar.year}
               month={calendar.month}
@@ -140,7 +166,11 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
           </div>
         ))}
         {view === 'years' && calendars.map((calendar) => (
-          <div key={`years-${calendar.year}`} className={clsx('rmd-calendar-container', classNames?.calendarContainer)}>
+          <div
+            key={`years-${calendar.year}`}
+            className={clsx('rmd-calendar-container', classNames?.calendarContainer)}
+            style={daysHeight ? { height: `${daysHeight}px` } : undefined}
+          >
             <YearSelection
               year={calendar.year}
               minDate={props.minDate}
@@ -152,7 +182,11 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
           </div>
         ))}
         {view === 'days' && calendars.map((calendar, index) => (
-          <div key={`${calendar.month}-${calendar.year}`} className={clsx('rmd-calendar-container', classNames?.calendarContainer)}>
+          <div
+            key={`${calendar.month}-${calendar.year}`}
+            ref={index === 0 ? daysContainerRef : undefined}
+            className={clsx('rmd-calendar-container', classNames?.calendarContainer)}
+          >
             {calendars.length > 1 && (
               <div className={clsx('rmd-header', classNames?.header)}>
                 <div className={clsx('rmd-nav-button-slot-start', classNames?.navButtonSlotStart)}>
