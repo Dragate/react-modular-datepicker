@@ -10,3 +10,43 @@
 .dark {
     --color-fd-primary: #c5a059;
 }
+
+/* Passive background animations */
+@keyframes float-orb-1 {
+    0%, 100% {
+        transform: translate(0px, 0px) scale(1);
+    }
+    50% {
+        transform: translate(30px, -25px) scale(1.08);
+    }
+}
+
+@keyframes float-orb-2 {
+    0%, 100% {
+        transform: translate(0px, 0px) scale(1);
+    }
+    50% {
+        transform: translate(-35px, 20px) scale(1.12);
+    }
+}
+
+@keyframes float-orb-3 {
+    0%, 100% {
+        transform: translate(0px, 0px) scale(1);
+    }
+    50% {
+        transform: translate(25px, 30px) scale(0.95);
+    }
+}
+
+.bg-orb-1 {
+    animation: float-orb-1 14s ease-in-out infinite;
+}
+
+.bg-orb-2 {
+    animation: float-orb-2 18s ease-in-out infinite;
+}
+
+.bg-orb-3 {
+    animation: float-orb-3 16s ease-in-out infinite;
+}
