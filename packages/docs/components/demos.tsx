@@ -465,11 +465,11 @@ export function CustomStylingDemo() {
     },
     monthsGrid: 'grid grid-cols-3 gap-2 bg-transparent p-1',
     monthButton: 'py-2 px-3 rounded border border-cyan-900/80 bg-[#081220] text-cyan-300 font-mono text-xs font-bold hover:border-cyan-400 hover:bg-cyan-950 transition-colors',
-    monthButtonSelected: 'bg-[#081220] text-amber-400 border-2 border-amber-400 shadow-[0_0_10px_rgba(251,191,36,0.6)] font-extrabold',
+    monthButtonSelected: 'bg-[#081220] text-amber-400 border-2 border-amber-400 shadow-[0_0_10px_rgba(34,211,238,0.6)] font-extrabold',
     monthButtonUnselected: 'text-cyan-300',
     yearsGrid: 'grid grid-cols-3 gap-2 bg-transparent p-1 max-h-60 overflow-y-auto',
     yearButton: 'py-2 px-3 rounded border border-cyan-900/80 bg-[#081220] text-cyan-300 font-mono text-xs font-bold hover:border-cyan-400 hover:bg-cyan-950 transition-colors',
-    yearButtonSelected: 'bg-[#081220] text-amber-400 border-2 border-amber-400 shadow-[0_0_10px_rgba(251,191,36,0.6)] font-extrabold',
+    yearButtonSelected: 'bg-[#081220] text-amber-400 border-2 border-amber-400 shadow-[0_0_10px_rgba(34,211,238,0.6)] font-extrabold',
     yearButtonUnselected: 'text-cyan-300',
   } satisfies CalendarClassNames
 
@@ -519,11 +519,11 @@ export function CustomStylingDemo() {
     },
     monthsGrid: 'grid grid-cols-3 gap-2 bg-transparent p-1',
     monthButton: 'py-2 px-3 rounded-lg bg-slate-200/50 dark:bg-slate-800/50 text-slate-800 dark:text-slate-200 hover:bg-emerald-500/20 dark:hover:bg-emerald-500/30 hover:text-emerald-700 dark:hover:text-emerald-300 text-xs font-semibold transition-all',
-    monthButtonSelected: 'bg-emerald-600 dark:bg-emerald-500 text-white font-bold rounded-lg shadow-md shadow-emerald-500/20 ring-2 ring-emerald-500 ring-offset-2 ring-offset-slate-100 dark:ring-offset-slate-900',
+    monthButtonSelected: 'bg-emerald-600 dark:bg-emerald-500 text-slate-800 dark:text-slate-200 font-bold rounded-lg shadow-md shadow-emerald-500/20 ring-2 ring-emerald-500 ring-offset-2 ring-offset-slate-100 dark:ring-offset-slate-900',
     monthButtonUnselected: 'text-slate-800 dark:text-slate-200',
     yearsGrid: 'grid grid-cols-3 gap-2 bg-transparent p-1 max-h-60 overflow-y-auto',
     yearButton: 'py-2 px-3 rounded-lg bg-slate-200/50 dark:bg-slate-800/50 text-slate-800 dark:text-slate-200 hover:bg-emerald-500/20 dark:hover:bg-emerald-500/30 hover:text-emerald-700 dark:hover:text-emerald-300 text-xs font-semibold transition-all',
-    yearButtonSelected: 'bg-emerald-600 dark:bg-emerald-500 text-white font-bold rounded-lg shadow-md shadow-emerald-500/20 ring-2 ring-emerald-500 ring-offset-2 ring-offset-slate-100 dark:ring-offset-slate-900',
+    yearButtonSelected: 'bg-emerald-600 dark:bg-emerald-500 text-slate-800 dark:text-slate-200 font-bold rounded-lg shadow-md shadow-emerald-500/20 ring-2 ring-emerald-500 ring-offset-2 ring-offset-slate-100 dark:ring-offset-slate-900',
     yearButtonUnselected: 'text-slate-800 dark:text-slate-200',
   } satisfies CalendarClassNames
 
