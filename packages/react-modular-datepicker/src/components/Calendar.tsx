@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import clsx from 'clsx';
 import { defaultAdapter } from '../adapters/dayjs';
 import { getTranslations, Translations } from '../i18n';
 import { CalendarClassNames, DateObj } from '../types';
@@ -111,17 +112,17 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
     />
   );
 
-  const rootClassName = ['rmd', 'rmd-root', classNames?.root].filter(Boolean).join(' ');
-  const calendarsContainerClassName = ['rmd-calendars-container', classNames?.calendarsContainer].filter(Boolean).join(' ');
-  const calendarContainerClassName = ['rmd-calendar-container', classNames?.calendarContainer].filter(Boolean).join(' ');
-  const monthHeaderClassName = ['rmd-header', classNames?.header].filter(Boolean).join(' ');
-  const navButtonSlotStartClassName = ['rmd-nav-button-slot-start', classNames?.navButtonSlotStart].filter(Boolean).join(' ');
-  const navButtonSlotEndClassName = ['rmd-nav-button-slot-end', classNames?.navButtonSlotEnd].filter(Boolean).join(' ');
-  const navButtonClassName = ['rmd-nav-button', classNames?.navButton].filter(Boolean).join(' ');
-  const headerTitleContainerClassName = ['rmd-header-title-container', classNames?.headerTitleContainer].filter(Boolean).join(' ');
-  const weekdayGridClassName = ['rmd-weekday-grid', classNames?.weekdayGrid].filter(Boolean).join(' ');
-  const weekdayClassName = ['rmd-weekday', classNames?.weekday].filter(Boolean).join(' ');
-  const footerClassName = ['rmd-footer', classNames?.footer].filter(Boolean).join(' ');
+  const rootClassName = clsx('rmd', 'rmd-root', classNames?.root);
+  const calendarsContainerClassName = clsx('rmd-calendars-container', classNames?.calendarsContainer);
+  const calendarContainerClassName = clsx('rmd-calendar-container', classNames?.calendarContainer);
+  const monthHeaderClassName = clsx('rmd-header', classNames?.header);
+  const navButtonSlotStartClassName = clsx('rmd-nav-button-slot-start', classNames?.navButtonSlotStart);
+  const navButtonSlotEndClassName = clsx('rmd-nav-button-slot-end', classNames?.navButtonSlotEnd);
+  const navButtonClassName = clsx('rmd-nav-button', classNames?.navButton);
+  const headerTitleContainerClassName = clsx('rmd-header-title-container', classNames?.headerTitleContainer);
+  const weekdayGridClassName = clsx('rmd-weekday-grid', classNames?.weekdayGrid);
+  const weekdayClassName = clsx('rmd-weekday', classNames?.weekday);
+  const footerClassName = clsx('rmd-footer', classNames?.footer);
 
   return (
     <div className={rootClassName}>
@@ -201,7 +202,15 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
                 <div key={day} className={weekdayClassName}>{day}</div>
               ))}
             </div>
-            <div key={`daysGrid-${calendar.month}-${calendar.year}`} className={['rmd-days-grid', slideDirection === 'left' ? 'rmd-slide-left' : slideDirection === 'right' ? 'rmd-slide-right' : '', classNames?.daysGrid].filter(Boolean).join(' ')}>
+            <div
+              key={`daysGrid-${calendar.month}-${calendar.year}`}
+              className={clsx(
+                'rmd-days-grid',
+                slideDirection === 'left' && 'rmd-slide-left',
+                slideDirection === 'right' && 'rmd-slide-right',
+                classNames?.daysGrid
+              )}
+            >
               {calendar.weeks.map((week, wi) =>
                 week.map((dateObj, di) => (
                   <Day

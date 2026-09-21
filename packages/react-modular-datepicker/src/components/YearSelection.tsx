@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import clsx from 'clsx';
 import { CalendarClassNames, DateAdapter } from '../types';
 
 interface YearSelectionProps {
@@ -36,18 +37,18 @@ export const YearSelection: React.FC<YearSelectionProps> = ({
     years.push(y);
   }
 
-  const gridClassName = ['rmd-years-grid', classNames?.yearsGrid].filter(Boolean).join(' ');
+  const gridClassName = clsx('rmd-years-grid', classNames?.yearsGrid);
 
   return (
     <div ref={yearListRef} className={gridClassName}>
       {years.map((y) => {
         const isSelected = y === year;
-        const buttonClassName = [
+        const buttonClassName = clsx(
           'rmd-year-button',
           isSelected ? 'rmd-year-button-selected' : 'rmd-year-button-unselected',
           classNames?.yearButton,
-          isSelected ? classNames?.yearButtonSelected : classNames?.yearButtonUnselected,
-        ].filter(Boolean).join(' ');
+          isSelected ? classNames?.yearButtonSelected : classNames?.yearButtonUnselected
+        );
 
         return (
           <button

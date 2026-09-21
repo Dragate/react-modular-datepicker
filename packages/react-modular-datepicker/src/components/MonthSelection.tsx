@@ -1,4 +1,5 @@
 import React from 'react';
+import clsx from 'clsx';
 import { CalendarClassNames } from '../types';
 
 interface MonthSelectionProps {
@@ -30,19 +31,19 @@ export const MonthSelection: React.FC<MonthSelectionProps> = ({
     return false;
   };
 
-  const gridClassName = ['rmd-months-grid', classNames?.monthsGrid].filter(Boolean).join(' ');
+  const gridClassName = clsx('rmd-months-grid', classNames?.monthsGrid);
 
   return (
     <div className={gridClassName}>
       {monthNames.map((name, idx) => {
         const disabled = isMonthDisabled(idx);
         const isSelected = idx === month;
-        const buttonClassName = [
+        const buttonClassName = clsx(
           'rmd-month-button',
           isSelected ? 'rmd-month-button-selected' : 'rmd-month-button-unselected',
           classNames?.monthButton,
-          isSelected ? classNames?.monthButtonSelected : classNames?.monthButtonUnselected,
-        ].filter(Boolean).join(' ');
+          isSelected ? classNames?.monthButtonSelected : classNames?.monthButtonUnselected
+        );
 
         return (
           <button

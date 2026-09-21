@@ -1,4 +1,5 @@
 import React from 'react';
+import clsx from 'clsx';
 import { Calendar, CalendarClassNames } from '../types';
 
 export interface HeaderProps {
@@ -43,36 +44,32 @@ export const CalendarHeader: React.FC<HeaderProps> = ({
   const first = calendars[0];
   const last = calendars[calendars.length - 1];
 
-  const headerClassName = [
+  const isMultiMonth = calendars.length > 1;
+  const headerClassName = clsx(
     'rmd-header',
-    calendars.length > 1 ? 'rmd-header-multi-month' : '',
+    isMultiMonth && 'rmd-header-multi-month',
     classNames?.header,
-    calendars.length > 1 ? classNames?.headerMultiMonth : ''
-  ].filter(Boolean).join(' ');
+    isMultiMonth && classNames?.headerMultiMonth
+  );
 
   const isNavHidden = !!(currentView && currentView !== 'days');
-  const navButtonClassName = [
+  const navButtonClassName = clsx(
     'rmd-nav-button',
-    isNavHidden ? 'rmd-nav-button-hidden' : '',
+    isNavHidden && 'rmd-nav-button-hidden',
     classNames?.navButton,
-    isNavHidden ? classNames?.navButtonHidden : ''
-  ].filter(Boolean).join(' ');
+    isNavHidden && classNames?.navButtonHidden
+  );
 
-  const monthYearContainerClassName = [
-    'rmd-month-year-container',
-    classNames?.monthYearContainer
-  ].filter(Boolean).join(' ');
+  const monthYearContainerClassName = clsx('rmd-month-year-container', classNames?.monthYearContainer);
 
-  const monthYearLabelClassName = [
+  const monthYearLabelClassName = clsx(
     'rmd-month-year-label',
-    slideDirection === 'left' ? 'rmd-slide-left' : slideDirection === 'right' ? 'rmd-slide-right' : '',
+    slideDirection === 'left' && 'rmd-slide-left',
+    slideDirection === 'right' && 'rmd-slide-right',
     classNames?.monthYearLabel
-  ].filter(Boolean).join(' ');
+  );
 
-  const monthYearButtonClassName = [
-    'rmd-month-year-button',
-    classNames?.monthYearButton
-  ].filter(Boolean).join(' ');
+  const monthYearButtonClassName = clsx('rmd-month-year-button', classNames?.monthYearButton);
 
   return (
     <div className={headerClassName}>

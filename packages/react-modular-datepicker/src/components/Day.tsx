@@ -1,4 +1,5 @@
 import React from 'react';
+import clsx from 'clsx';
 import type { CalendarClassNames, DateObj } from '../types';
 
 interface DayProps {
@@ -10,8 +11,7 @@ interface DayProps {
 
 export const Day: React.FC<DayProps> = ({ dateObj, getDateProps, dayProps, classNames }) => {
   if (!dateObj) {
-    const emptyClassName = ['rmd-day-empty', classNames?.day?.empty].filter(Boolean).join(' ');
-    return <div className={emptyClassName} />;
+    return <div className={clsx('rmd-day-empty', classNames?.day?.empty)} />;
   }
 
   const { date, selected, selectable, isRangeStart, isRangeEnd, isRangeBetween, isRangeHovering, isRangeActive } = dateObj;
@@ -24,10 +24,10 @@ export const Day: React.FC<DayProps> = ({ dateObj, getDateProps, dayProps, class
     semanticStateClass = 'rmd-day-selected';
     customStateClass = dayClasses?.selected || '';
   } else if (isRangeStart) {
-    semanticStateClass = ['rmd-day-range-start', isRangeActive ? 'rmd-day-range-active' : ''].filter(Boolean).join(' ');
+    semanticStateClass = clsx('rmd-day-range-start', isRangeActive && 'rmd-day-range-active');
     customStateClass = dayClasses?.rangeStart || '';
   } else if (isRangeEnd) {
-    semanticStateClass = ['rmd-day-range-end', isRangeActive ? 'rmd-day-range-active' : ''].filter(Boolean).join(' ');
+    semanticStateClass = clsx('rmd-day-range-end', isRangeActive && 'rmd-day-range-active');
     customStateClass = dayClasses?.rangeEnd || '';
   } else if (isRangeBetween) {
     semanticStateClass = 'rmd-day-range-between';
@@ -48,16 +48,15 @@ export const Day: React.FC<DayProps> = ({ dateObj, getDateProps, dayProps, class
 
   const modifierClasses = (dateObj.modifiers || [])
     .map(m => (dayClasses as any)?.[m] || m)
-    .filter(Boolean)
-    .join(' ');
+    .filter(Boolean);
 
-  const className = [
+  const className = clsx(
     'rmd-day',
     dayClasses?.day,
     semanticStateClass,
     customStateClass,
     modifierClasses
-  ].filter(Boolean).join(' ');
+  );
 
   return (
     <button
