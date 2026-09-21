@@ -1,11 +1,11 @@
 ---
 title: Custom Styling & Themes
-description: Deep theme overrides using the classNames prop.
+description: Deep theme overrides using classNames, CSS variables, and CSS Modules.
 ---
 
 # Custom Styling & Themes
 
-Easily override colors, borders, typography, and interactive states using the `classNames` prop. Below are themes inspired by various UI paradigms, including Adaptive Glass (Light & Dark), Cyberpunk Cyan, and Royal Purple.
+Easily override colors, borders, typography, and interactive states using the `classNames` prop, CSS custom properties (variables), or CSS Modules. Below are theme presets inspired by various UI paradigms alongside instructions for custom CSS variable and CSS Module implementations.
 
 <CustomStylingDemo />
 
@@ -30,6 +30,12 @@ export function AdaptiveGlassCalendar() {
           day: 'aspect-square rounded-lg bg-slate-200/50 dark:bg-slate-800/50 text-slate-800 dark:text-slate-200 hover:bg-emerald-500/20 dark:hover:bg-emerald-500/30 hover:text-emerald-700 dark:hover:text-emerald-300 font-semibold',
           selected: 'bg-emerald-600 dark:bg-emerald-500 text-white font-bold rounded-lg shadow-md shadow-emerald-500/20',
         },
+        monthsGrid: 'grid grid-cols-3 gap-2 bg-transparent p-1',
+        monthButton: 'py-2 px-3 rounded-lg bg-slate-200/50 dark:bg-slate-800/50 text-slate-800 dark:text-slate-200 hover:bg-emerald-500/20 dark:hover:bg-emerald-500/30 hover:text-emerald-700 dark:hover:text-emerald-300 text-xs font-semibold',
+        monthButtonSelected: 'bg-emerald-600 dark:bg-emerald-500 text-white font-bold rounded-lg shadow-md shadow-emerald-500/20',
+        yearsGrid: 'grid grid-cols-3 gap-2 bg-transparent p-1 max-h-60 overflow-y-auto',
+        yearButton: 'py-2 px-3 rounded-lg bg-slate-200/50 dark:bg-slate-800/50 text-slate-800 dark:text-slate-200 hover:bg-emerald-500/20 dark:hover:bg-emerald-500/30 hover:text-emerald-700 dark:hover:text-emerald-300 text-xs font-semibold',
+        yearButtonSelected: 'bg-emerald-600 dark:bg-emerald-500 text-white font-bold rounded-lg shadow-md shadow-emerald-500/20',
       }}
     />
   );
@@ -58,6 +64,12 @@ export function CyberpunkCalendar() {
           day: 'aspect-square border border-cyan-900/80 bg-[#081220] text-cyan-300 hover:border-cyan-400 hover:bg-cyan-950 font-bold',
           selected: 'bg-[#081220] text-amber-400 border-2 border-amber-400 shadow-[0_0_10px_rgba(251,191,36,0.6)] font-extrabold',
         },
+        monthsGrid: 'grid grid-cols-3 gap-2 bg-transparent p-1',
+        monthButton: 'py-2 px-3 rounded border border-cyan-900/80 bg-[#081220] text-cyan-300 font-mono text-xs font-bold hover:border-cyan-400 hover:bg-cyan-950',
+        monthButtonSelected: 'bg-[#081220] text-amber-400 border-2 border-amber-400 shadow-[0_0_10px_rgba(251,191,36,0.6)] font-extrabold',
+        yearsGrid: 'grid grid-cols-3 gap-2 bg-transparent p-1 max-h-60 overflow-y-auto',
+        yearButton: 'py-2 px-3 rounded border border-cyan-900/80 bg-[#081220] text-cyan-300 font-mono text-xs font-bold hover:border-cyan-400 hover:bg-cyan-950',
+        yearButtonSelected: 'bg-[#081220] text-amber-400 border-2 border-amber-400 shadow-[0_0_10px_rgba(251,191,36,0.6)] font-extrabold',
       }}
     />
   );
@@ -85,6 +97,148 @@ export function RoyalPurpleCalendar() {
           day: 'aspect-square rounded-full text-purple-100 hover:bg-purple-800/40 font-semibold bg-purple-900/60',
           selected: 'bg-purple-900/60 text-white font-bold ring-2 ring-pink-500 ring-offset-2 ring-offset-[#1e073e] rounded-full shadow-[0_0_12px_rgba(236,72,153,0.7)]',
         },
+        monthsGrid: 'grid grid-cols-3 gap-2 bg-transparent p-1',
+        monthButton: 'py-2 px-3 rounded-xl text-purple-100 hover:bg-purple-800/40 bg-purple-900/60 font-semibold text-xs',
+        monthButtonSelected: 'bg-purple-900/80 text-white font-extrabold ring-2 ring-pink-400 ring-offset-2 ring-offset-[#1e073e] rounded-xl shadow-[0_0_12px_rgba(236,72,153,0.7)]',
+        yearsGrid: 'grid grid-cols-3 gap-2 bg-transparent p-1 max-h-60 overflow-y-auto',
+        yearButton: 'py-2 px-3 rounded-xl text-purple-100 hover:bg-purple-800/40 bg-purple-900/60 font-semibold text-xs',
+        yearButtonSelected: 'bg-purple-900/80 text-white font-extrabold ring-2 ring-pink-400 ring-offset-2 ring-offset-[#1e073e] rounded-xl shadow-[0_0_12px_rgba(236,72,153,0.7)]',
+      }}
+    />
+  );
+}
+```
+
+---
+
+## 4. Theming with CSS Custom Properties (Variables)
+
+`react-modular-datepicker` defines semantic brand design tokens in CSS variables. You can easily override these variables in your application stylesheet globally or scoped under a specific parent element:
+
+```css
+/* custom-theme.css */
+.custom-theme {
+  --color-brand-gold: #8b5cf6;       /* Primary selection & accent color */
+  --color-brand-gray-light: #e2e8f0; /* Grid line and scrollbar thumb color */
+  --color-brand-gray-dark: #475569;  /* Muted borders & icons */
+  --color-brand-text: #0f172a;       /* Primary text color */
+}
+```
+
+Then wrap your `<Calendar />` component with the container class:
+
+```tsx
+import 'react-modular-datepicker/dist/index.css';
+import './custom-theme.css';
+import { Calendar } from 'react-modular-datepicker';
+
+export function CSSVariablesThemedCalendar() {
+  return (
+    <div className="custom-theme">
+      <Calendar />
+    </div>
+  );
+}
+```
+
+---
+
+## 5. Theming with CSS Modules
+
+If your project uses CSS Modules, you can define custom classes in a `.module.css` file and pass them via the `classNames` prop:
+
+```css
+/* Calendar.module.css */
+.calendarRoot {
+  background-color: #18181b;
+  border: 1px solid #27272a;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  color: #f4f4f5;
+}
+
+.calendarHeader {
+  border-bottom: 1px solid #27272a;
+  padding-bottom: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.navButton {
+  color: #a1a1aa;
+  border-radius: 0.5rem;
+}
+
+.navButton:hover {
+  background-color: #27272a;
+  color: #f4f4f5;
+}
+
+.dayCell {
+  border-radius: 0.5rem;
+  font-weight: 500;
+  color: #e4e4e7;
+}
+
+.dayCell:hover {
+  background-color: #27272a;
+}
+
+.selectedDayCell {
+  background-color: #0284c7 !important;
+  color: #ffffff !important;
+  font-weight: 700;
+  border-radius: 0.5rem;
+}
+
+.monthsGrid,
+.yearsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+  padding: 0.25rem;
+}
+
+.monthButton,
+.yearButton {
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  color: #e4e4e7;
+  font-size: 0.875rem;
+  font-weight: 600;
+  background-color: #27272a;
+}
+
+.monthButtonSelected,
+.yearButtonSelected {
+  background-color: #0284c7 !important;
+  color: #ffffff !important;
+  font-weight: 700;
+}
+```
+
+And pass the imported CSS module to `<Calendar />`:
+
+```tsx
+import { Calendar } from 'react-modular-datepicker';
+import styles from './Calendar.module.css';
+
+export function CSSModulesCalendar() {
+  return (
+    <Calendar
+      classNames={{
+        root: styles.calendarRoot,
+        header: styles.calendarHeader,
+        navButton: styles.navButton,
+        day: {
+          day: styles.dayCell,
+          selected: styles.selectedDayCell,
+        },
+        monthsGrid: styles.monthsGrid,
+        monthButton: styles.monthButton,
+        monthButtonSelected: styles.monthButtonSelected,
+        yearsGrid: styles.yearsGrid,
+        yearButton: styles.yearButton,
+        yearButtonSelected: styles.yearButtonSelected,
       }}
     />
   );
