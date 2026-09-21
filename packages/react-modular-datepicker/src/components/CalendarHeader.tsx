@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import React from 'react';
+import { Translations } from '../i18n';
 import { Calendar, CalendarClassNames } from '../types';
 
 export interface HeaderProps {
@@ -8,7 +9,7 @@ export interface HeaderProps {
   getForwardProps: (args: any) => any;
   setView: (view: 'days' | 'months' | 'years') => void;
   monthNames: string[];
-  t: { back: string; forward: string };
+  t: Translations;
   classNames?: CalendarClassNames;
   slideDirection?: 'left' | 'right' | null;
   currentView?: 'days' | 'months' | 'years';
@@ -68,7 +69,6 @@ export const CalendarHeader: React.FC<HeaderProps> = ({
     )}>
       <button
         {...getBackProps({ calendars })}
-        onMouseDown={(e) => e.preventDefault()}
         className={navButtonClassName}
         aria-label={t.back}
       >
@@ -79,16 +79,18 @@ export const CalendarHeader: React.FC<HeaderProps> = ({
         {calendars.length === 1 ? (
           <div key={`${calendars[0].month}-${calendars[0].year}`} className={monthYearLabelClassName}>
             <button
-              onMouseDown={(e) => e.preventDefault()}
               onClick={() => setView(currentView === 'months' ? 'days' : 'months')}
               className={clsx('rmd-month-year-button', classNames?.monthYearButton)}
+              aria-label={`${monthNames[calendars[0].month]}, ${t.selectMonth || 'Select month'}`}
+              aria-expanded={currentView === 'months'}
             >
               {monthNames[calendars[0].month]}
             </button>
             <button
-              onMouseDown={(e) => e.preventDefault()}
               onClick={() => setView(currentView === 'years' ? 'days' : 'years')}
               className={clsx('rmd-month-year-button', classNames?.monthYearButton)}
+              aria-label={`${calendars[0].year}, ${t.selectYear || 'Select year'}`}
+              aria-expanded={currentView === 'years'}
             >
               {calendars[0].year}
             </button>
@@ -104,7 +106,6 @@ export const CalendarHeader: React.FC<HeaderProps> = ({
 
       <button
         {...getForwardProps({ calendars })}
-        onMouseDown={(e) => e.preventDefault()}
         className={navButtonClassName}
         aria-label={t.forward}
       >

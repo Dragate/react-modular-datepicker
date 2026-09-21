@@ -6,6 +6,8 @@ export interface Translations {
   weekdays: string[];
   back: string;
   forward: string;
+  selectMonth?: string;
+  selectYear?: string;
 }
 
 export function getDefaults(adapter: DateAdapter = defaultAdapter, locale?: string): Translations {
@@ -13,7 +15,9 @@ export function getDefaults(adapter: DateAdapter = defaultAdapter, locale?: stri
     months: adapter.getMonths(locale),
     weekdays: adapter.getWeekdays(locale),
     back: 'Previous month',
-    forward: 'Next month'
+    forward: 'Next month',
+    selectMonth: 'Select month',
+    selectYear: 'Select year'
   };
 }
 

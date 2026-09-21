@@ -88,8 +88,12 @@
     @apply rmd:mt-4;
   }
 
+  .rmd-sr-only {
+    @apply rmd:sr-only;
+  }
+
   .rmd-nav-button {
-    @apply rmd:p-2 rmd:text-brand-text rmd:hover:bg-gray-100 rmd:rounded-full rmd:transition-colors rmd:cursor-pointer rmd:disabled:invisible rmd:disabled:pointer-events-none;
+    @apply rmd:p-2 rmd:text-brand-text rmd:hover:bg-gray-100 rmd:rounded-full rmd:transition-colors rmd:cursor-pointer rmd:disabled:invisible rmd:disabled:pointer-events-none rmd:focus-visible:outline-2 rmd:focus-visible:outline-brand-gold rmd:focus-visible:outline-offset-1;
   }
 
   .rmd-nav-button-hidden {
@@ -105,11 +109,11 @@
   }
 
   .rmd-month-year-button {
-    @apply rmd:hover:bg-gray-100 rmd:px-2 rmd:py-1 rmd:rounded rmd:cursor-pointer;
+    @apply rmd:hover:bg-gray-100 rmd:px-2 rmd:py-1 rmd:rounded rmd:cursor-pointer rmd:focus-visible:outline-2 rmd:focus-visible:outline-brand-gold rmd:focus-visible:outline-offset-1;
   }
 
   .rmd-day {
-    @apply rmd:aspect-square rmd:flex rmd:items-center rmd:justify-center rmd:p-[1px] rmd:relative rmd:text-sm rmd:font-medium rmd:transition-all rmd:enabled:cursor-pointer;
+    @apply rmd:aspect-square rmd:flex rmd:items-center rmd:justify-center rmd:p-[1px] rmd:relative rmd:text-sm rmd:font-medium rmd:transition-all rmd:enabled:cursor-pointer rmd:focus-visible:outline-2 rmd:focus-visible:outline-brand-gold rmd:focus-visible:outline-offset-1 rmd:focus-visible:z-10;
   }
 
   .rmd-day-selected {
@@ -157,7 +161,7 @@
   }
 
   .rmd-month-button {
-    @apply rmd:flex rmd:items-center rmd:justify-center rmd:p-1 rmd:text-[13px] rmd:font-medium rmd:rounded-md rmd:hover:bg-brand-gray-light/30 rmd:transition-colors rmd:cursor-pointer rmd:disabled:opacity-30 rmd:disabled:pointer-events-none;
+    @apply rmd:flex rmd:items-center rmd:justify-center rmd:p-1 rmd:text-[13px] rmd:font-medium rmd:rounded-md rmd:hover:bg-brand-gray-light/30 rmd:transition-colors rmd:cursor-pointer rmd:disabled:opacity-30 rmd:disabled:pointer-events-none rmd:focus-visible:outline-2 rmd:focus-visible:outline-brand-gold rmd:focus-visible:outline-offset-1;
   }
 
   .rmd-month-button-selected {
@@ -192,7 +196,7 @@
   }
 
   .rmd-year-button {
-    @apply rmd:py-1.5 rmd:px-2.5 rmd:text-sm rmd:font-medium rmd:rounded-md rmd:hover:bg-brand-gray-light/30 rmd:transition-colors rmd:cursor-pointer rmd:disabled:opacity-30 rmd:disabled:pointer-events-none;
+    @apply rmd:py-1.5 rmd:px-2.5 rmd:text-sm rmd:font-medium rmd:rounded-md rmd:hover:bg-brand-gray-light/30 rmd:transition-colors rmd:cursor-pointer rmd:disabled:opacity-30 rmd:disabled:pointer-events-none rmd:focus-visible:outline-2 rmd:focus-visible:outline-brand-gold rmd:focus-visible:outline-offset-1;
   }
 
   .rmd-year-button-selected {
