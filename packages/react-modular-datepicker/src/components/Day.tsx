@@ -50,18 +50,16 @@ export const Day: React.FC<DayProps> = ({ dateObj, getDateProps, dayProps, class
     .map(m => (dayClasses as any)?.[m] || m)
     .filter(Boolean);
 
-  const className = clsx(
-    'rmd-day',
-    dayClasses?.day,
-    semanticStateClass,
-    customStateClass,
-    modifierClasses
-  );
-
   return (
     <button
       {...getDateProps({ dateObj, ...dayProps })}
-      className={className}
+      className={clsx(
+        'rmd-day',
+        dayClasses?.day,
+        semanticStateClass,
+        customStateClass,
+        modifierClasses
+      )}
     >
       {date.getDate()}
     </button>

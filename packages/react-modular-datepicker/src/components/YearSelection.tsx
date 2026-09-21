@@ -37,10 +37,8 @@ export const YearSelection: React.FC<YearSelectionProps> = ({
     years.push(y);
   }
 
-  const gridClassName = clsx('rmd-years-grid', classNames?.yearsGrid);
-
   return (
-    <div ref={yearListRef} className={gridClassName}>
+    <div ref={yearListRef} className={clsx('rmd-years-grid', classNames?.yearsGrid)}>
       {years.map((y) => {
         const isSelected = y === year;
         const buttonClassName = clsx(

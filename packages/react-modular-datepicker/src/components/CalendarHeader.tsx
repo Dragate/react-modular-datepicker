@@ -1,5 +1,5 @@
-import React from 'react';
 import clsx from 'clsx';
+import React from 'react';
 import { Calendar, CalendarClassNames } from '../types';
 
 export interface HeaderProps {
@@ -44,14 +44,6 @@ export const CalendarHeader: React.FC<HeaderProps> = ({
   const first = calendars[0];
   const last = calendars[calendars.length - 1];
 
-  const isMultiMonth = calendars.length > 1;
-  const headerClassName = clsx(
-    'rmd-header',
-    isMultiMonth && 'rmd-header-multi-month',
-    classNames?.header,
-    isMultiMonth && classNames?.headerMultiMonth
-  );
-
   const isNavHidden = !!(currentView && currentView !== 'days');
   const navButtonClassName = clsx(
     'rmd-nav-button',
@@ -60,8 +52,6 @@ export const CalendarHeader: React.FC<HeaderProps> = ({
     isNavHidden && classNames?.navButtonHidden
   );
 
-  const monthYearContainerClassName = clsx('rmd-month-year-container', classNames?.monthYearContainer);
-
   const monthYearLabelClassName = clsx(
     'rmd-month-year-label',
     slideDirection === 'left' && 'rmd-slide-left',
@@ -69,10 +59,13 @@ export const CalendarHeader: React.FC<HeaderProps> = ({
     classNames?.monthYearLabel
   );
 
-  const monthYearButtonClassName = clsx('rmd-month-year-button', classNames?.monthYearButton);
-
   return (
-    <div className={headerClassName}>
+    <div className={clsx(
+      'rmd-header',
+      calendars.length > 1 && 'rmd-header-multi-month',
+      classNames?.header,
+      calendars.length > 1 && classNames?.headerMultiMonth
+    )}>
       <button
         {...getBackProps({ calendars })}
         onMouseDown={(e) => e.preventDefault()}
@@ -82,20 +75,20 @@ export const CalendarHeader: React.FC<HeaderProps> = ({
         <ChevronLeftIcon />
       </button>
 
-      <div className={monthYearContainerClassName}>
+      <div className={clsx('rmd-month-year-container', classNames?.monthYearContainer)}>
         {calendars.length === 1 ? (
           <div key={`${calendars[0].month}-${calendars[0].year}`} className={monthYearLabelClassName}>
             <button
               onMouseDown={(e) => e.preventDefault()}
               onClick={() => setView(currentView === 'months' ? 'days' : 'months')}
-              className={monthYearButtonClassName}
+              className={clsx('rmd-month-year-button', classNames?.monthYearButton)}
             >
               {monthNames[calendars[0].month]}
             </button>
             <button
               onMouseDown={(e) => e.preventDefault()}
               onClick={() => setView(currentView === 'years' ? 'days' : 'years')}
-              className={monthYearButtonClassName}
+              className={clsx('rmd-month-year-button', classNames?.monthYearButton)}
             >
               {calendars[0].year}
             </button>

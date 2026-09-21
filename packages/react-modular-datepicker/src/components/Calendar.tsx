@@ -112,20 +112,8 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
     />
   );
 
-  const rootClassName = clsx('rmd', 'rmd-root', classNames?.root);
-  const calendarsContainerClassName = clsx('rmd-calendars-container', classNames?.calendarsContainer);
-  const calendarContainerClassName = clsx('rmd-calendar-container', classNames?.calendarContainer);
-  const monthHeaderClassName = clsx('rmd-header', classNames?.header);
-  const navButtonSlotStartClassName = clsx('rmd-nav-button-slot-start', classNames?.navButtonSlotStart);
-  const navButtonSlotEndClassName = clsx('rmd-nav-button-slot-end', classNames?.navButtonSlotEnd);
-  const navButtonClassName = clsx('rmd-nav-button', classNames?.navButton);
-  const headerTitleContainerClassName = clsx('rmd-header-title-container', classNames?.headerTitleContainer);
-  const weekdayGridClassName = clsx('rmd-weekday-grid', classNames?.weekdayGrid);
-  const weekdayClassName = clsx('rmd-weekday', classNames?.weekday);
-  const footerClassName = clsx('rmd-footer', classNames?.footer);
-
   return (
-    <div className={rootClassName}>
+    <div className={clsx('rmd', 'rmd-root', classNames?.root)}>
       {typeof header === 'function' ? header({
         calendars,
         getBackProps: wrappedGetBackProps,
@@ -137,9 +125,9 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
         currentView: view
       }) : (header || renderDefaultHeader())}
 
-      <div className={calendarsContainerClassName}>
+      <div className={clsx('rmd-calendars-container', classNames?.calendarsContainer)}>
         {view === 'months' && calendars.map((calendar) => (
-          <div key={`months-${calendar.year}`} className={calendarContainerClassName}>
+          <div key={`months-${calendar.year}`} className={clsx('rmd-calendar-container', classNames?.calendarContainer)}>
             <MonthSelection
               year={calendar.year}
               month={calendar.month}
@@ -152,7 +140,7 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
           </div>
         ))}
         {view === 'years' && calendars.map((calendar) => (
-          <div key={`years-${calendar.year}`} className={calendarContainerClassName}>
+          <div key={`years-${calendar.year}`} className={clsx('rmd-calendar-container', classNames?.calendarContainer)}>
             <YearSelection
               year={calendar.year}
               minDate={props.minDate}
@@ -164,31 +152,31 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
           </div>
         ))}
         {view === 'days' && calendars.map((calendar, index) => (
-          <div key={`${calendar.month}-${calendar.year}`} className={calendarContainerClassName}>
+          <div key={`${calendar.month}-${calendar.year}`} className={clsx('rmd-calendar-container', classNames?.calendarContainer)}>
             {calendars.length > 1 && (
-              <div className={monthHeaderClassName}>
-                <div className={navButtonSlotStartClassName}>
+              <div className={clsx('rmd-header', classNames?.header)}>
+                <div className={clsx('rmd-nav-button-slot-start', classNames?.navButtonSlotStart)}>
                   {index === 0 && calendars.length < 12 && (
                     <button
                       {...wrappedGetBackProps({ calendars })}
                       onMouseDown={(e) => e.preventDefault()}
-                      className={navButtonClassName}
+                      className={clsx('rmd-nav-button', classNames?.navButton)}
                       aria-label={t.back}
                     >
                       <ChevronLeftIcon />
                     </button>
                   )}
                 </div>
-                <span className={headerTitleContainerClassName}>
+                <span className={clsx('rmd-header-title-container', classNames?.headerTitleContainer)}>
                   {monthNames[calendar.month]}
                   {calendars.length < 12 ? ` ${calendar.year}` : ''}
                 </span>
-                <div className={navButtonSlotEndClassName}>
+                <div className={clsx('rmd-nav-button-slot-end', classNames?.navButtonSlotEnd)}>
                   {index === calendars.length - 1 && calendars.length < 12 && (
                     <button
                       {...wrappedGetForwardProps({ calendars })}
                       onMouseDown={(e) => e.preventDefault()}
-                      className={navButtonClassName}
+                      className={clsx('rmd-nav-button', classNames?.navButton)}
                       aria-label={t.forward}
                     >
                       <ChevronRightIcon />
@@ -197,9 +185,9 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
                 </div>
               </div>
             )}
-            <div className={weekdayGridClassName}>
+            <div className={clsx('rmd-weekday-grid', classNames?.weekdayGrid)}>
               {sortedWeekdays.map((day) => (
-                <div key={day} className={weekdayClassName}>{day}</div>
+                <div key={day} className={clsx('rmd-weekday', classNames?.weekday)}>{day}</div>
               ))}
             </div>
             <div
@@ -226,7 +214,7 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
           </div>
         ))}
       </div>
-      {footer && <div className={footerClassName}>{footer}</div>}
+      {footer && <div className={clsx('rmd-footer', classNames?.footer)}>{footer}</div>}
     </div>
   );
 };
