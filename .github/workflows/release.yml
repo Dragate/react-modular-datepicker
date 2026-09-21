@@ -29,6 +29,9 @@ env:
 jobs:
   release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
     steps:
     - uses: actions/checkout@v6
     - uses: pnpm/action-setup@v6
@@ -50,13 +53,13 @@ jobs:
     - name: Bump version and tag
       id: bump
       run: node ./scripts/bump-version.js
-    - name: Push version commit
+    - name: Push version commit and tags
       run: |
-        git push origin ${GITHUB_REF#refs/heads/}
-        git push origin --tags
+        git push origin refs/tags/v${{ steps.bump.outputs.version }} || git push origin --tags
+        git push origin ${GITHUB_REF#refs/heads/} || echo "Branch is protected, skipped direct branch push"
     - name: Create release
       run: gh release create v${{ steps.bump.outputs.version }} --target ${GITHUB_REF#refs/heads/} --generate-notes ${{ github.event.inputs.releaseType == 'canary' && '--prerelease' || '' }}
       env:
         GH_TOKEN: ${{ github.token }}
     - name: Publish package
-      run: pnpm --filter react-modular-datepicker publish --no-git-checks --access public ${{ github.event.inputs.releaseType != 'stable' && format('--tag {0}', github.event.inputs.releaseType) || '' }}
+      run: pnpm --filter react-modular-datepicker publish --provenance --no-git-checks --access public ${{ github.event.inputs.releaseType != 'stable' && format('--tag {0}', github.event.inputs.releaseType) || '' }}
