@@ -1,4 +1,8 @@
+import dayjs from "dayjs";
+import localeData from "dayjs/plugin/localeData";
 import { ImageResponse } from 'next/og';
+
+dayjs.extend(localeData)
 
 export const alt = 'React Modular Datepicker - Modular, Lightweight & Type-Safe Datepicker for React';
 export const size = {
@@ -15,7 +19,7 @@ interface CalendarDayItem {
 }
 
 export default async function Image() {
-  const daysHeader = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+  const daysHeader = dayjs().localeData().weekdaysShort();
 
   const week1: CalendarDayItem[] = [
     { num: '28', outside: true },
@@ -110,6 +114,7 @@ export default async function Image() {
               fontSize: '18px',
               fontWeight: 600,
               marginBottom: '28px',
+              maxWidth: '290px',
             }}
           >
             {/* Embedded Logo SVG */}
@@ -191,7 +196,7 @@ export default async function Image() {
             style={{
               display: 'flex',
               flexDirection: 'column',
-              width: '360px',
+              width: '350px',
               backgroundColor: '#ffffff',
               border: '1px solid #e5e7eb',
               borderRadius: '12px',
@@ -208,7 +213,7 @@ export default async function Image() {
                 justifyContent: 'space-between',
                 paddingBottom: '8px',
                 borderBottom: '2px solid rgba(181, 190, 198, 0.4)',
-                marginBottom: '12px',
+                marginBottom: '8px',
               }}
             >
               {/* Back Button */}
@@ -278,6 +283,7 @@ export default async function Image() {
                     justifyContent: 'center',
                     fontSize: '12px',
                     color: '#9ca3af',
+                    textTransform: "uppercase",
                   }}
                 >
                   {day}
@@ -293,14 +299,15 @@ export default async function Image() {
                 backgroundColor: 'rgba(181, 190, 198, 0.25)',
               }}
             >
-              {weeks.map((week, wIdx) => (
+              {weeks.map((week, wIdx, arr) => (
                 <div
                   key={wIdx}
                   style={{
                     display: 'flex',
                     flexDirection: 'row',
                     justifyContent: 'space-between',
-                    marginBottom: '1px',
+                    gap: '1px',
+                    marginBottom: wIdx === arr.length - 1 ? '0px' : '1px',
                   }}
                 >
                   {week.map((item, dIdx) => {
@@ -310,7 +317,7 @@ export default async function Image() {
                     let fontWeight: number | string = 500;
 
                     if (item.outside) {
-                      textColor = '#9ca3af';
+                      textColor = '#ffffff';
                     } else if (item.selected) {
                       bgColor = '#c5a059';
                       textColor = '#ffffff';
@@ -325,6 +332,7 @@ export default async function Image() {
                           width: '44px',
                           height: '42px',
                           display: 'flex',
+                          flex: "1",
                           alignItems: 'center',
                           justifyContent: 'center',
                           backgroundColor: bgColor,
@@ -341,23 +349,6 @@ export default async function Image() {
                 </div>
               ))}
             </div>
-          </div>
-
-          {/* Selected Date indicator matching BasicDemo */}
-          <div
-            style={{
-              marginTop: '16px',
-              fontSize: '14px',
-              color: '#9ca3af',
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}
-          >
-            <span>Selected: </span>
-            <span style={{ fontWeight: 600, color: '#f3f4f6', marginLeft: '6px' }}>
-              Wed Oct 15 2025
-            </span>
           </div>
         </div>
       </div>
