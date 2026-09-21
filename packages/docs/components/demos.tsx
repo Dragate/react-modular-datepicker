@@ -15,6 +15,7 @@ import {
 import React, { useEffect, useRef, useState } from 'react';
 import {
   Calendar,
+  CalendarClassNames,
   DateAdapter,
   useDates
 } from 'react-modular-datepicker';
@@ -448,25 +449,26 @@ export function CustomStylingDemo() {
   const cyberpunkClassNames = {
     root: 'bg-[#050b14] p-4 sm:p-6 rounded-none border-2 border-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.5)] text-cyan-400 font-mono w-full max-w-sm',
     calendarContainer: 'w-full min-w-0',
-    header: 'flex items-center justify-between border-b border-cyan-500/50 pb-3 mb-3',
+    header: 'flex items-center justify-between border-b border-cyan-500/50 pb-3',
     navButton: 'p-1.5 text-cyan-400 hover:bg-cyan-950 hover:text-cyan-200 rounded transition-colors',
     monthYearLabel: 'font-mono text-cyan-300 text-base font-bold tracking-wider',
     monthYearButton: 'hover:bg-cyan-950 px-2 py-1 rounded text-cyan-300',
-    weekdayGrid: 'grid grid-cols-7 gap-1 mb-2 border-b border-cyan-900/60 pb-1',
+    weekdayGrid: 'grid grid-cols-7 gap-1 mb-2 border-b border-cyan-900/60',
     weekday: 'text-center text-xs font-bold text-cyan-400 tracking-widest uppercase',
     daysGrid: 'grid grid-cols-7 gap-1 bg-transparent',
     day: {
       day: 'aspect-square flex items-center justify-center text-xs font-bold transition-all relative border border-cyan-900/80 bg-[#081220] text-cyan-300 hover:border-cyan-400 hover:bg-cyan-950',
-      selected: '!bg-[#081220] !text-amber-400 border-2 border-amber-400 shadow-[0_0_12px_rgba(251,191,36,0.8)] font-extrabold scale-105',
+      selected: 'bg-[#081220] text-amber-400 border-2 border-amber-400 shadow-[0_0_12px_rgba(34,211,238,0.8)] font-extrabold',
       unselected: 'bg-[#081220] text-cyan-300',
       disabled: 'bg-gray-900/80 text-gray-600 border-gray-900 cursor-not-allowed opacity-40',
+      outside: "invisible"
     },
-  };
+  } satisfies CalendarClassNames
 
   const purpleClassNames = {
     root: 'bg-gradient-to-b from-[#2d0b5a] via-[#1e073e] to-[#120327] p-4 sm:p-6 rounded-3xl border border-purple-500/30 shadow-2xl text-purple-100 w-full max-w-sm',
     calendarContainer: 'w-full min-w-0',
-    header: 'flex items-center justify-between pb-3 mb-2',
+    header: 'flex items-center justify-between pb-3',
     navButton: 'p-1.5 text-purple-300 hover:bg-purple-900/50 rounded-full transition-colors',
     monthYearLabel: 'font-sans text-purple-100 text-lg font-extrabold tracking-wide',
     monthYearButton: 'hover:bg-purple-900/40 px-2 py-1 rounded-lg text-purple-100',
@@ -475,29 +477,31 @@ export function CustomStylingDemo() {
     daysGrid: 'grid grid-cols-7 gap-2 bg-transparent',
     day: {
       day: 'aspect-square flex items-center justify-center text-xs font-semibold rounded-full transition-all text-purple-100 hover:bg-purple-800/40 bg-purple-900/60',
-      selected: '!bg-purple-600 !text-white font-extrabold ring-2 ring-pink-400 ring-offset-2 ring-offset-[#1e073e] rounded-full shadow-[0_0_15px_rgba(236,72,153,0.9)] scale-105',
+      selected: '-purple-600 text-white font-extrabold ring-2 ring-pink-400 ring-offset-2 ring-offset-[#1e073e] rounded-full',
       unselected: 'text-purple-100',
       disabled: 'bg-purple-950/40 text-purple-400/30 cursor-not-allowed',
+      outside: "invisible"
     },
-  };
+  } satisfies CalendarClassNames
 
   const adaptiveClassNames = {
     root: 'bg-slate-100/80 dark:bg-slate-900/90 p-4 sm:p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-lg text-slate-800 dark:text-slate-100 w-full max-w-sm backdrop-blur-md',
     calendarContainer: 'w-full min-w-0',
-    header: 'flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3 mb-3',
+    header: 'flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3',
     navButton: 'p-1.5 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-lg transition-colors',
     monthYearLabel: 'font-sans text-slate-900 dark:text-slate-50 text-base font-bold tracking-tight',
     monthYearButton: 'hover:bg-slate-200 dark:hover:bg-slate-800 px-2 py-1 rounded-lg text-slate-900 dark:text-slate-100 font-bold',
-    weekdayGrid: 'grid grid-cols-7 gap-1 mb-2 border-b border-slate-200/60 dark:border-slate-800/60 pb-1',
+    weekdayGrid: 'grid grid-cols-7 gap-1 mb-2 border-b border-slate-200/60 dark:border-slate-800/60',
     weekday: 'text-center text-[11px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider',
     daysGrid: 'grid grid-cols-7 gap-1 bg-transparent',
     day: {
       day: 'aspect-square flex items-center justify-center text-xs font-semibold rounded-lg bg-slate-200/50 dark:bg-slate-800/50 text-slate-800 dark:text-slate-200 hover:bg-emerald-500/20 dark:hover:bg-emerald-500/30 hover:text-emerald-700 dark:hover:text-emerald-300 transition-all',
-      selected: '!bg-emerald-600 dark:!bg-emerald-500 !text-white font-extrabold rounded-lg shadow-lg shadow-emerald-600/40 dark:shadow-emerald-500/60 ring-2 ring-emerald-500 ring-offset-2 ring-offset-slate-100 dark:ring-offset-slate-900 scale-105',
+      selected: 'bg-emerald-600 dark:bg-emerald-500  text-slate-800 dark:text-slate-200 font-extrabold rounded-lg shadow-lg shadow-emerald-600/40 dark:shadow-emerald-500/60 ring-2 ring-emerald-500 ring-offset-2 ring-offset-slate-100 dark:ring-offset-slate-900',
       unselected: 'text-slate-800 dark:text-slate-200',
       disabled: 'opacity-30 bg-slate-100 dark:bg-slate-900 text-slate-400 dark:text-slate-600 cursor-not-allowed',
+      outside: "invisible"
     },
-  };
+  } satisfies CalendarClassNames
 
   const themeClassNames = {
     cyberpunk: cyberpunkClassNames,
