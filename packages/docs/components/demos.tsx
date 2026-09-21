@@ -49,7 +49,7 @@ export function ModifiersDemo() {
 
   const [selectedDate, setSelectedDate] = useState<Date>(new Date(year, month, 15));
 
-  const birthdays = [`${year}-${month + 1}-12`, `${year}-${month + 1}-24`];
+  const birthdays = [`${year}-${month + 1}-18`];
   const holidays = [`${year}-${month + 1}-1`, `${year}-${month + 1}-25`];
 
   const getKey = (d: Date) => `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
@@ -67,7 +67,7 @@ export function ModifiersDemo() {
         getDayProps={(dateObj) => {
           const key = getKey(dateObj.date);
           if (birthdays.includes(key)) {
-            return { 'data-tooltip': '🎂 Birthday!' };
+            return { 'data-tooltip': '🎂 Birthday Party!' };
           }
           if (holidays.includes(key)) {
             return { 'data-tooltip': '🎉 Holiday' };
@@ -79,27 +79,27 @@ export function ModifiersDemo() {
         }}
         classNames={{
           day: {
-            weekend: 'bg-indigo-100/70 dark:bg-indigo-950/50 text-indigo-900 dark:text-indigo-200 font-bold',
+            weekend: 'text-red-950 dark:text-red-200 font-normal',
             holiday:
-              'border-2 border-emerald-500 font-bold relative ' +
+              'border-2 border-emerald-500 font-normal relative ' +
               'before:content-[attr(data-tooltip)] before:absolute before:bottom-full before:left-1/2 before:-translate-x-1/2 before:mb-1 before:hidden hover:before:block ' +
               'before:px-2 before:py-0.5 before:bg-gray-800 before:text-white before:text-[10px] before:rounded before:whitespace-nowrap before:z-20',
             birthday:
-              'text-pink-600 dark:text-pink-400 font-black scale-105 relative ' +
+              'text-pink-600 dark:text-pink-400 font-bold relative ' +
               'before:content-[attr(data-tooltip)] before:absolute before:bottom-full before:left-1/2 before:-translate-x-1/2 before:mb-1 before:hidden hover:before:block ' +
               'before:px-2 before:py-0.5 before:bg-gray-800 before:text-white before:text-[10px] before:rounded before:whitespace-nowrap before:z-20',
           },
         }}
       />
       <div className="mt-4 flex flex-wrap gap-3 justify-center text-xs">
-        <span className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-indigo-100/70 dark:bg-indigo-950/50 text-indigo-900 dark:text-indigo-200 font-semibold">
-          <span className="w-2.5 h-2.5 rounded-full bg-indigo-500 inline-block" /> Weekend (Background Color)
+        <span className="flex items-center gap-1.5 px-2.5 py-1 rounded text-red-950 dark:text-red-200 font-medium border border-red-200 dark:border-red-900/40">
+          <span className="w-2.5 h-2.5 rounded-full bg-red-900 dark:bg-red-300 inline-block" /> Weekend (Dark Red Text)
         </span>
-        <span className="flex items-center gap-1.5 px-2.5 py-1 rounded border-2 border-emerald-500 text-emerald-800 dark:text-emerald-200 font-bold">
+        <span className="flex items-center gap-1.5 px-2.5 py-1 rounded border-2 border-emerald-500 text-emerald-800 dark:text-emerald-200 font-medium">
           <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block" /> 🎉 Holiday (Border Highlight)
         </span>
-        <span className="flex items-center gap-1.5 px-2.5 py-1 rounded text-pink-600 dark:text-pink-400 font-black">
-          <span className="w-2.5 h-2.5 rounded-full bg-pink-500 inline-block" /> 🎂 Birthday (Text Color)
+        <span className="flex items-center gap-1.5 px-2.5 py-1 rounded text-pink-600 dark:text-pink-400 font-bold border border-pink-200 dark:border-pink-900/40">
+          <span className="w-2.5 h-2.5 rounded-full bg-pink-500 inline-block" /> 🎂 Birthday Party (Pink Bold Text)
         </span>
       </div>
     </DemoContainer>
@@ -403,7 +403,16 @@ export function RangeDemo() {
 }
 
 export function MultipleDemo() {
-  const [dates, setDates] = useState<Date[]>([]);
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = today.getMonth();
+
+  const [dates, setDates] = useState<Date[]>([
+    new Date(year, month, 8),
+    new Date(year, month, 12),
+    new Date(year, month, 15),
+    new Date(year, month, 22),
+  ]);
   return (
     <DemoContainer title="Live Preview: Multiple Date Selection">
       <Calendar
@@ -483,7 +492,8 @@ export function CustomStylingDemo() {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date(2026, 8, 13));
 
   const cyberpunkClassNames = {
-    root: 'bg-[#050b14] p-6 rounded-none border-2 border-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.5)] text-cyan-400 font-mono w-full max-w-sm',
+    root: 'bg-[#050b14] p-4 sm:p-6 rounded-none border-2 border-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.5)] text-cyan-400 font-mono w-full max-w-sm',
+    calendarContainer: 'w-full min-w-0',
     header: 'flex items-center justify-between border-b border-cyan-500/50 pb-3 mb-3',
     navButton: 'p-1.5 text-cyan-400 hover:bg-cyan-950 hover:text-cyan-200 rounded transition-colors',
     monthYearLabel: 'font-mono text-cyan-300 text-base font-bold tracking-wider',
@@ -493,14 +503,15 @@ export function CustomStylingDemo() {
     daysGrid: 'grid grid-cols-7 gap-1 bg-transparent',
     day: {
       day: 'aspect-square flex items-center justify-center text-xs font-bold transition-all relative border border-cyan-900/80 bg-[#081220] text-cyan-300 hover:border-cyan-400 hover:bg-cyan-950',
-      selected: 'bg-[#081220] text-amber-400 border-2 border-amber-400 shadow-[0_0_10px_rgba(251,191,36,0.6)] font-extrabold',
+      selected: '!bg-[#081220] !text-amber-400 border-2 border-amber-400 shadow-[0_0_12px_rgba(251,191,36,0.8)] font-extrabold scale-105',
       unselected: 'bg-[#081220] text-cyan-300',
       disabled: 'bg-gray-900/80 text-gray-600 border-gray-900 cursor-not-allowed opacity-40',
     },
   };
 
   const purpleClassNames = {
-    root: 'bg-gradient-to-b from-[#2d0b5a] via-[#1e073e] to-[#120327] p-6 rounded-3xl border border-purple-500/30 shadow-2xl text-purple-100 w-full max-w-sm',
+    root: 'bg-gradient-to-b from-[#2d0b5a] via-[#1e073e] to-[#120327] p-4 sm:p-6 rounded-3xl border border-purple-500/30 shadow-2xl text-purple-100 w-full max-w-sm',
+    calendarContainer: 'w-full min-w-0',
     header: 'flex items-center justify-between pb-3 mb-2',
     navButton: 'p-1.5 text-purple-300 hover:bg-purple-900/50 rounded-full transition-colors',
     monthYearLabel: 'font-sans text-purple-100 text-lg font-extrabold tracking-wide',
@@ -510,14 +521,15 @@ export function CustomStylingDemo() {
     daysGrid: 'grid grid-cols-7 gap-2 bg-transparent',
     day: {
       day: 'aspect-square flex items-center justify-center text-xs font-semibold rounded-full transition-all text-purple-100 hover:bg-purple-800/40 bg-purple-900/60',
-      selected: 'bg-purple-900/60 text-white font-bold ring-2 ring-pink-500 ring-offset-2 ring-offset-[#1e073e] rounded-full shadow-[0_0_12px_rgba(236,72,153,0.7)]',
+      selected: '!bg-purple-600 !text-white font-extrabold ring-2 ring-pink-400 ring-offset-2 ring-offset-[#1e073e] rounded-full shadow-[0_0_15px_rgba(236,72,153,0.9)] scale-105',
       unselected: 'text-purple-100',
       disabled: 'bg-purple-950/40 text-purple-400/30 cursor-not-allowed',
     },
   };
 
   const adaptiveClassNames = {
-    root: 'bg-slate-100/80 dark:bg-slate-900/90 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-lg text-slate-800 dark:text-slate-100 w-full max-w-sm backdrop-blur-md',
+    root: 'bg-slate-100/80 dark:bg-slate-900/90 p-4 sm:p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-lg text-slate-800 dark:text-slate-100 w-full max-w-sm backdrop-blur-md',
+    calendarContainer: 'w-full min-w-0',
     header: 'flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3 mb-3',
     navButton: 'p-1.5 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-lg transition-colors',
     monthYearLabel: 'font-sans text-slate-900 dark:text-slate-50 text-base font-bold tracking-tight',
@@ -527,7 +539,7 @@ export function CustomStylingDemo() {
     daysGrid: 'grid grid-cols-7 gap-1 bg-transparent',
     day: {
       day: 'aspect-square flex items-center justify-center text-xs font-semibold rounded-lg bg-slate-200/50 dark:bg-slate-800/50 text-slate-800 dark:text-slate-200 hover:bg-emerald-500/20 dark:hover:bg-emerald-500/30 hover:text-emerald-700 dark:hover:text-emerald-300 transition-all',
-      selected: 'bg-emerald-600 dark:bg-emerald-500 text-white font-bold rounded-lg shadow-md shadow-emerald-500/20',
+      selected: '!bg-emerald-600 dark:!bg-emerald-500 !text-white font-extrabold rounded-lg shadow-lg shadow-emerald-600/40 dark:shadow-emerald-500/60 ring-2 ring-emerald-500 ring-offset-2 ring-offset-slate-100 dark:ring-offset-slate-900 scale-105',
       unselected: 'text-slate-800 dark:text-slate-200',
       disabled: 'opacity-30 bg-slate-100 dark:bg-slate-900 text-slate-400 dark:text-slate-600 cursor-not-allowed',
     },
@@ -541,7 +553,7 @@ export function CustomStylingDemo() {
 
   return (
     <DemoContainer title="Live Preview: Custom Styling & Themes">
-      <div className="flex gap-2 mb-6">
+      <div className="flex flex-wrap gap-2 justify-center mb-6 w-full">
         <button
           type="button"
           onClick={() => setTheme('adaptive')}
@@ -699,13 +711,64 @@ export function FormIntegrationDemo() {
 
 export function HeaderFooterDemo() {
   const [selected, setSelected] = useState<Date | null>(new Date());
+  const [currentDate, setCurrentDate] = useState<Date>(new Date());
+
+  const handleSelectToday = () => {
+    const today = new Date();
+    setSelected(today);
+    setCurrentDate(today);
+  };
+
+  const handleClear = () => {
+    setSelected(null);
+  };
+
   return (
     <DemoContainer title="Live Preview: Custom Header & Footer">
       <Calendar
+        date={currentDate}
         selected={selected || undefined}
         onChange={(val) => setSelected(val as Date)}
-        header={<div className="p-2 bg-blue-500/20 text-blue-700 dark:text-blue-300 font-bold text-center rounded-t-lg">🌟 Custom Header Banner</div>}
-        footer={<div className="p-2 bg-fd-muted text-fd-muted-foreground text-xs text-center rounded-b-lg border-t border-fd-border">Custom Footer: Select any date</div>}
+        onMonthChange={(d) => setCurrentDate(d)}
+        header={
+          <div className="px-4 py-3 bg-slate-900 dark:bg-slate-950 text-white border-b border-slate-800 flex items-center justify-between rounded-t-lg shadow-sm">
+            <span className="text-xs font-bold tracking-wide flex items-center gap-2">
+              <span className="text-brand-gold text-sm">📅</span> Appointment Booking
+            </span>
+            <span className="text-[11px] font-medium text-slate-300 bg-slate-800/80 px-2 py-0.5 rounded-full">
+              Step 1 of 2
+            </span>
+          </div>
+        }
+        footer={
+          <div className="px-4 py-3 bg-slate-900 dark:bg-slate-950 text-white border-t border-slate-800 flex items-center justify-between rounded-b-lg shadow-sm text-xs">
+            <div className="flex-1 min-w-0 h-5 flex items-center pr-2">
+              {selected ? (
+                <span className="text-slate-200 font-medium truncate">
+                  Selected: <strong className="font-bold text-brand-gold">{selected.toLocaleDateString()}</strong>
+                </span>
+              ) : (
+                <span className="text-slate-400 italic truncate">No date selected</span>
+              )}
+            </div>
+            <div className="flex items-center gap-2 shrink-0">
+              <button
+                type="button"
+                onClick={handleSelectToday}
+                className="px-2.5 py-1 text-xs font-semibold rounded bg-brand-gold text-slate-950 hover:bg-amber-400 transition-colors cursor-pointer"
+              >
+                Today
+              </button>
+              <button
+                type="button"
+                onClick={handleClear}
+                className="px-2.5 py-1 text-xs font-semibold rounded border border-slate-700 bg-slate-800 text-slate-200 hover:bg-slate-700 transition-colors cursor-pointer"
+              >
+                Clear
+              </button>
+            </div>
+          </div>
+        }
       />
     </DemoContainer>
   );

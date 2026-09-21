@@ -57,7 +57,7 @@
   }
 
   .rmd-calendar-container {
-    @apply rmd:flex-1 rmd:min-w-[280px] rmd:max-w-full;
+    @apply rmd:flex-1 rmd:min-w-[240px] rmd:max-w-full;
   }
 
   .rmd-nav-button-slot-start {
@@ -153,11 +153,11 @@
   }
 
   .rmd-months-grid {
-    @apply rmd:grid rmd:grid-cols-3 rmd:grid-rows-4 rmd:gap-2 rmd:h-full rmd:animate-slide-in-top;
+    @apply rmd:grid rmd:grid-cols-3 rmd:grid-rows-4 rmd:gap-2 rmd:items-center rmd:h-full rmd:animate-slide-in-top;
   }
 
   .rmd-month-button {
-    @apply rmd:flex rmd:items-center rmd:justify-center rmd:h-full rmd:py-2 rmd:rounded-lg rmd:hover:bg-brand-gray-light rmd:transition-colors rmd:cursor-pointer rmd:disabled:opacity-30 rmd:disabled:pointer-events-none;
+    @apply rmd:flex rmd:items-center rmd:justify-center rmd:py-1.5 rmd:px-2.5 rmd:text-sm rmd:font-medium rmd:rounded-md rmd:hover:bg-brand-gray-light/30 rmd:transition-colors rmd:cursor-pointer rmd:disabled:opacity-30 rmd:disabled:pointer-events-none;
   }
 
   .rmd-month-button-selected {
@@ -169,7 +169,7 @@
   }
 
   .rmd-years-grid {
-    @apply rmd:grid rmd:grid-cols-3 rmd:gap-2 rmd:h-full rmd:overflow-y-auto rmd:pr-2 rmd:animate-slide-in-top;
+    @apply rmd:grid rmd:grid-cols-3 rmd:gap-2 rmd:items-center rmd:h-full rmd:overflow-y-auto rmd:pr-2 rmd:animate-slide-in-top;
     scrollbar-width: thin;
     scrollbar-color: var(--color-brand-gray-light, #b5bec6) transparent;
   }
@@ -192,7 +192,7 @@
   }
 
   .rmd-year-button {
-    @apply rmd:py-3 rmd:rounded-lg rmd:hover:bg-brand-gray-light rmd:transition-colors rmd:cursor-pointer rmd:disabled:opacity-30 rmd:disabled:pointer-events-none;
+    @apply rmd:py-1.5 rmd:px-2.5 rmd:text-sm rmd:font-medium rmd:rounded-md rmd:hover:bg-brand-gray-light/30 rmd:transition-colors rmd:cursor-pointer rmd:disabled:opacity-30 rmd:disabled:pointer-events-none;
   }
 
   .rmd-year-button-selected {
