@@ -11,7 +11,7 @@ description: Learn how to customize class names, override themes, and integrate 
 
 ## Import Built-in Styles
 
-To use the default theme, import the compiled Tailwind CSS file:
+To use the default theme, import the compiled CSS stylesheet:
 
 ```tsx
 import 'react-modular-datepicker/dist/index.css';
@@ -26,22 +26,35 @@ The `Calendar` component accepts a `classNames` prop of type `CalendarClassNames
 ```typescript
 export interface CalendarClassNames {
   root?: string;
+  header?: string;
+  headerMultiMonth?: string;
   calendarsContainer?: string;
-  calendarHeader?: string;
-  monthYearLabel?: string;
-  monthYearSelect?: string;
+  calendarContainer?: string;
+  navButtonSlotStart?: string;
+  navButtonSlotEnd?: string;
+  headerTitleContainer?: string;
+  weekdayGrid?: string;
+  weekday?: string;
+  daysGrid?: string;
+  footer?: string;
+
   navButton?: string;
-  weekdaysHeader?: string;
-  weekdayCell?: string;
-  weeksContainer?: string;
-  weekRow?: string;
+  navButtonHidden?: string;
+  monthYearContainer?: string;
+  monthYearLabel?: string;
+  monthYearButton?: string;
+
   day?: DayClassNames;
-  monthSelectionRoot?: string;
-  monthSelectionGrid?: string;
-  monthSelectionCell?: string;
-  yearSelectionRoot?: string;
-  yearSelectionList?: string;
-  yearSelectionItem?: string;
+
+  monthsGrid?: string;
+  monthButton?: string;
+  monthButtonSelected?: string;
+  monthButtonUnselected?: string;
+
+  yearsGrid?: string;
+  yearButton?: string;
+  yearButtonSelected?: string;
+  yearButtonUnselected?: string;
 }
 ```
 
@@ -53,13 +66,11 @@ The `day` property under `classNames` allows customizing specific date cell stat
 
 ```typescript
 export interface DayClassNames {
-  cell?: string;
   day?: string;
-  unselected?: string;
   selected?: string;
-  today?: string;
+  unselected?: string;
   disabled?: string;
-  outside?: string;
+  empty?: string;
   rangeStart?: string;
   rangeEnd?: string;
   rangeBetween?: string;
@@ -70,9 +81,9 @@ export interface DayClassNames {
 
 ---
 
-## Deep Merging Behavior
+## Class Name Merging Behavior
 
-The library automatically merges your custom class names with `defaultClassNames` using the internal `mergeClassNames` utility.
+The library automatically combines default semantic classes (`rmd-*`) with user-provided `classNames` overrides using `clsx`.
 
 ```tsx
 <Calendar
@@ -82,10 +93,23 @@ The library automatically merges your custom class names with `defaultClassNames
     day: {
       unselected: 'bg-stone-800 text-stone-200 hover:bg-amber-900/50',
       selected: 'bg-amber-500 text-stone-950 font-bold',
-      today: 'border-2 border-amber-400',
-    }
+    },
+    monthsGrid: 'grid grid-cols-3 gap-2',
+    monthButtonSelected: 'bg-amber-500 text-stone-950 font-bold',
+    yearsGrid: 'grid grid-cols-3 gap-2',
+    yearButtonSelected: 'bg-amber-500 text-stone-950 font-bold',
   }}
 />
 ```
+
+---
+
+## Customization Approaches
+
+1. **Class Names Override (`classNames`)**: Target individual element slots with custom Tailwind CSS or CSS classes.
+2. **CSS Variables**: Override root theme tokens (`--color-brand-gold`, `--color-brand-gray-light`, `--color-brand-gray-dark`, `--color-brand-text`).
+3. **CSS Modules**: Pass styles from `.module.css` files directly into `classNames`.
+
+Check out the interactive [Custom Styling Recipe](/docs/recipes/custom-styling) for live preset themes and detailed code examples.
 
 <CustomStylingDemo />
