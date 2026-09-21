@@ -809,7 +809,7 @@ export function YearlyDemo() {
 
   return (
     <DemoContainer title="Live Preview: Yearly View">
-      <div className="w-full">
+      <div className="flex flex-col justify-center">
         <Calendar
           date={startOfYear}
           monthsToDisplay={12}
