@@ -5,6 +5,9 @@ import { Calendar } from 'react-modular-datepicker';
 
 const customClassNames = {
   root: 'custom-root-style',
+  day: {
+    selected: 'custom-selected-day',
+  },
 };
 
 function StylingTestWrapper() {
@@ -20,7 +23,7 @@ function StylingTestWrapper() {
 }
 
 describe('Custom Styling Recipe', () => {
-  test('should render custom styling component', () => {
+  test('should render custom styling component with semantic classes and custom overrides', () => {
     const container = document.createElement('div');
     document.body.appendChild(container);
     const root = createRoot(container);
@@ -30,6 +33,20 @@ describe('Custom Styling Recipe', () => {
     });
 
     const rootElement = container.querySelector('.rmd');
+    expect(rootElement?.className).toContain('rmd-root');
     expect(rootElement?.className).toContain('custom-root-style');
+
+    const selectedDay = Array.from(container.querySelectorAll('button')).find(
+      (btn) => btn.textContent?.trim() === '13'
+    );
+    expect(selectedDay?.className).toContain('rmd-day');
+    expect(selectedDay?.className).toContain('rmd-day-selected');
+    expect(selectedDay?.className).toContain('custom-selected-day');
+
+    const unselectedDay = Array.from(container.querySelectorAll('button')).find(
+      (btn) => btn.textContent?.trim() === '14'
+    );
+    expect(unselectedDay?.className).toContain('rmd-day');
+    expect(unselectedDay?.className).toContain('rmd-day-unselected');
   });
 });

@@ -1,48 +1,62 @@
 import React from 'react';
+import clsx from 'clsx';
 import type { CalendarClassNames, DateObj } from '../types';
 
 interface DayProps {
   dateObj: DateObj | null;
   getDateProps: (args: { dateObj: DateObj, [key: string]: any }) => any;
   dayProps?: Record<string, any>;
-  classNames: Required<CalendarClassNames>;
+  classNames?: CalendarClassNames;
 }
 
 export const Day: React.FC<DayProps> = ({ dateObj, getDateProps, dayProps, classNames }) => {
   if (!dateObj) {
-    return <div className={classNames.day.empty} />;
+    return <div className={clsx('rmd-day-empty', classNames?.day?.empty)} />;
   }
 
   const { date, selected, selectable, isRangeStart, isRangeEnd, isRangeBetween, isRangeHovering, isRangeActive } = dateObj;
-  const dayClasses = classNames.day;
+  const dayClasses = classNames?.day;
 
-  let stateClasses = "rmd:rounded-full";
+  let semanticStateClass = '';
+  let customStateClass = '';
+
   if (isRangeStart && isRangeEnd) {
-    stateClasses = `${dayClasses.selected} rmd:rounded-full`;
+    semanticStateClass = 'rmd-day-selected';
+    customStateClass = dayClasses?.selected || '';
   } else if (isRangeStart) {
-    stateClasses = `${dayClasses.rangeStart} ${isRangeActive ? 'rmd:rounded-l-full rmd:rounded-r-none' : 'rmd:rounded-full'}`;
+    semanticStateClass = clsx('rmd-day-range-start', isRangeActive && 'rmd-day-range-active');
+    customStateClass = dayClasses?.rangeStart || '';
   } else if (isRangeEnd) {
-    stateClasses = `${dayClasses.rangeEnd} ${isRangeActive ? 'rmd:rounded-r-full rmd:rounded-l-none' : 'rmd:rounded-full'}`;
+    semanticStateClass = clsx('rmd-day-range-end', isRangeActive && 'rmd-day-range-active');
+    customStateClass = dayClasses?.rangeEnd || '';
   } else if (isRangeBetween) {
-    stateClasses = dayClasses.rangeBetween || '';
+    semanticStateClass = 'rmd-day-range-between';
+    customStateClass = dayClasses?.rangeBetween || '';
   } else if (isRangeHovering) {
-    stateClasses = dayClasses.rangeHovering || '';
+    semanticStateClass = 'rmd-day-range-hovering';
+    customStateClass = dayClasses?.rangeHovering || '';
   } else if (selected) {
-    stateClasses = dayClasses.selected || '';
+    semanticStateClass = 'rmd-day-selected';
+    customStateClass = dayClasses?.selected || '';
   } else if (!selectable) {
-    stateClasses = dayClasses.disabled || '';
+    semanticStateClass = 'rmd-day-disabled';
+    customStateClass = dayClasses?.disabled || '';
   } else {
-    stateClasses = dayClasses.unselected || '';
+    semanticStateClass = 'rmd-day-unselected';
+    customStateClass = dayClasses?.unselected || '';
   }
 
   const modifierClasses = (dateObj.modifiers || [])
-    .map(m => (dayClasses as any)[m] || m)
-    .filter(Boolean)
-    .join(' ');
+    .map(m => (dayClasses as any)?.[m] || m)
+    .filter(Boolean);
 
-  const className = [dayClasses.day, stateClasses, modifierClasses]
-    .filter(Boolean)
-    .join(' ');
+  const className = clsx(
+    'rmd-day',
+    dayClasses?.day,
+    semanticStateClass,
+    customStateClass,
+    modifierClasses
+  );
 
   return (
     <button

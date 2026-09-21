@@ -1,4 +1,5 @@
 import React from 'react';
+import clsx from 'clsx';
 import { CalendarClassNames } from '../types';
 
 interface MonthSelectionProps {
@@ -8,7 +9,7 @@ interface MonthSelectionProps {
   minDate?: Date | null;
   maxDate?: Date | null;
   onMonthSelect: (month: number) => void;
-  classNames: Required<CalendarClassNames>;
+  classNames?: CalendarClassNames;
 }
 
 export const MonthSelection: React.FC<MonthSelectionProps> = ({
@@ -30,16 +31,26 @@ export const MonthSelection: React.FC<MonthSelectionProps> = ({
     return false;
   };
 
+  const gridClassName = clsx('rmd-months-grid', classNames?.monthsGrid);
+
   return (
-    <div className={classNames.monthsGrid}>
+    <div className={gridClassName}>
       {monthNames.map((name, idx) => {
         const disabled = isMonthDisabled(idx);
+        const isSelected = idx === month;
+        const buttonClassName = clsx(
+          'rmd-month-button',
+          isSelected ? 'rmd-month-button-selected' : 'rmd-month-button-unselected',
+          classNames?.monthButton,
+          isSelected ? classNames?.monthButtonSelected : classNames?.monthButtonUnselected
+        );
+
         return (
           <button
             key={name}
             onMouseDown={(e) => e.preventDefault()}
             onClick={() => !disabled && onMonthSelect(idx)}
-            className={`${classNames.monthButton} ${idx === month ? classNames.monthButtonSelected : classNames.monthButtonUnselected}`}
+            className={buttonClassName}
             disabled={disabled}
           >
             {name}

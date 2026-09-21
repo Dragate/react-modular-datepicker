@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
+import clsx from 'clsx';
 import { defaultAdapter } from '../adapters/dayjs';
-import { mergeClassNames } from '../classNames';
 import { getTranslations, Translations } from '../i18n';
 import { CalendarClassNames, DateObj } from '../types';
 import { useDates, UseDatesProps } from '../useDates';
@@ -22,7 +22,7 @@ type CalendarView = 'days' | 'months' | 'years';
 
 export const Calendar: React.FC<CalendarProps> = (props) => {
   const {
-    classNames: customClassNames,
+    classNames,
     locale,
     translations: customTranslations,
     adapter = defaultAdapter,
@@ -32,8 +32,6 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
     getDayProps,
     ...useDatesProps
   } = props;
-
-  const classNames = mergeClassNames(customClassNames);
 
   const [view, setView] = useState<CalendarView>('days');
   const [slideDirection, setSlideDirection] = useState<'left' | 'right' | null>(null);
@@ -114,8 +112,20 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
     />
   );
 
+  const rootClassName = clsx('rmd', 'rmd-root', classNames?.root);
+  const calendarsContainerClassName = clsx('rmd-calendars-container', classNames?.calendarsContainer);
+  const calendarContainerClassName = clsx('rmd-calendar-container', classNames?.calendarContainer);
+  const monthHeaderClassName = clsx('rmd-header', classNames?.header);
+  const navButtonSlotStartClassName = clsx('rmd-nav-button-slot-start', classNames?.navButtonSlotStart);
+  const navButtonSlotEndClassName = clsx('rmd-nav-button-slot-end', classNames?.navButtonSlotEnd);
+  const navButtonClassName = clsx('rmd-nav-button', classNames?.navButton);
+  const headerTitleContainerClassName = clsx('rmd-header-title-container', classNames?.headerTitleContainer);
+  const weekdayGridClassName = clsx('rmd-weekday-grid', classNames?.weekdayGrid);
+  const weekdayClassName = clsx('rmd-weekday', classNames?.weekday);
+  const footerClassName = clsx('rmd-footer', classNames?.footer);
+
   return (
-    <div className={`rmd ${classNames.root}`}>
+    <div className={rootClassName}>
       {typeof header === 'function' ? header({
         calendars,
         getBackProps: wrappedGetBackProps,
@@ -127,9 +137,9 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
         currentView: view
       }) : (header || renderDefaultHeader())}
 
-      <div className={classNames.calendarsContainer}>
+      <div className={calendarsContainerClassName}>
         {view === 'months' && calendars.map((calendar) => (
-          <div key={`months-${calendar.year}`} className={classNames.calendarContainer}>
+          <div key={`months-${calendar.year}`} className={calendarContainerClassName}>
             <MonthSelection
               year={calendar.year}
               month={calendar.month}
@@ -142,7 +152,7 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
           </div>
         ))}
         {view === 'years' && calendars.map((calendar) => (
-          <div key={`years-${calendar.year}`} className={classNames.calendarContainer}>
+          <div key={`years-${calendar.year}`} className={calendarContainerClassName}>
             <YearSelection
               year={calendar.year}
               minDate={props.minDate}
@@ -154,31 +164,31 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
           </div>
         ))}
         {view === 'days' && calendars.map((calendar, index) => (
-          <div key={`${calendar.month}-${calendar.year}`} className={classNames.calendarContainer}>
+          <div key={`${calendar.month}-${calendar.year}`} className={calendarContainerClassName}>
             {calendars.length > 1 && (
-              <div className={classNames.header}>
-                <div className={classNames.navButtonSlotStart}>
+              <div className={monthHeaderClassName}>
+                <div className={navButtonSlotStartClassName}>
                   {index === 0 && calendars.length < 12 && (
                     <button
                       {...wrappedGetBackProps({ calendars })}
                       onMouseDown={(e) => e.preventDefault()}
-                      className={classNames.navButton}
+                      className={navButtonClassName}
                       aria-label={t.back}
                     >
                       <ChevronLeftIcon />
                     </button>
                   )}
                 </div>
-                <span className={classNames.headerTitleContainer}>
+                <span className={headerTitleContainerClassName}>
                   {monthNames[calendar.month]}
                   {calendars.length < 12 ? ` ${calendar.year}` : ''}
                 </span>
-                <div className={classNames.navButtonSlotEnd}>
+                <div className={navButtonSlotEndClassName}>
                   {index === calendars.length - 1 && calendars.length < 12 && (
                     <button
                       {...wrappedGetForwardProps({ calendars })}
                       onMouseDown={(e) => e.preventDefault()}
-                      className={classNames.navButton}
+                      className={navButtonClassName}
                       aria-label={t.forward}
                     >
                       <ChevronRightIcon />
@@ -187,12 +197,20 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
                 </div>
               </div>
             )}
-            <div className={classNames.weekdayGrid}>
+            <div className={weekdayGridClassName}>
               {sortedWeekdays.map((day) => (
-                <div key={day} className={classNames.weekday}>{day}</div>
+                <div key={day} className={weekdayClassName}>{day}</div>
               ))}
             </div>
-            <div key={`daysGrid-${calendar.month}-${calendar.year}`} className={`${classNames.daysGrid} ${slideDirection === 'left' ? 'rmd:animate-slide-in-left' : slideDirection === 'right' ? 'rmd:animate-slide-in-right' : ''}`}>
+            <div
+              key={`daysGrid-${calendar.month}-${calendar.year}`}
+              className={clsx(
+                'rmd-days-grid',
+                slideDirection === 'left' && 'rmd-slide-left',
+                slideDirection === 'right' && 'rmd-slide-right',
+                classNames?.daysGrid
+              )}
+            >
               {calendar.weeks.map((week, wi) =>
                 week.map((dateObj, di) => (
                   <Day
@@ -208,7 +226,7 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
           </div>
         ))}
       </div>
-      {footer && <div className={classNames.footer}>{footer}</div>}
+      {footer && <div className={footerClassName}>{footer}</div>}
     </div>
   );
 };

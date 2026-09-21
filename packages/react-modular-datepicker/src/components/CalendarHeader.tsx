@@ -1,4 +1,5 @@
 import React from 'react';
+import clsx from 'clsx';
 import { Calendar, CalendarClassNames } from '../types';
 
 export interface HeaderProps {
@@ -8,7 +9,7 @@ export interface HeaderProps {
   setView: (view: 'days' | 'months' | 'years') => void;
   monthNames: string[];
   t: { back: string; forward: string };
-  classNames: Required<CalendarClassNames>;
+  classNames?: CalendarClassNames;
   slideDirection?: 'left' | 'right' | null;
   currentView?: 'days' | 'months' | 'years';
 }
@@ -43,49 +44,64 @@ export const CalendarHeader: React.FC<HeaderProps> = ({
   const first = calendars[0];
   const last = calendars[calendars.length - 1];
 
-  const headerClassName = [
-    classNames.header,
-    calendars.length > 1 ? classNames.headerMultiMonth : ''
-  ].filter(Boolean).join(' ');
-
-  const navButtonClassName = (isHidden: boolean) => [
-    classNames.navButton,
-    isHidden ? classNames.navButtonHidden : ''
-  ].filter(Boolean).join(' ');
+  const isMultiMonth = calendars.length > 1;
+  const headerClassName = clsx(
+    'rmd-header',
+    isMultiMonth && 'rmd-header-multi-month',
+    classNames?.header,
+    isMultiMonth && classNames?.headerMultiMonth
+  );
 
   const isNavHidden = !!(currentView && currentView !== 'days');
+  const navButtonClassName = clsx(
+    'rmd-nav-button',
+    isNavHidden && 'rmd-nav-button-hidden',
+    classNames?.navButton,
+    isNavHidden && classNames?.navButtonHidden
+  );
+
+  const monthYearContainerClassName = clsx('rmd-month-year-container', classNames?.monthYearContainer);
+
+  const monthYearLabelClassName = clsx(
+    'rmd-month-year-label',
+    slideDirection === 'left' && 'rmd-slide-left',
+    slideDirection === 'right' && 'rmd-slide-right',
+    classNames?.monthYearLabel
+  );
+
+  const monthYearButtonClassName = clsx('rmd-month-year-button', classNames?.monthYearButton);
 
   return (
     <div className={headerClassName}>
       <button
         {...getBackProps({ calendars })}
         onMouseDown={(e) => e.preventDefault()}
-        className={navButtonClassName(isNavHidden)}
+        className={navButtonClassName}
         aria-label={t.back}
       >
         <ChevronLeftIcon />
       </button>
 
-      <div className={classNames.monthYearContainer}>
+      <div className={monthYearContainerClassName}>
         {calendars.length === 1 ? (
-          <div key={`${calendars[0].month}-${calendars[0].year}`} className={`${classNames.monthYearLabel} ${slideDirection === 'left' ? 'rmd:animate-slide-in-left' : slideDirection === 'right' ? 'rmd:animate-slide-in-right' : ''}`}>
+          <div key={`${calendars[0].month}-${calendars[0].year}`} className={monthYearLabelClassName}>
             <button
               onMouseDown={(e) => e.preventDefault()}
               onClick={() => setView(currentView === 'months' ? 'days' : 'months')}
-              className={classNames.monthYearButton}
+              className={monthYearButtonClassName}
             >
               {monthNames[calendars[0].month]}
             </button>
             <button
               onMouseDown={(e) => e.preventDefault()}
               onClick={() => setView(currentView === 'years' ? 'days' : 'years')}
-              className={classNames.monthYearButton}
+              className={monthYearButtonClassName}
             >
               {calendars[0].year}
             </button>
           </div>
         ) : (
-          <div className={`${classNames.monthYearLabel} ${slideDirection === 'left' ? 'rmd:animate-slide-in-left' : slideDirection === 'right' ? 'rmd:animate-slide-in-right' : ''}`}>
+          <div className={monthYearLabelClassName}>
             <span>
               {first.year === last.year ? first.year : `${first.year} - ${last.year}`}
             </span>
@@ -96,7 +112,7 @@ export const CalendarHeader: React.FC<HeaderProps> = ({
       <button
         {...getForwardProps({ calendars })}
         onMouseDown={(e) => e.preventDefault()}
-        className={navButtonClassName(isNavHidden)}
+        className={navButtonClassName}
         aria-label={t.forward}
       >
         <ChevronRightIcon />
