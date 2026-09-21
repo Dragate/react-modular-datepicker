@@ -5,8 +5,8 @@ import { Calendar, CalendarClassNames } from '../types';
 
 export interface HeaderProps {
   calendars: Calendar[];
-  getBackProps: (args: any) => any;
-  getForwardProps: (args: any) => any;
+  getBackProps: (args?: Record<string, unknown>) => Record<string, unknown>;
+  getForwardProps: (args?: Record<string, unknown>) => Record<string, unknown>;
   setView: (view: 'days' | 'months' | 'years') => void;
   monthNames: string[];
   t: Translations;
@@ -68,7 +68,7 @@ export const CalendarHeader: React.FC<HeaderProps> = ({
       calendars.length > 1 && classNames?.headerMultiMonth
     )}>
       <button
-        {...getBackProps({ calendars })}
+        {...(getBackProps({ calendars }) as React.ButtonHTMLAttributes<HTMLButtonElement>)}
         className={navButtonClassName}
         aria-label={t.back}
       >
@@ -105,7 +105,7 @@ export const CalendarHeader: React.FC<HeaderProps> = ({
       </div>
 
       <button
-        {...getForwardProps({ calendars })}
+        {...(getForwardProps({ calendars }) as React.ButtonHTMLAttributes<HTMLButtonElement>)}
         className={navButtonClassName}
         aria-label={t.forward}
       >

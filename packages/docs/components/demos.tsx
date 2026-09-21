@@ -842,7 +842,7 @@ export function YearlyDemo() {
 }
 
 class DateFnsAdapter implements DateAdapter<Date> {
-  date(value?: any): Date { return value ? new Date(value) : new Date(); }
+  date(value?: unknown): Date { return value ? new Date(value as string | number | Date) : new Date(); }
   add(date: Date, amount: number, unit: 'day' | 'month' | 'year'): Date {
     if (unit === 'day') return addDays(date, amount);
     if (unit === 'month') return addMonths(date, amount);

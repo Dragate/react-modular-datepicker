@@ -1,7 +1,9 @@
 import type { Calendar, DateAdapter, DateObj, SelectionMode } from './types';
 
-export function composeEventHandlers(...fns: any[]) {
-    return (event: any, ...args: any[]) =>
+export function composeEventHandlers<E extends { defaultPrevented?: boolean } = React.SyntheticEvent>(
+    ...fns: (((event: E, ...args: unknown[]) => void) | undefined)[]
+) {
+    return (event: E, ...args: unknown[]) =>
         fns.some(fn => {
             if (fn) {
                 fn(event, ...args);
@@ -257,12 +259,12 @@ function fillFrontWeek({
     firstDayOfMonth: Date,
     minDate?: Date,
     maxDate?: Date,
-    selectedDates?: any,
+    selectedDates?: Date | Date[] | { start?: Date, end?: Date },
     disabledDates?: Date[],
     modifiers?: Record<string, (date: Date, month: number, year: number) => boolean>,
     firstDayOfWeek: number,
     adapter: DateAdapter,
-    selectionMode: any,
+    selectionMode: SelectionMode,
     hoveredDate?: Date,
     month: number,
     year: number
@@ -299,12 +301,12 @@ function fillBackWeek({
     lastDayOfMonth: Date,
     minDate?: Date,
     maxDate?: Date,
-    selectedDates?: any,
+    selectedDates?: Date | Date[] | { start?: Date, end?: Date },
     disabledDates?: Date[],
     modifiers?: Record<string, (date: Date, month: number, year: number) => boolean>,
     firstDayOfWeek: number,
     adapter: DateAdapter,
-    selectionMode: any,
+    selectionMode: SelectionMode,
     hoveredDate?: Date,
     month: number,
     year: number
