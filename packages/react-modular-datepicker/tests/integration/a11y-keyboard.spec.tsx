@@ -3,13 +3,13 @@ import { createRoot } from 'react-dom/client';
 import { describe, expect, test } from 'vitest';
 import { Calendar } from 'react-modular-datepicker';
 
-function A11yCalendarWrapper(props: any) {
-  const [selected, setSelected] = useState<Date | null>(props.selected || null);
+function A11yCalendarWrapper(props: React.ComponentProps<typeof Calendar>) {
+  const [selected, setSelected] = useState<Date | null>((props.selected as Date) || null);
   return (
     <Calendar
       {...props}
       selected={selected || undefined}
-      onChange={(d: any) => {
+      onChange={(d) => {
         setSelected(d as Date);
         props.onChange?.(d);
       }}

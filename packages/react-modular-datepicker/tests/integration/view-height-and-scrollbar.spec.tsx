@@ -23,7 +23,7 @@ describe('View Height and Scrollbar Integration', () => {
     if (originalOffsetHeight) {
       Object.defineProperty(HTMLElement.prototype, 'offsetHeight', originalOffsetHeight);
     } else {
-      delete (HTMLElement.prototype as any).offsetHeight;
+      Reflect.deleteProperty(HTMLElement.prototype, 'offsetHeight');
     }
   });
 
