@@ -3,7 +3,7 @@
 A modular, lightweight, and type-safe React datepicker library. Whether you need a fully-featured calendar component or a headless hook to build your own UI, `react-modular-datepicker` has you covered.
 
 <p align="center">
-  <img src="./packages/docs/docs/images/hero-calendar.png" alt="react-modular-datepicker preview" width="320" />
+  <img src="https://react-modular-datepicker.vercel.app/opengraph-image" alt="react-modular-datepicker preview" width="800" />
 </p>
 
 ## Features

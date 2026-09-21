@@ -10,25 +10,65 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  applicationName: "React Modular Datepicker",
+  metadataBase: new URL('https://react-modular-datepicker.vercel.app'),
+  applicationName: 'React Modular Datepicker',
   title: {
-    template: "%s | React Modular Datepicker",
-    default: "React Modular Datepicker",
+    template: '%s | React Modular Datepicker',
+    default: 'React Modular Datepicker - Headless & Modular React Calendar Component',
   },
-  description: "asd",
-  creator: "https://www.spidfair.com",
+  description: 'A modular, lightweight, accessible, and type-safe React datepicker library. Customizable styling, single/range modes, headless useDates hook, and pluggable date adapters.',
+  keywords: [
+    'react',
+    'datepicker',
+    'date-picker',
+    'calendar',
+    'react-calendar',
+    'date-range-picker',
+    'headless-ui',
+    'tailwind-css',
+    'css-variables',
+    'typescript',
+    'react-component',
+    'useDates',
+    'dayjs',
+    'date-fns',
+    'modular-datepicker',
+    'accessible-datepicker',
+    'wai-aria',
+  ],
+  creator: 'https://www.spidfair.com',
+  openGraph: {
+    type: 'website',
+    locale: 'en',
+    url: 'https://react-modular-datepicker.vercel.app',
+    title: 'React Modular Datepicker - Headless & Modular React Calendar Component',
+    description: 'Modular, lightweight, accessible, and type-safe React datepicker library. Customizable styling with single/range modes and headless hook support.',
+    siteName: 'React Modular Datepicker',
+    images: [{
+      url: '/opengraph-image',
+      width: 1200,
+      height: 630,
+      alt: 'React Modular Datepicker - Modular, Lightweight & Type-Safe Datepicker',
+    }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'React Modular Datepicker',
+    description: 'Modular, lightweight, accessible, and type-safe React datepicker library.',
+    images: ['/opengraph-image'],
+  },
   verification: {
-    google: "cPwTWWsKpgpJaiwv1lo8Q16c19J9l6bztgp4-o5BXiw",
+    google: 'cPwTWWsKpgpJaiwv1lo8Q16c19J9l6bztgp4-o5BXiw',
   },
-}
+};
 
 export default function Layout({ children }: LayoutProps<'/'>) {
   return (
     <html lang="en" className={inter.className} suppressHydrationWarning>
       <body className="flex flex-col min-h-screen">
         <RootProvider>{children}</RootProvider>
-        {process.env.NODE_ENV === "production" && <Analytics />}
-        {process.env.NODE_ENV === "production" && <SpeedInsights />}
+        {process.env.NODE_ENV === 'production' && <Analytics />}
+        {process.env.NODE_ENV === 'production' && <SpeedInsights />}
       </body>
     </html>
   );
