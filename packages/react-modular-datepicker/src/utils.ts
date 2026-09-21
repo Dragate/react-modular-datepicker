@@ -126,7 +126,7 @@ function getMonthData({
     selectionMode: 'single' | 'range' | 'multiple',
     hoveredDate?: Date
 }): Calendar {
-    let currentMonth = adapter.set(adapter.set(adapter.date(), 'year', year), 'month', month);
+    let currentMonth = adapter.set(adapter.set(adapter.startOf(adapter.date(), 'year'), 'year', year), 'month', month);
     month = adapter.get(currentMonth, 'month');
     year = adapter.get(currentMonth, 'year');
 
