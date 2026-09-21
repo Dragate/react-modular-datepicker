@@ -1,17 +1,34 @@
 import React from 'react';
 import clsx from 'clsx';
-import type { CalendarClassNames, DateObj } from '../types';
+import type { CalendarClassNames, DateAdapter, DateObj } from '../types';
 
 interface DayProps {
   dateObj: DateObj | null;
   getDateProps: (args: { dateObj: DateObj, [key: string]: any }) => any;
   dayProps?: Record<string, any>;
   classNames?: CalendarClassNames;
+  tabIndex?: number;
+  adapter?: DateAdapter;
+  locale?: string;
+  onKeyDown?: (e: React.KeyboardEvent, dateObj: DateObj) => void;
+  onFocus?: (dateObj: DateObj) => void;
+  buttonRef?: (el: HTMLButtonElement | null) => void;
 }
 
-export const Day: React.FC<DayProps> = ({ dateObj, getDateProps, dayProps, classNames }) => {
+export const Day: React.FC<DayProps> = ({
+  dateObj,
+  getDateProps,
+  dayProps,
+  classNames,
+  tabIndex = -1,
+  adapter,
+  locale,
+  onKeyDown,
+  onFocus,
+  buttonRef
+}) => {
   if (!dateObj) {
-    return <div className={clsx('rmd-day-empty', classNames?.day?.empty)} />;
+    return <div role="gridcell" aria-hidden="true" className={clsx('rmd-day-empty', classNames?.day?.empty)} />;
   }
 
   const { date, selected, selectable, isRangeStart, isRangeEnd, isRangeBetween, isRangeHovering, isRangeActive } = dateObj;
@@ -50,9 +67,31 @@ export const Day: React.FC<DayProps> = ({ dateObj, getDateProps, dayProps, class
     .map(m => (dayClasses as any)?.[m] || m)
     .filter(Boolean);
 
+  const formattedDateLabel = adapter
+    ? adapter.format(adapter.date(date), 'dddd, MMMM D, YYYY', locale)
+    : date.toDateString();
+
+  const isSelected = !!(selected || isRangeStart || isRangeEnd);
+
+  const baseProps = getDateProps({ dateObj, ...dayProps });
+
   return (
     <button
-      {...getDateProps({ dateObj, ...dayProps })}
+      role="gridcell"
+      aria-selected={isSelected}
+      aria-disabled={!selectable}
+      aria-label={formattedDateLabel}
+      tabIndex={tabIndex}
+      {...baseProps}
+      ref={buttonRef}
+      onKeyDown={(e) => {
+        baseProps.onKeyDown?.(e);
+        onKeyDown?.(e, dateObj);
+      }}
+      onFocus={(e) => {
+        baseProps.onFocus?.(e);
+        onFocus?.(dateObj);
+      }}
       className={clsx(
         'rmd-day',
         dayClasses?.day,
