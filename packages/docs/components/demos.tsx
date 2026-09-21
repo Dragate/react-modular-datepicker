@@ -795,7 +795,7 @@ export function YearlyDemo() {
             calendarContainer: 'min-w-0',
             day: {
               day: 'aspect-square flex items-center justify-center text-xs font-medium transition-all relative group cursor-pointer p-0',
-              weekend: 'text-red-600 dark:text-red-400 font-semibold',
+              weekend: 'text-red-700',
               hasEvents:
                 'font-bold relative after:content-["•"] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:text-brand-gold after:text-[10px]',
             },
