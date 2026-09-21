@@ -1,14 +1,14 @@
-import Link from 'next/link';
-import Image from 'next/image';
 import {
-  Layers,
-  Cpu,
-  Palette,
-  CheckCircle2,
   ArrowRight,
+  CheckCircle2,
   Code2,
+  Cpu,
+  Layers,
+  Palette,
 } from 'lucide-react';
-import { BasicDemo } from '@/components/demos';
+import Image from 'next/image';
+import Link from 'next/link';
+import Demo from "./demo";
 
 export default function HomePage() {
   return (
@@ -24,10 +24,7 @@ export default function HomePage() {
         {/* Version Badge */}
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs md:text-sm font-semibold bg-[#c5a059]/10 border border-[#c5a059]/30 text-[#c5a059] mb-8 shadow-sm cursor-default">
           <Image src="/icon0.svg" alt="logo" width={18} height={18} className="w-4 h-4" />
-          <span>react-modular-datepicker v0.0.8</span>
-          <span className="bg-[#c5a059]/20 text-[#c5a059] px-1.5 py-0.5 rounded text-[10px] uppercase font-bold tracking-wider">
-            Latest
-          </span>
+          <span>react-modular-datepicker</span>
         </div>
 
         {/* Hero Title */}
@@ -63,10 +60,6 @@ export default function HomePage() {
         {/* Interactive Calendar Showcase Section (Two Columns, direct demo rendering) */}
         <div className="w-full max-w-5xl mb-20 flex flex-col md:flex-row items-center justify-between gap-12 text-left">
           <div className="flex-1 space-y-4">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md text-xs font-semibold bg-[#c5a059]/10 text-[#c5a059]">
-              <Code2 className="w-4 h-4" />
-              <span>Interactive Live Demo</span>
-            </div>
             <h2 className="text-2xl md:text-4xl font-extrabold text-fd-foreground leading-tight">
               Ready out of the box, fully customizable inside.
             </h2>
@@ -95,7 +88,7 @@ export default function HomePage() {
           </div>
 
           <div className="flex justify-center items-center">
-            <BasicDemo />
+            <Demo />
           </div>
         </div>
 
