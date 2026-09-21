@@ -92,6 +92,11 @@
     @apply rmd:sr-only;
   }
 
+  .rmd-week-row,
+  .rmd-selection-row {
+    display: contents;
+  }
+
   .rmd-nav-button {
     @apply rmd:p-2 rmd:text-brand-text rmd:hover:bg-gray-100 rmd:rounded-full rmd:transition-colors rmd:cursor-pointer rmd:disabled:invisible rmd:disabled:pointer-events-none rmd:focus-visible:outline-2 rmd:focus-visible:outline-brand-gold rmd:focus-visible:outline-offset-1;
   }

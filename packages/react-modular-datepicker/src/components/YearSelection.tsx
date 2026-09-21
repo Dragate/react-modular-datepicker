@@ -21,7 +21,6 @@ export const YearSelection: React.FC<YearSelectionProps> = ({
 }) => {
   const yearListRef = useRef<HTMLDivElement>(null);
   const [focusedYear, setFocusedYear] = useState<number>(year);
-  const buttonRefs = useRef<Map<number, HTMLButtonElement>>(new Map());
 
   const startYear = minDate ? adapter.get(adapter.date(minDate), 'year') : year - 50;
   const endYear = maxDate ? adapter.get(adapter.date(maxDate), 'year') : year + 50;
@@ -43,59 +42,32 @@ export const YearSelection: React.FC<YearSelectionProps> = ({
   }, []);
 
   useEffect(() => {
-    const btn = buttonRefs.current.get(focusedYear);
-    if (btn) {
-      btn.focus();
-    }
+    yearListRef.current?.querySelector<HTMLButtonElement>('.rmd-year-button[tabindex="0"]')?.focus();
   }, [focusedYear]);
 
   const handleKeyDown = (e: React.KeyboardEvent, y: number) => {
     let nextYear = focusedYear;
-
     switch (e.key) {
-      case 'ArrowLeft':
-        e.preventDefault();
-        nextYear = Math.max(startYear, y - 1);
-        break;
-      case 'ArrowRight':
-        e.preventDefault();
-        nextYear = Math.min(endYear, y + 1);
-        break;
-      case 'ArrowUp':
-        e.preventDefault();
-        nextYear = Math.max(startYear, y - 3);
-        break;
-      case 'ArrowDown':
-        e.preventDefault();
-        nextYear = Math.min(endYear, y + 3);
-        break;
-      case 'PageUp':
-        e.preventDefault();
-        nextYear = Math.max(startYear, y - 10);
-        break;
-      case 'PageDown':
-        e.preventDefault();
-        nextYear = Math.min(endYear, y + 10);
-        break;
-      case 'Home':
-        e.preventDefault();
-        nextYear = startYear;
-        break;
-      case 'End':
-        e.preventDefault();
-        nextYear = endYear;
-        break;
+      case 'ArrowLeft': nextYear = Math.max(startYear, y - 1); break;
+      case 'ArrowRight': nextYear = Math.min(endYear, y + 1); break;
+      case 'ArrowUp': nextYear = Math.max(startYear, y - 3); break;
+      case 'ArrowDown': nextYear = Math.min(endYear, y + 3); break;
+      case 'PageUp': nextYear = Math.max(startYear, y - 10); break;
+      case 'PageDown': nextYear = Math.min(endYear, y + 10); break;
+      case 'Home': nextYear = startYear; break;
+      case 'End': nextYear = endYear; break;
       case 'Enter':
-      case ' ':
-        e.preventDefault();
-        onYearSelect(y);
-        return;
-      default:
-        return;
+      case ' ': e.preventDefault(); onYearSelect(y); return;
+      default: return;
     }
-
+    e.preventDefault();
     setFocusedYear(nextYear);
   };
+
+  const rows = [];
+  for (let i = 0; i < years.length; i += 3) {
+    rows.push(years.slice(i, i + 3));
+  }
 
   return (
     <div
@@ -104,36 +76,34 @@ export const YearSelection: React.FC<YearSelectionProps> = ({
       aria-label="Select year"
       className={clsx('rmd-years-grid', classNames?.yearsGrid)}
     >
-      {years.map((y) => {
-        const isSelected = y === year;
-        const isFocused = y === focusedYear;
-        const buttonClassName = clsx(
-          'rmd-year-button',
-          isSelected ? 'rmd-year-button-selected' : 'rmd-year-button-unselected',
-          classNames?.yearButton,
-          isSelected ? classNames?.yearButtonSelected : classNames?.yearButtonUnselected
-        );
-
-        return (
-          <button
-            key={y}
-            ref={(el) => {
-              if (el) buttonRefs.current.set(y, el);
-              else buttonRefs.current.delete(y);
-            }}
-            data-selected={isSelected}
-            role="gridcell"
-            aria-selected={isSelected}
-            tabIndex={isFocused ? 0 : -1}
-            onClick={() => onYearSelect(y)}
-            onKeyDown={(e) => handleKeyDown(e, y)}
-            onFocus={() => setFocusedYear(y)}
-            className={buttonClassName}
-          >
-            {y}
-          </button>
-        );
-      })}
+      {rows.map((row, rowIdx) => (
+        <div key={rowIdx} role="row" className="rmd-selection-row">
+          {row.map((y) => {
+            const isSelected = y === year;
+            const isFocused = y === focusedYear;
+            return (
+              <button
+                key={y}
+                data-selected={isSelected}
+                role="gridcell"
+                aria-selected={isSelected}
+                tabIndex={isFocused ? 0 : -1}
+                onClick={() => onYearSelect(y)}
+                onKeyDown={(e) => handleKeyDown(e, y)}
+                onFocus={() => setFocusedYear(y)}
+                className={clsx(
+                  'rmd-year-button',
+                  isSelected ? 'rmd-year-button-selected' : 'rmd-year-button-unselected',
+                  classNames?.yearButton,
+                  isSelected ? classNames?.yearButtonSelected : classNames?.yearButtonUnselected
+                )}
+              >
+                {y}
+              </button>
+            );
+          })}
+        </div>
+      ))}
     </div>
   );
 };
