@@ -290,8 +290,6 @@ export function AvailabilityDemo() {
 
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date(year, month, 8));
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
-  const [confirmed, setConfirmed] = useState(false);
 
   const handleMonthChange = (date: Date) => {
     setIsLoading(true);
@@ -314,8 +312,6 @@ export function AvailabilityDemo() {
             selected={selectedDate || undefined}
             onChange={(d) => {
               setSelectedDate(d as Date);
-              setSelectedSlot(null);
-              setConfirmed(false);
             }}
             onMonthChange={handleMonthChange}
             disabledDates={bookedDays}
@@ -323,7 +319,6 @@ export function AvailabilityDemo() {
               daysGrid: 'grid grid-cols-7 gap-px bg-brand-gray-light/20 relative',
               day: {
                 disabled: 'text-red-400 line-through cursor-not-allowed',
-                outside: 'bg-white dark:bg-zinc-900 text-white dark:text-zinc-900 border-none select-none pointer-events-none',
               },
             }}
           />
@@ -331,47 +326,8 @@ export function AvailabilityDemo() {
           {isLoading && (
             <div className="absolute inset-x-0 bottom-0 top-12 bg-transparent backdrop-blur-md flex flex-col items-center justify-center rounded-b-lg z-20">
               <div className="w-7 h-7 border-3 border-[#c5a059] border-t-transparent rounded-full animate-spin mb-2" />
-              <span className="text-xs font-extrabold text-slate-900 dark:text-slate-100 bg-white/80 dark:bg-zinc-900/80 px-2.5 py-1 rounded-md shadow-xs">Fetching availabilities...</span>
+              <span className="text-xs font-bold text-slate-900 px-2.5 py-1">Fetching availabilities...</span>
             </div>
-          )}
-        </div>
-
-        <div className="w-full max-w-xs bg-fd-card border border-fd-border rounded-xl p-4 shadow-sm">
-          <h3 className="font-bold text-sm text-fd-foreground mb-3 border-b border-fd-border pb-2">
-            Available Times: {selectedDate ? selectedDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : 'Select Date'}
-          </h3>
-          {confirmed ? (
-            <div className="p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-lg text-center">
-              <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 block mb-1">Appointment Confirmed!</span>
-              <span className="text-[11px] text-fd-muted-foreground block">{selectedDate?.toLocaleDateString()} at {selectedSlot}</span>
-            </div>
-          ) : (
-            <>
-              <div className="grid grid-cols-2 gap-2 mb-4">
-                {timeSlots.map((slot) => (
-                  <button
-                    key={slot}
-                    type="button"
-                    onClick={() => setSelectedSlot(slot)}
-                    className={`py-1.5 px-2 text-xs rounded-lg border transition-colors ${selectedSlot === slot
-                      ? 'bg-brand-gold text-white font-bold border-brand-gold'
-                      : 'border-fd-border bg-fd-background hover:bg-fd-accent text-fd-foreground'
-                      }`}
-                  >
-                    {slot}
-                  </button>
-                ))}
-              </div>
-              {selectedSlot && (
-                <button
-                  type="button"
-                  onClick={() => setConfirmed(true)}
-                  className="w-full py-2 bg-fd-primary text-fd-primary-foreground text-xs font-bold rounded-lg hover:opacity-90 transition-opacity"
-                >
-                  Confirm Appointment
-                </button>
-              )}
-            </>
           )}
         </div>
       </div>
