@@ -323,13 +323,13 @@ export function AvailabilityDemo() {
               daysGrid: 'grid grid-cols-7 gap-px bg-brand-gray-light/20 relative',
               day: {
                 disabled: 'text-red-400 line-through cursor-not-allowed',
-                outside: 'bg-white dark:bg-zinc-900 text-transparent border-none select-none pointer-events-none',
+                outside: 'bg-white dark:bg-zinc-900 text-white dark:text-zinc-900 border-none select-none pointer-events-none',
               },
             }}
           />
 
           {isLoading && (
-            <div className="absolute inset-0 bg-white/85 dark:bg-zinc-900/85 backdrop-blur-sm flex flex-col items-center justify-center rounded-lg z-20">
+            <div className="absolute inset-x-0 bottom-0 top-12 bg-transparent backdrop-blur-md flex flex-col items-center justify-center rounded-b-lg z-20">
               <div className="w-7 h-7 border-3 border-[#c5a059] border-t-transparent rounded-full animate-spin mb-2" />
               <span className="text-xs font-bold text-fd-foreground drop-shadow-sm">Fetching availabilities...</span>
             </div>
