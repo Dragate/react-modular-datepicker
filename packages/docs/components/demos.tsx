@@ -409,9 +409,8 @@ export function MultipleDemo() {
 
   const [dates, setDates] = useState<Date[]>([
     new Date(year, month, 8),
-    new Date(year, month, 12),
-    new Date(year, month, 15),
-    new Date(year, month, 22),
+    new Date(year, month, 19),
+    new Date(year, month, 23),
   ]);
   return (
     <DemoContainer title="Live Preview: Multiple Date Selection">
