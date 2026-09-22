@@ -19,16 +19,18 @@ import { Calendar } from 'react-modular-datepicker';
 import 'react-modular-datepicker/dist/index.css';
 
 export function RangeDemo() {
-  const [range, setRange] = useState<{ start?: Date; end?: Date }>({
-    start: new Date(2026, 8, 10),
-    end: new Date(2026, 9, 21),
+  const [range, setRange] = useState<{ start?: Date; end?: Date }>(() => {
+    const today = new Date();
+    return {
+      start: new Date(today.getFullYear(), today.getMonth(), 10),
+      end: new Date(today.getFullYear(), today.getMonth() + 1, 21),
+    };
   });
 
   return (
     <div>
       <Calendar
         selectionMode="range"
-        date={new Date(2026, 8, 1)}
         monthsToDisplay={2}
         selected={range}
         onChange={(r) => setRange(r as { start?: Date; end?: Date })}
