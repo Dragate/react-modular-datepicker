@@ -2,7 +2,7 @@
  * This is a component stylesheet, so do not include Tailwind's global
  * Preflight reset. The host application owns the document-level styles.
  */
-@import "tailwindcss" prefix(tw);
+@import "tailwindcss" prefix(rmd);
 
 @theme {
   --color-brand-gold: #c5a059;
