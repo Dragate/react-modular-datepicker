@@ -188,7 +188,7 @@
   }
 
   .rmd-day-outside {
-    @apply rmd:text-white rmd:pointer-events-none;
+    @apply rmd:text-transparent! rmd:pointer-events-none;
   }
 
   .rmd-day-empty {
