@@ -1,9 +1,17 @@
 import { act } from 'react';
 import { createRoot } from 'react-dom/client';
-import { describe, expect, test } from 'vitest';
+import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 import { Calendar } from 'react-modular-datepicker';
 
 describe('Component Snapshot Tests', () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date(2026, 8, 21));
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
   test('renders single date selection calendar DOM snapshot', () => {
     const container = document.createElement('div');
     document.body.appendChild(container);
