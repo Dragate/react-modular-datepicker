@@ -114,7 +114,7 @@ export default async function Image() {
               fontSize: '20px',
               fontWeight: 600,
               marginBottom: '24px',
-              maxWidth: '330px',
+              maxWidth: '320px',
             }}
           >
             {/* Embedded Logo SVG */}
