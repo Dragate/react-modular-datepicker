@@ -183,14 +183,12 @@
     @apply rmd:bg-white rmd:cursor-not-allowed;
   }
 
-  .today,
   .rmd-day-today {
-    @apply rmd:text-brand-gold rmd:border rmd:border-brand-gold;
+    @apply rmd:border rmd:border-brand-gold;
   }
 
-  .outside,
   .rmd-day-outside {
-    @apply rmd:text-white rmd:cursor-default!;
+    @apply rmd:text-white rmd:pointer-events-none;
   }
 
   .rmd-day-empty {
