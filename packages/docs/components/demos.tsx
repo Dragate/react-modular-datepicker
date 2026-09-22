@@ -488,7 +488,8 @@ export function CustomStylingDemo() {
       selected: '-purple-600 text-white font-extrabold ring-2 ring-pink-400 ring-offset-2 ring-offset-[#1e073e] rounded-full',
       unselected: 'text-purple-100',
       disabled: 'bg-purple-950/40 text-purple-400/30 cursor-not-allowed',
-      outside: "invisible"
+      outside: "invisible",
+      today: "border-none",
     },
     monthsGrid: 'grid grid-cols-3 gap-2 bg-transparent p-1',
     monthButton: 'py-2 px-3 rounded-xl text-purple-100 hover:bg-purple-800/40 bg-purple-900/60 font-semibold text-xs transition-colors',
@@ -515,7 +516,8 @@ export function CustomStylingDemo() {
       selected: 'bg-emerald-600 dark:bg-emerald-500  text-slate-800 dark:text-slate-200 font-extrabold rounded-lg shadow-lg shadow-emerald-600/40 dark:shadow-emerald-500/60 ring-2 ring-emerald-500 ring-offset-2 ring-offset-slate-100 dark:ring-offset-slate-900',
       unselected: 'text-slate-800 dark:text-slate-200',
       disabled: 'opacity-30 bg-slate-100 dark:bg-slate-900 text-slate-400 dark:text-slate-600 cursor-not-allowed',
-      outside: "invisible"
+      outside: "invisible",
+      today: "border-none",
     },
     monthsGrid: 'grid grid-cols-3 gap-2 bg-transparent p-1',
     monthButton: 'py-2 px-3 rounded-lg bg-slate-200/50 dark:bg-slate-800/50 text-slate-800 dark:text-slate-200 hover:bg-emerald-500/20 dark:hover:bg-emerald-500/30 hover:text-emerald-700 dark:hover:text-emerald-300 text-xs font-semibold transition-all',

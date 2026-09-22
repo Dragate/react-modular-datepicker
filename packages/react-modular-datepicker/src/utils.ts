@@ -210,9 +210,9 @@ function createDateObj(
     const isNextMonth = isOutside && adapter.isAfter(adapter.date(date), adapter.endOf(adapter.date(date), 'month'));
 
     const defaultModifiers: Record<string, (d: Date, m: number, y: number) => boolean> = {
-        'text-brand-gold border border-brand-gold': (d: Date) =>
+        'rmd-day-today': (d: Date) =>
             adapter.isSame(adapter.date(d), adapter.date(), 'day'),
-        'text-white cursor-default!': (d: Date, m: number) =>
+        'rmd-day-outside': (d: Date, m: number) =>
             adapter.get(adapter.date(d), 'month') !== m
     };
     const mergedModifiers: Record<string, (d: Date, m: number, y: number) => boolean> = { ...defaultModifiers, ...modifiers };

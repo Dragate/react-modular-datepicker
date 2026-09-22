@@ -1,11 +1,66 @@
 /*
- * This is a component stylesheet, so do not include Tailwind's global
- * Preflight reset. The host application owns the document-level styles.
+ * This is a component stylesheet.
+ * Scoped reset styles are included for datepicker elements under .rmd-root
+ * to ensure consistent rendering without requiring a global Preflight CSS reset in host apps.
  */
 @layer theme, base, components, utilities;
 
 @import "tailwindcss/theme.css" layer(theme) prefix(rmd);
 @import "tailwindcss/utilities.css" layer(utilities) prefix(rmd);
+
+@layer base {
+  .rmd-root,
+  .rmd-root *,
+  .rmd-root *::before,
+  .rmd-root *::after {
+    box-sizing: border-box;
+    border-width: 0;
+    border-style: solid;
+    border-color: currentColor;
+  }
+
+  .rmd-root button,
+  .rmd-root [type='button'],
+  .rmd-root [type='reset'],
+  .rmd-root [type='submit'] {
+    font-family: inherit;
+    font-size: 100%;
+    font-weight: inherit;
+    line-height: inherit;
+    color: inherit;
+    margin: 0;
+    padding: 0;
+    text-transform: none;
+    background-color: transparent;
+    background-image: none;
+    border-style: none;
+    -webkit-appearance: button;
+    appearance: button;
+    cursor: pointer;
+  }
+
+  .rmd-root button:disabled {
+    cursor: default;
+  }
+
+  .rmd-root svg {
+    display: block;
+    vertical-align: middle;
+  }
+
+  .rmd-root h1,
+  .rmd-root h2,
+  .rmd-root h3,
+  .rmd-root h4,
+  .rmd-root h5,
+  .rmd-root h6,
+  .rmd-root p,
+  .rmd-root ul,
+  .rmd-root ol {
+    margin: 0;
+    padding: 0;
+  }
+}
 
 @theme {
   --color-brand-gold: #c5a059;
@@ -126,6 +181,14 @@
 
   .rmd-day-disabled {
     @apply rmd:bg-white rmd:cursor-not-allowed;
+  }
+
+  .rmd-day-today {
+    @apply rmd:border rmd:border-brand-gold;
+  }
+
+  .rmd-day-outside {
+    @apply rmd:text-transparent! rmd:pointer-events-none;
   }
 
   .rmd-day-empty {
