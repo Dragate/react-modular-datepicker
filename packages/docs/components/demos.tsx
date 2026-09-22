@@ -336,15 +336,17 @@ export function AvailabilityDemo() {
 }
 
 export function RangeDemo() {
-  const [range, setRange] = useState<{ start?: Date; end?: Date }>({
-    start: new Date(2026, 8, 10),
-    end: new Date(2026, 9, 21),
+  const [range, setRange] = useState<{ start?: Date; end?: Date }>(() => {
+    const today = new Date();
+    return {
+      start: new Date(today.getFullYear(), today.getMonth(), 10),
+      end: new Date(today.getFullYear(), today.getMonth() + 1, 21),
+    };
   });
   return (
     <DemoContainer title="Live Preview: Date Range Selection">
       <Calendar
         selectionMode="range"
-        date={new Date(2026, 8, 1)}
         monthsToDisplay={2}
         selected={range}
         onChange={(r) => setRange(r as { start?: Date; end?: Date })}
@@ -444,7 +446,10 @@ export function HeadlessDemo() {
 
 export function CustomStylingDemo() {
   const [theme, setTheme] = useState<'cyberpunk' | 'purple' | 'adaptive'>('adaptive');
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date(2026, 8, 13));
+  const [selectedDate, setSelectedDate] = useState<Date>(() => {
+    const today = new Date();
+    return new Date(today.getFullYear(), today.getMonth(), 13);
+  });
 
   const cyberpunkClassNames = {
     root: 'bg-[#050b14] p-4 sm:p-6 rounded-none border-2 border-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.5)] text-cyan-400 font-mono w-full max-w-sm',

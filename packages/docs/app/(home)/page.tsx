@@ -61,7 +61,8 @@ export default function HomePage() {
         <div className="w-full max-w-5xl mb-20 flex flex-col md:flex-row items-center justify-between gap-12 text-left">
           <div className="flex-1 space-y-4">
             <h2 className="text-2xl md:text-4xl font-extrabold text-fd-foreground leading-tight">
-              Ready out of the box, fully customizable inside.
+              Ready out of the box, <br />
+              fully customizable inside.
             </h2>
             <p className="text-sm md:text-base text-fd-muted-foreground leading-relaxed">
               Full keyboard navigation, accessible WAI-ARIA grid semantics, and seamless theme overriding.

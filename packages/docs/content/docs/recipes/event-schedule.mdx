@@ -26,21 +26,25 @@ interface EventItem {
   type: 'meeting' | 'webinar' | 'deadline';
 }
 
+const today = new Date();
+const currentYear = today.getFullYear();
+const currentMonth = today.getMonth();
+
 const eventsData: Record<string, EventItem[]> = {
-  '2025-03-05': [
+  [`${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-05`]: [
     { title: 'Team Sync & Standup', time: '09:00 AM', type: 'meeting' },
     { title: 'Project Kickoff', time: '02:00 PM', type: 'meeting' },
   ],
-  '2025-03-12': [
+  [`${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-12`]: [
     { title: 'React Modular Datepicker Webinar', time: '11:00 AM', type: 'webinar' },
   ],
-  '2025-03-18': [
+  [`${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-18`]: [
     { title: 'Q3 Product Release Deadline', time: '05:00 PM', type: 'deadline' },
   ],
 };
 
 export function EventScheduleExample() {
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date(2025, 2, 5));
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date(currentYear, currentMonth, 5));
 
   const getKey = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 
@@ -95,18 +99,22 @@ interface EventItem {
   color: string;
 }
 
+const today = new Date();
+const currentYear = today.getFullYear();
+const currentMonth = today.getMonth();
+
 const eventsData: Record<string, EventItem[]> = {
-  '2025-03-05': [
+  [`${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-05`]: [
     { title: 'Team Standup', time: '9am', color: 'bg-blue-500 text-white' },
     { title: 'Project Review', time: '2pm', color: 'bg-emerald-500 text-white' },
   ],
-  '2025-03-12': [
+  [`${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-12`]: [
     { title: 'Webinar Live', time: '11am', color: 'bg-purple-500 text-white' },
   ],
 };
 
 export function FullMonthScheduleExample() {
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date(2025, 2, 5));
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date(currentYear, currentMonth, 5));
   const { calendars, getBackProps, getForwardProps, getDateProps } = useDates({
     selected: selectedDate,
     onChange: (d) => setSelectedDate(d as Date),
