@@ -1,6 +1,6 @@
 {
   "name": "react-modular-datepicker",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "A modular, lightweight, and type-safe React datepicker and calendar component with headless hooks for single, multiple, and range selection.",
   "author": "",
   "license": "MIT",

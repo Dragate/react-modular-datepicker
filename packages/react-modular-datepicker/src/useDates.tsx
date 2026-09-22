@@ -113,10 +113,18 @@ export function useDates<E extends { defaultPrevented?: boolean } = React.Synthe
     onYearChange
 }: UseDatesProps<E> = {}) {
     const [stateOffset, setStateOffset] = useState(0);
+    const [prevDate, setPrevDate] = useState(date);
     const [hoveredDate, setHoveredDate] = useState<Date | undefined>(undefined);
     const [uncontrolledSelected, setUncontrolledSelected] = useState<
         Date | Date[] | { start?: Date; end?: Date } | null | undefined
     >(defaultSelected ?? null);
+
+    if (!adapter.isSame(adapter.date(prevDate), adapter.date(date), 'day')) {
+        setPrevDate(date);
+        if (!isOffsetControlled(offset)) {
+            setStateOffset(0);
+        }
+    }
 
     const isControlled = selected !== undefined;
     const effectiveSelected = isControlled ? selected : uncontrolledSelected;

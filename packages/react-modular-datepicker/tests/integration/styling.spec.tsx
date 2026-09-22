@@ -125,4 +125,50 @@ describe('Custom Styling Recipe', () => {
     expect(unselectedYear?.className).toContain('custom-year-button');
     expect(unselectedYear?.className).toContain('custom-year-unselected');
   });
+
+  test('should retain navigated month view when selecting a date after month navigation', () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+    const root = createRoot(container);
+
+    act(() => {
+      root.render(<StylingTestWrapper />);
+    });
+
+    // Initial state: September 2026, September 13 selected
+    const initialHeader = container.querySelector('.rmd-month-year-label');
+    expect(initialHeader?.textContent).toContain('September');
+    expect(initialHeader?.textContent).toContain('2026');
+
+    // Click Next Month button
+    const nextBtn = container.querySelector('button[aria-label="Next month"]') as HTMLButtonElement;
+    expect(nextBtn).not.toBeNull();
+
+    act(() => {
+      nextBtn.click();
+    });
+
+    // Month view should now be October 2026
+    const navigatedHeader = container.querySelector('.rmd-month-year-label');
+    expect(navigatedHeader?.textContent).toContain('October');
+    expect(navigatedHeader?.textContent).toContain('2026');
+
+    // Find and click day 15 in October 2026 grid
+    const day15Button = Array.from(container.querySelectorAll('.rmd-day')).find(
+      (btn) => btn.textContent?.trim() === '15' && !btn.classList.contains('rmd-day-outside')
+    ) as HTMLButtonElement;
+    expect(day15Button).not.toBeNull();
+
+    act(() => {
+      day15Button.click();
+    });
+
+    // Month view MUST remain October 2026, and day 15 should be selected
+    const headerAfterClick = container.querySelector('.rmd-month-year-label');
+    expect(headerAfterClick?.textContent).toContain('October');
+    expect(headerAfterClick?.textContent).toContain('2026');
+
+    const selectedDay = container.querySelector('.rmd-day-selected');
+    expect(selectedDay?.textContent?.trim()).toBe('15');
+  });
 });
