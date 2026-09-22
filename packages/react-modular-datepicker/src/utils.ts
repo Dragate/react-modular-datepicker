@@ -68,7 +68,7 @@ export function getCalendars({
     hoveredDate
 }: {
     date: Date,
-    selected?: Date | Date[] | { start?: Date, end?: Date },
+    selected?: Date | Date[] | { start?: Date, end?: Date } | null,
     disabledDates?: Date[],
     modifiers?: Record<string, (date: Date, month: number, year: number) => boolean>,
     monthsToDisplay: number,
@@ -118,7 +118,7 @@ function getMonthData({
 }: {
     month: number,
     year: number,
-    selectedDates?: Date | Date[] | { start?: Date, end?: Date },
+    selectedDates?: Date | Date[] | { start?: Date, end?: Date } | null,
     disabledDates?: Date[],
     modifiers?: Record<string, (date: Date, month: number, year: number) => boolean>,
     minDate?: Date,
@@ -190,7 +190,7 @@ function getMonthData({
 
 function createDateObj(
     date: Date,
-    selectedDates: Date | Date[] | { start?: Date, end?: Date } | undefined,
+    selectedDates: Date | Date[] | { start?: Date, end?: Date } | null | undefined,
     disabledDates: Date[] | undefined,
     modifiers: Record<string, (date: Date, month: number, year: number) => boolean> | undefined,
     minDate: Date | undefined,
@@ -259,7 +259,7 @@ function fillFrontWeek({
     firstDayOfMonth: Date,
     minDate?: Date,
     maxDate?: Date,
-    selectedDates?: Date | Date[] | { start?: Date, end?: Date },
+    selectedDates?: Date | Date[] | { start?: Date, end?: Date } | null,
     disabledDates?: Date[],
     modifiers?: Record<string, (date: Date, month: number, year: number) => boolean>,
     firstDayOfWeek: number,
@@ -301,7 +301,7 @@ function fillBackWeek({
     lastDayOfMonth: Date,
     minDate?: Date,
     maxDate?: Date,
-    selectedDates?: Date | Date[] | { start?: Date, end?: Date },
+    selectedDates?: Date | Date[] | { start?: Date, end?: Date } | null,
     disabledDates?: Date[],
     modifiers?: Record<string, (date: Date, month: number, year: number) => boolean>,
     firstDayOfWeek: number,
@@ -339,7 +339,7 @@ function getWeeks(dates: (DateObj | null)[]): (DateObj | null)[][] {
 }
 
 function isSelected(
-    selectedDates: Date | Date[] | { start?: Date, end?: Date } | undefined,
+    selectedDates: Date | Date[] | { start?: Date, end?: Date } | null | undefined,
     date: Date,
     adapter: DateAdapter,
     selectionMode: 'single' | 'range' | 'multiple',

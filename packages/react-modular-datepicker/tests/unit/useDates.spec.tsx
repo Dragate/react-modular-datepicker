@@ -461,6 +461,95 @@ describe('useDates Hook', () => {
     document.body.removeChild(container);
   });
 
+  test('uncontrolled selection maintains state internally across clicks', () => {
+    const onChange = vi.fn();
+
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+    const root = createRoot(container);
+
+    function UncontrolledHookWrapper() {
+      const res = useDates({
+        date: baseDate,
+        selectionMode: 'single',
+        onChange,
+      });
+
+      const flatDays = res.calendars[0].weeks.flat().filter(Boolean) as DateObj[];
+      const day10Obj = flatDays.find((d) => d.date.getDate() === 10)!;
+
+      return (
+        <button
+          {...res.getDateProps({ dateObj: day10Obj })}
+          data-testid="day-10"
+        >
+          {String(day10Obj.selected)}
+        </button>
+      );
+    }
+
+    act(() => {
+      root.render(<UncontrolledHookWrapper />);
+    });
+
+    const day10Btn = container.querySelector('[data-testid="day-10"]') as HTMLButtonElement;
+    expect(day10Btn.textContent).toBe('false');
+
+    act(() => {
+      day10Btn.click();
+    });
+
+    expect(day10Btn.textContent).toBe('true');
+    expect(onChange).toHaveBeenCalled();
+
+    document.body.removeChild(container);
+  });
+
+  test('controlled selection with selected=null does not update internal state', () => {
+    const onChange = vi.fn();
+
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+    const root = createRoot(container);
+
+    function ControlledNullHookWrapper() {
+      const res = useDates({
+        date: baseDate,
+        selectionMode: 'single',
+        selected: null,
+        onChange,
+      });
+
+      const flatDays = res.calendars[0].weeks.flat().filter(Boolean) as DateObj[];
+      const day10Obj = flatDays.find((d) => d.date.getDate() === 10)!;
+
+      return (
+        <button
+          {...res.getDateProps({ dateObj: day10Obj })}
+          data-testid="day-10"
+        >
+          {String(day10Obj.selected)}
+        </button>
+      );
+    }
+
+    act(() => {
+      root.render(<ControlledNullHookWrapper />);
+    });
+
+    const day10Btn = container.querySelector('[data-testid="day-10"]') as HTMLButtonElement;
+    expect(day10Btn.textContent).toBe('false');
+
+    act(() => {
+      day10Btn.click();
+    });
+
+    expect(onChange).toHaveBeenCalled();
+    expect(day10Btn.textContent).toBe('false');
+
+    document.body.removeChild(container);
+  });
+
   test('range mode calculates hovered date highlighting correctly', () => {
     const day10 = new Date(2025, 4, 10);
 
