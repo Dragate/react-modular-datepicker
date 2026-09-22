@@ -183,6 +183,16 @@
     @apply rmd:bg-white rmd:cursor-not-allowed;
   }
 
+  .today,
+  .rmd-day-today {
+    @apply rmd:text-brand-gold rmd:border rmd:border-brand-gold;
+  }
+
+  .outside,
+  .rmd-day-outside {
+    @apply rmd:text-white rmd:cursor-default!;
+  }
+
   .rmd-day-empty {
     @apply rmd:aspect-square rmd:bg-white;
   }
