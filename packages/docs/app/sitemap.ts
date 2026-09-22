@@ -1,16 +1,13 @@
-import type { MetadataRoute } from 'next';
 import { source } from '@/lib/source';
-
-export const revalidate = false;
+import type { MetadataRoute } from 'next';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = 'https://react-modular-datepicker.vercel.app';
-  const url = (path: string) => `${baseUrl}${path}`;
+  const url = (path: string) => `https://react-modular-datepicker.vercel.app${path}`;
 
   return [
     {
-      url: url('/'),
-      changeFrequency: 'monthly',
+      url: url(''),
+      changeFrequency: 'weekly',
       priority: 1.0,
     },
     ...source.getPages().map((page) => ({
