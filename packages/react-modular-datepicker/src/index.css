@@ -190,7 +190,7 @@
 
   .outside,
   .rmd-day-outside {
-    @apply rmd:text-white rmd:cursor-default!;
+    @apply rmd:text-brand-gray-light rmd:pointer-events-none;
   }
 
   .rmd-day-empty {
