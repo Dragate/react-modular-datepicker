@@ -34,6 +34,12 @@ describe('RTL and Custom Localization Integration', () => {
     expect(backBtn).not.toBeNull();
     expect(forwardBtn).not.toBeNull();
 
+    const backSvg = backBtn?.querySelector('svg');
+    const forwardSvg = forwardBtn?.querySelector('svg');
+
+    expect(backSvg).not.toBeNull();
+    expect(forwardSvg).not.toBeNull();
+
     document.body.removeChild(container);
   });
 });
