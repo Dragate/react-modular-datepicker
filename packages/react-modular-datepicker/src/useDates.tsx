@@ -83,7 +83,8 @@ export interface UseDatesProps<E extends { defaultPrevented?: boolean } = React.
     offset?: number;
     onDateSelected?: (dateObj: DateObj, event: E) => void;
     onOffsetChanged?: (newOffset: number) => void;
-    selected?: Date | Date[] | { start?: Date, end?: Date };
+    selected?: Date | Date[] | { start?: Date, end?: Date } | null;
+    defaultSelected?: Date | Date[] | { start?: Date, end?: Date } | null;
     modifiers?: Record<string, (date: Date, month: number, year: number) => boolean>;
     selectionMode?: SelectionMode;
     adapter?: DateAdapter;
@@ -103,6 +104,7 @@ export function useDates<E extends { defaultPrevented?: boolean } = React.Synthe
     onDateSelected,
     onOffsetChanged = () => { },
     selected,
+    defaultSelected,
     modifiers,
     selectionMode = 'single',
     adapter = defaultAdapter,
@@ -112,6 +114,13 @@ export function useDates<E extends { defaultPrevented?: boolean } = React.Synthe
 }: UseDatesProps<E> = {}) {
     const [stateOffset, setStateOffset] = useState(0);
     const [hoveredDate, setHoveredDate] = useState<Date | undefined>(undefined);
+    const [uncontrolledSelected, setUncontrolledSelected] = useState<
+        Date | Date[] | { start?: Date; end?: Date } | null | undefined
+    >(defaultSelected ?? null);
+
+    const isControlled = selected !== undefined;
+    const effectiveSelected = isControlled ? selected : uncontrolledSelected;
+
     const offsetMonth = getOffset(offset, stateOffset);
 
     const handleOffsetChanged = useCallback((newOffset: number) => {
@@ -133,35 +142,49 @@ export function useDates<E extends { defaultPrevented?: boolean } = React.Synthe
     const handleDateSelected = useCallback((dateObj: DateObj, event: E) => {
         onDateSelected?.(dateObj, event);
 
-        if (!onChange) return;
+        let nextSelected: Date | Date[] | { start?: Date; end?: Date } | null = null;
 
         if (selectionMode === 'single') {
-            onChange(dateObj.date);
+            nextSelected = dateObj.date;
         } else if (selectionMode === 'multiple') {
-            const currentSelected = Array.isArray(selected) ? selected : (selected ? [selected as Date] : []);
-            const isAlreadySelected = currentSelected.some(d => adapter.isSame(adapter.date(d), adapter.date(dateObj.date), 'day'));
+            const currentSelected = Array.isArray(effectiveSelected)
+                ? effectiveSelected
+                : (effectiveSelected instanceof Date ? [effectiveSelected] : []);
+            const isAlreadySelected = currentSelected.some(d =>
+                adapter.isSame(adapter.date(d), adapter.date(dateObj.date), 'day')
+            );
             if (isAlreadySelected) {
-                onChange(currentSelected.filter(d => !adapter.isSame(adapter.date(d), adapter.date(dateObj.date), 'day')));
+                nextSelected = currentSelected.filter(d =>
+                    !adapter.isSame(adapter.date(d), adapter.date(dateObj.date), 'day')
+                );
             } else {
-                onChange([...currentSelected, dateObj.date]);
+                nextSelected = [...currentSelected, dateObj.date];
             }
         } else if (selectionMode === 'range') {
-            const range = (selected && typeof selected === 'object' && !(selected instanceof Date) && !Array.isArray(selected)) ? (selected as { start?: Date, end?: Date }) : { start: undefined, end: undefined };
+            const range = (effectiveSelected && typeof effectiveSelected === 'object' && !(effectiveSelected instanceof Date) && !Array.isArray(effectiveSelected))
+                ? (effectiveSelected as { start?: Date; end?: Date })
+                : { start: undefined, end: undefined };
             if (!range.start || (range.start && range.end)) {
-                onChange({ start: dateObj.date, end: undefined });
+                nextSelected = { start: dateObj.date, end: undefined };
             } else {
                 if (adapter.isBefore(adapter.date(dateObj.date), adapter.date(range.start), 'day')) {
-                    onChange({ start: dateObj.date, end: range.start });
+                    nextSelected = { start: dateObj.date, end: range.start };
                 } else {
-                    onChange({ start: range.start, end: dateObj.date });
+                    nextSelected = { start: range.start, end: dateObj.date };
                 }
             }
         }
-    }, [onDateSelected, onChange, selectionMode, selected, adapter]);
+
+        if (!isControlled) {
+            setUncontrolledSelected(nextSelected);
+        }
+
+        onChange?.(nextSelected);
+    }, [onDateSelected, onChange, selectionMode, effectiveSelected, isControlled, adapter]);
 
     const calendars = getCalendars({
         date,
-        selected,
+        selected: effectiveSelected,
         disabledDates,
         modifiers,
         monthsToDisplay,

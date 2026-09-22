@@ -378,7 +378,7 @@ describe('Controlled vs Uncontrolled Integration Tests', () => {
   });
 
   describe('Uncontrolled / Standalone Selection', () => {
-    test('calls onChange callback without requiring controlled selected prop', () => {
+    test('calls onChange callback and updates DOM selection state when selected prop is undefined', () => {
       const container = document.createElement('div');
       document.body.appendChild(container);
       const root = createRoot(container);
@@ -401,6 +401,13 @@ describe('Controlled vs Uncontrolled Integration Tests', () => {
         (btn) => btn.textContent?.trim() === '12' && !btn.classList.contains('outside')
       ) as HTMLButtonElement;
 
+      const day15Btn = Array.from(container.querySelectorAll('.rmd-day')).find(
+        (btn) => btn.textContent?.trim() === '15' && !btn.classList.contains('outside')
+      ) as HTMLButtonElement;
+
+      expect(day12Btn.getAttribute('aria-pressed')).toBe('false');
+
+      // First click: day 12
       act(() => {
         day12Btn.click();
       });
@@ -409,6 +416,160 @@ describe('Controlled vs Uncontrolled Integration Tests', () => {
       expect(onChange).toHaveBeenCalled();
       const selectedDate = onChange.mock.calls[0][0] as Date;
       expect(selectedDate.getDate()).toBe(12);
+      expect(day12Btn.getAttribute('aria-pressed')).toBe('true');
+
+      // Second click: day 15
+      act(() => {
+        day15Btn.click();
+      });
+
+      const selectedDate2 = onChange.mock.calls[1][0] as Date;
+      expect(selectedDate2.getDate()).toBe(15);
+      expect(day15Btn.getAttribute('aria-pressed')).toBe('true');
+      expect(day12Btn.getAttribute('aria-pressed')).toBe('false');
+
+      document.body.removeChild(container);
+    });
+
+    test('updates selection in multiple and range modes when uncontrolled', () => {
+      const container = document.createElement('div');
+      document.body.appendChild(container);
+      const root = createRoot(container);
+
+      const onChangeMultiple = vi.fn();
+
+      act(() => {
+        root.render(
+          <Calendar
+            date={baseDate}
+            selectionMode="multiple"
+            onChange={onChangeMultiple}
+          />
+        );
+      });
+
+      const day10Btn = Array.from(container.querySelectorAll('.rmd-day')).find(
+        (btn) => btn.textContent?.trim() === '10' && !btn.classList.contains('outside')
+      ) as HTMLButtonElement;
+
+      const day12Btn = Array.from(container.querySelectorAll('.rmd-day')).find(
+        (btn) => btn.textContent?.trim() === '12' && !btn.classList.contains('outside')
+      ) as HTMLButtonElement;
+
+      act(() => {
+        day10Btn.click();
+      });
+      expect(day10Btn.getAttribute('aria-pressed')).toBe('true');
+
+      act(() => {
+        day12Btn.click();
+      });
+      expect(day10Btn.getAttribute('aria-pressed')).toBe('true');
+      expect(day12Btn.getAttribute('aria-pressed')).toBe('true');
+      expect(onChangeMultiple).toHaveBeenLastCalledWith(
+        expect.arrayContaining([expect.any(Date), expect.any(Date)])
+      );
+
+      document.body.removeChild(container);
+    });
+
+    test('functions in uncontrolled mode without requiring onChange prop', () => {
+      const container = document.createElement('div');
+      document.body.appendChild(container);
+      const root = createRoot(container);
+
+      act(() => {
+        root.render(<Calendar date={baseDate} selectionMode="single" />);
+      });
+
+      const day12Btn = Array.from(container.querySelectorAll('.rmd-day')).find(
+        (btn) => btn.textContent?.trim() === '12' && !btn.classList.contains('outside')
+      ) as HTMLButtonElement;
+
+      expect(day12Btn.getAttribute('aria-pressed')).toBe('false');
+
+      act(() => {
+        day12Btn.click();
+      });
+
+      expect(day12Btn.getAttribute('aria-pressed')).toBe('true');
+
+      document.body.removeChild(container);
+    });
+
+    test('initializes with defaultSelected in uncontrolled mode', () => {
+      const container = document.createElement('div');
+      document.body.appendChild(container);
+      const root = createRoot(container);
+
+      const initialDate = new Date(2025, 4, 10);
+
+      act(() => {
+        root.render(
+          <Calendar
+            date={baseDate}
+            selectionMode="single"
+            defaultSelected={initialDate}
+          />
+        );
+      });
+
+      const day10Btn = Array.from(container.querySelectorAll('.rmd-day')).find(
+        (btn) => btn.textContent?.trim() === '10' && !btn.classList.contains('outside')
+      ) as HTMLButtonElement;
+
+      const day20Btn = Array.from(container.querySelectorAll('.rmd-day')).find(
+        (btn) => btn.textContent?.trim() === '20' && !btn.classList.contains('outside')
+      ) as HTMLButtonElement;
+
+      expect(day10Btn.getAttribute('aria-pressed')).toBe('true');
+      expect(day20Btn.getAttribute('aria-pressed')).toBe('false');
+
+      act(() => {
+        day20Btn.click();
+      });
+
+      expect(day10Btn.getAttribute('aria-pressed')).toBe('false');
+      expect(day20Btn.getAttribute('aria-pressed')).toBe('true');
+
+      document.body.removeChild(container);
+    });
+
+    test('operates in controlled mode when selected is null', () => {
+      const container = document.createElement('div');
+      document.body.appendChild(container);
+      const root = createRoot(container);
+
+      const onChange = vi.fn();
+
+      act(() => {
+        root.render(
+          <Calendar
+            date={baseDate}
+            selectionMode="single"
+            selected={null}
+            onChange={onChange}
+          />
+        );
+      });
+
+      const day12Btn = Array.from(container.querySelectorAll('.rmd-day')).find(
+        (btn) => btn.textContent?.trim() === '12' && !btn.classList.contains('outside')
+      ) as HTMLButtonElement;
+
+      // No date should be pressed initially
+      expect(day12Btn.getAttribute('aria-pressed')).toBe('false');
+
+      act(() => {
+        day12Btn.click();
+      });
+
+      expect(onChange).toHaveBeenCalled();
+      const calledDate = onChange.mock.calls[0][0] as Date;
+      expect(calledDate.getDate()).toBe(12);
+
+      // Controlled selected prop remains null, so day 12 stays unselected
+      expect(day12Btn.getAttribute('aria-pressed')).toBe('false');
 
       document.body.removeChild(container);
     });
