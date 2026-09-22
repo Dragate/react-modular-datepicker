@@ -86,7 +86,7 @@ export default async function Image() {
           backgroundColor: '#0a0d14',
           backgroundImage:
             'radial-gradient(circle at 15% 20%, rgba(197, 160, 89, 0.22) 0%, transparent 45%), radial-gradient(circle at 85% 80%, rgba(197, 160, 89, 0.15) 0%, transparent 40%)',
-          padding: '60px',
+          padding: '50px 60px',
           fontFamily: 'sans-serif',
           color: '#f3f4f6',
           boxSizing: 'border-box',
@@ -98,7 +98,7 @@ export default async function Image() {
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
-            maxWidth: '560px',
+            maxWidth: '630px',
           }}
         >
           {/* Logo Badge */}
@@ -109,18 +109,18 @@ export default async function Image() {
               backgroundColor: 'rgba(197, 160, 89, 0.15)',
               border: '1px solid rgba(197, 160, 89, 0.35)',
               color: '#d8b467',
-              padding: '8px 18px',
+              padding: '8px 20px',
               borderRadius: '9999px',
-              fontSize: '18px',
+              fontSize: '20px',
               fontWeight: 600,
-              marginBottom: '28px',
-              maxWidth: '290px',
+              marginBottom: '24px',
+              maxWidth: '330px',
             }}
           >
             {/* Embedded Logo SVG */}
             <svg
-              width="22"
-              height="22"
+              width="24"
+              height="24"
               viewBox="0 0 200 200"
               style={{ marginRight: '10px' }}
             >
@@ -138,10 +138,10 @@ export default async function Image() {
 
           <h1
             style={{
-              fontSize: '52px',
+              fontSize: '56px',
               fontWeight: 800,
               lineHeight: 1.15,
-              margin: '0 0 20px 0',
+              margin: '0 0 18px 0',
               color: '#ffffff',
               letterSpacing: '-0.02em',
             }}
@@ -151,9 +151,9 @@ export default async function Image() {
 
           <p
             style={{
-              fontSize: '22px',
+              fontSize: '24px',
               color: '#9ca3af',
-              margin: '0 0 32px 0',
+              margin: '0 0 28px 0',
               lineHeight: 1.5,
             }}
           >
@@ -168,9 +168,9 @@ export default async function Image() {
                   backgroundColor: '#161d2a',
                   border: '1px solid #2a3447',
                   color: '#e5e7eb',
-                  padding: '8px 16px',
+                  padding: '9px 18px',
                   borderRadius: '8px',
-                  fontSize: '16px',
+                  fontSize: '18px',
                   fontWeight: 500,
                   marginRight: '12px',
                   marginBottom: '12px',
@@ -196,11 +196,11 @@ export default async function Image() {
             style={{
               display: 'flex',
               flexDirection: 'column',
-              width: '350px',
+              width: '360px',
               backgroundColor: '#ffffff',
               border: '1px solid #e5e7eb',
-              borderRadius: '12px',
-              padding: '16px',
+              borderRadius: '14px',
+              padding: '18px',
               boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.2)',
             }}
           >
@@ -211,9 +211,9 @@ export default async function Image() {
                 flexDirection: 'row',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                paddingBottom: '8px',
+                paddingBottom: '10px',
                 borderBottom: '2px solid rgba(181, 190, 198, 0.4)',
-                marginBottom: '8px',
+                marginBottom: '10px',
               }}
             >
               {/* Back Button */}
@@ -222,23 +222,23 @@ export default async function Image() {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  width: '32px',
-                  height: '32px',
+                  width: '34px',
+                  height: '34px',
                   borderRadius: '9999px',
                   color: '#343a40',
                 }}
               >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#343a40" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#343a40" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <polyline points="15 18 9 12 15 6" />
                 </svg>
               </div>
 
               {/* Month/Year Title */}
               <div style={{ display: 'flex', flexDirection: 'row', gap: '8px' }}>
-                <span style={{ fontSize: '15px', fontWeight: 600, color: '#343a40' }}>
+                <span style={{ fontSize: '18px', fontWeight: 600, color: '#343a40' }}>
                   October
                 </span>
-                <span style={{ fontSize: '15px', fontWeight: 600, color: '#343a40' }}>
+                <span style={{ fontSize: '18px', fontWeight: 600, color: '#343a40' }}>
                   2025
                 </span>
               </div>
@@ -249,13 +249,13 @@ export default async function Image() {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  width: '32px',
-                  height: '32px',
+                  width: '34px',
+                  height: '34px',
                   borderRadius: '9999px',
                   color: '#343a40',
                 }}
               >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#343a40" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#343a40" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <polyline points="9 18 15 12 9 6" />
                 </svg>
               </div>
@@ -267,8 +267,8 @@ export default async function Image() {
                 display: 'flex',
                 flexDirection: 'row',
                 justifyContent: 'space-between',
-                marginBottom: '6px',
-                paddingBottom: '4px',
+                marginBottom: '8px',
+                paddingBottom: '6px',
                 borderBottom: '1px solid rgba(181, 190, 198, 0.4)',
               }}
             >
@@ -276,12 +276,12 @@ export default async function Image() {
                 <div
                   key={i}
                   style={{
-                    width: '42px',
-                    height: '24px',
+                    width: '44px',
+                    height: '26px',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    fontSize: '12px',
+                    fontSize: '14px',
                     color: '#9ca3af',
                     textTransform: "uppercase",
                   }}
@@ -330,7 +330,7 @@ export default async function Image() {
                         key={dIdx}
                         style={{
                           width: '44px',
-                          height: '42px',
+                          height: '44px',
                           display: 'flex',
                           flex: "1",
                           alignItems: 'center',
@@ -339,7 +339,7 @@ export default async function Image() {
                           color: textColor,
                           borderRadius: borderRadius,
                           fontWeight: fontWeight,
-                          fontSize: '14px',
+                          fontSize: '16px',
                         }}
                       >
                         {item.num}

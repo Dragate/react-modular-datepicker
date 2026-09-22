@@ -22,10 +22,15 @@ export default function HomePage() {
 
       <main className="w-full max-w-6xl mx-auto px-4 py-12 md:py-20 flex flex-col items-center text-center">
         {/* Version Badge */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs md:text-sm font-semibold bg-[#c5a059]/10 border border-[#c5a059]/30 text-[#c5a059] mb-8 shadow-sm cursor-default">
+        <a
+          href="https://www.npmjs.com/package/react-modular-datepicker"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs md:text-sm font-semibold bg-[#c5a059]/10 border border-[#c5a059]/30 text-[#c5a059] mb-8 shadow-sm hover:bg-[#c5a059]/20 transition-colors cursor-pointer"
+        >
           <Image src="/icon0.svg" alt="logo" width={18} height={18} className="w-4 h-4" />
           <span>react-modular-datepicker</span>
-        </div>
+        </a>
 
         {/* Hero Title */}
         <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold tracking-tight mb-6 text-fd-foreground max-w-4xl leading-[1.1]">
