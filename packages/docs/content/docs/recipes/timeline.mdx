@@ -1,0 +1,169 @@
+---
+title: Timeline View
+description: Build interactive daily agenda timelines and multi-day milestone schedule views with calendar date selection.
+---
+
+# Timeline View
+
+The `<Calendar />` component and `useDates` hook can be combined with vertical or horizontal timeline interfaces to display chronological daily agendas, scheduled milestones, or activity feeds.
+
+## Interactive Daily Timeline Agenda
+
+In this pattern, `<Calendar />` uses custom `modifiers` to display indicator dots on days that contain scheduled items. Selecting a date updates the adjacent vertical timeline agenda, displaying time slots, milestone status badges (Completed, In Progress, Upcoming), and category labels.
+
+<TimelineDemo />
+
+---
+
+## Code Example
+
+Below is the complete implementation for building a date-driven daily timeline agenda with `<Calendar />` and custom styling tokens:
+
+```tsx
+import { useState } from 'react';
+import { Calendar } from 'react-modular-datepicker';
+import 'react-modular-datepicker/dist/index.css';
+
+interface TimelineEvent {
+  id: string;
+  time: string;
+  title: string;
+  description: string;
+  status: 'completed' | 'in-progress' | 'upcoming';
+  category: 'Engineering' | 'Design' | 'Product' | 'Operations';
+}
+
+const today = new Date();
+const currentYear = today.getFullYear();
+const currentMonth = today.getMonth();
+
+const timelineEvents: Record<string, TimelineEvent[]> = {
+  [`${currentYear}-${currentMonth + 1}-8`]: [
+    {
+      id: '1',
+      time: '09:00 AM',
+      title: 'Sprint Planning & Backlog Grooming',
+      description: 'Review user stories and estimate story points for Sprint 24.',
+      status: 'completed',
+      category: 'Product',
+    },
+    {
+      id: '2',
+      time: '11:30 AM',
+      title: 'Design System Component Sync',
+      description: 'Align on datepicker custom styling tokens and Tailwind CSS prefixes.',
+      status: 'completed',
+      category: 'Design',
+    },
+    {
+      id: '3',
+      time: '02:00 PM',
+      title: 'API Architecture Review',
+      description: 'Discuss headless useDates hook integration for timeline layouts.',
+      status: 'in-progress',
+      category: 'Engineering',
+    },
+    {
+      id: '4',
+      time: '04:30 PM',
+      title: 'CI/CD Pipeline Optimization',
+      description: 'Update GitHub Actions workflows for automated Vitest execution.',
+      status: 'upcoming',
+      category: 'Operations',
+    },
+  ],
+  [`${currentYear}-${currentMonth + 1}-15`]: [
+    {
+      id: '5',
+      time: '10:00 AM',
+      title: 'Frontend Verification Session',
+      description: 'Verify accessibility standards (WAI-ARIA APG) for calendar controls.',
+      status: 'in-progress',
+      category: 'Engineering',
+    },
+  ],
+};
+
+export function TimelineViewExample() {
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date(currentYear, currentMonth, 8));
+
+  const getKey = (d: Date) => `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+  const currentKey = getKey(selectedDate);
+  const events = timelineEvents[currentKey] || [];
+
+  return (
+    <div className="flex flex-col lg:flex-row gap-6 w-full max-w-4xl items-start">
+      {/* Calendar Picker with Event Modifier Dots */}
+      <div className="w-full lg:w-auto shrink-0 flex flex-col items-center border rounded-xl p-4 bg-white dark:bg-slate-900">
+        <Calendar
+          selected={selectedDate}
+          onChange={(d) => setSelectedDate(d as Date)}
+          modifiers={{
+            hasEvents: (date) => !!timelineEvents[getKey(date)],
+          }}
+          classNames={{
+            day: {
+              hasEvents:
+                'font-bold relative after:content-["•"] after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:text-amber-500 after:text-xs',
+            },
+          }}
+        />
+      </div>
+
+      {/* Vertical Timeline Agenda */}
+      <div className="flex-1 w-full border rounded-xl p-5 bg-white dark:bg-slate-900 min-h-[360px]">
+        <div className="flex items-center justify-between pb-3 mb-4 border-b">
+          <div>
+            <h3 className="text-sm font-bold">
+              {selectedDate.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })}
+            </h3>
+            <p className="text-xs text-gray-500">
+              {events.length} {events.length === 1 ? 'event' : 'events'} scheduled
+            </p>
+          </div>
+          <span className="px-2.5 py-1 text-xs font-semibold rounded-full bg-gray-100 dark:bg-slate-800">
+            Timeline Agenda
+          </span>
+        </div>
+
+        {events.length > 0 ? (
+          <div className="relative pl-6 space-y-6 before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-gray-200 dark:before:bg-slate-800">
+            {events.map((ev) => (
+              <div key={ev.id} className="relative">
+                {/* Timeline Node Dot */}
+                <span
+                  className={`absolute -left-[19px] top-1 w-3 h-3 rounded-full ring-4 ring-white dark:ring-slate-900 ${
+                    ev.status === 'completed'
+                      ? 'bg-emerald-500'
+                      : ev.status === 'in-progress'
+                      ? 'bg-amber-500 animate-pulse'
+                      : 'bg-blue-500'
+                  }`}
+                />
+
+                <div className="bg-gray-50 dark:bg-slate-800/50 rounded-lg p-3.5 border">
+                  <div className="flex items-center justify-between gap-2 mb-1">
+                    <span className="text-xs font-mono font-semibold text-gray-500">
+                      {ev.time}
+                    </span>
+                    <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full border bg-white dark:bg-slate-800">
+                      {ev.status}
+                    </span>
+                  </div>
+                  <h4 className="text-xs font-bold mb-1">{ev.title}</h4>
+                  <p className="text-xs text-gray-500">{ev.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center py-12 text-center text-gray-500">
+            <span className="text-2xl mb-2">🗓️</span>
+            <p className="text-xs font-semibold">No events scheduled for this date</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+```

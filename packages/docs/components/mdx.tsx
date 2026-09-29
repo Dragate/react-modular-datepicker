@@ -16,6 +16,7 @@ import {
   FullMonthScheduleDemo,
   AvailabilityDemo,
   ModifiersDemo,
+  TimelineDemo,
 } from './demos';
 
 export function getMDXComponents(components?: MDXComponents) {
@@ -36,6 +37,7 @@ export function getMDXComponents(components?: MDXComponents) {
     FullMonthScheduleDemo,
     AvailabilityDemo,
     ModifiersDemo,
+    TimelineDemo,
     ...components,
   } satisfies MDXComponents;
 }

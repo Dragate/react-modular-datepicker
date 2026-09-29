@@ -43,6 +43,193 @@ export function BasicDemo() {
   );
 }
 
+export function TimelineDemo() {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = today.getMonth();
+
+  interface TimelineEvent {
+    id: string;
+    time: string;
+    title: string;
+    description: string;
+    status: 'completed' | 'in-progress' | 'upcoming';
+    category: 'Engineering' | 'Design' | 'Product' | 'Operations';
+  }
+
+  const timelineEvents: Record<string, TimelineEvent[]> = {
+    [`${year}-${month + 1}-8`]: [
+      {
+        id: '1',
+        time: '09:00 AM',
+        title: 'Sprint Planning & Backlog Grooming',
+        description: 'Review user stories and estimate story points for Sprint 24.',
+        status: 'completed',
+        category: 'Product',
+      },
+      {
+        id: '2',
+        time: '11:30 AM',
+        title: 'Design System Component Sync',
+        description: 'Align on datepicker custom styling tokens and Tailwind CSS prefixes.',
+        status: 'completed',
+        category: 'Design',
+      },
+      {
+        id: '3',
+        time: '02:00 PM',
+        title: 'API Architecture Review',
+        description: 'Discuss headless useDates hook integration for timeline layouts.',
+        status: 'in-progress',
+        category: 'Engineering',
+      },
+      {
+        id: '4',
+        time: '04:30 PM',
+        title: 'CI/CD Pipeline Optimization',
+        description: 'Update GitHub Actions workflows for automated Vitest execution.',
+        status: 'upcoming',
+        category: 'Operations',
+      },
+    ],
+    [`${year}-${month + 1}-15`]: [
+      {
+        id: '5',
+        time: '10:00 AM',
+        title: 'Frontend Verification Session',
+        description: 'Verify accessibility standards (WAI-ARIA APG) for calendar controls.',
+        status: 'in-progress',
+        category: 'Engineering',
+      },
+      {
+        id: '6',
+        time: '01:00 PM',
+        title: 'Product Roadmap Q4 Pitch',
+        description: 'Present upcoming feature releases to key stakeholders.',
+        status: 'upcoming',
+        category: 'Product',
+      },
+    ],
+    [`${year}-${month + 1}-22`]: [
+      {
+        id: '7',
+        time: '09:30 AM',
+        title: 'Security & Dependency Audit',
+        description: 'Run automated Dependabot updates and verify package provenance.',
+        status: 'upcoming',
+        category: 'Operations',
+      },
+    ],
+  };
+
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date(year, month, 8));
+
+  const getKey = (d: Date) => `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+  const currentKey = getKey(selectedDate);
+  const events = timelineEvents[currentKey] || [];
+
+  return (
+    <DemoContainer title="Live Preview: Interactive Timeline View">
+      <div className="flex flex-col lg:flex-row gap-6 w-full max-w-4xl items-start justify-center">
+        <div className="w-full lg:w-auto shrink-0 flex flex-col items-center border border-fd-border rounded-xl p-4 bg-fd-card shadow-xs">
+          <Calendar
+            selected={selectedDate}
+            onChange={(d) => setSelectedDate(d as Date)}
+            modifiers={{
+              hasEvents: (date) => !!timelineEvents[getKey(date)],
+            }}
+            classNames={{
+              day: {
+                hasEvents:
+                  'font-bold relative after:content-["•"] after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:text-amber-500 after:text-xs',
+              },
+            }}
+          />
+          <div className="mt-3 text-xs text-fd-muted-foreground flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-amber-500 inline-block" />
+            <span>Dates with scheduled timeline items</span>
+          </div>
+        </div>
+
+        <div className="flex-1 w-full border border-fd-border rounded-xl p-5 bg-fd-card shadow-xs min-h-[360px]">
+          <div className="flex items-center justify-between pb-3 mb-4 border-b border-fd-border">
+            <div>
+              <h3 className="text-sm font-bold text-fd-foreground">
+                {selectedDate.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })}
+              </h3>
+              <p className="text-xs text-fd-muted-foreground">
+                {events.length} {events.length === 1 ? 'event' : 'events'} scheduled
+              </p>
+            </div>
+            <span className="px-2.5 py-1 text-[11px] font-semibold rounded-full bg-fd-secondary text-fd-secondary-foreground border border-fd-border">
+              Timeline Agenda
+            </span>
+          </div>
+
+          {events.length > 0 ? (
+            <div className="relative pl-6 space-y-6 before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-fd-border">
+              {events.map((ev) => {
+                const statusColors = {
+                  completed: 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/30',
+                  'in-progress': 'bg-amber-500/15 text-amber-600 dark:text-amber-400 border-amber-500/30',
+                  upcoming: 'bg-blue-500/15 text-blue-600 dark:text-blue-400 border-blue-500/30',
+                };
+
+                const nodeColors = {
+                  completed: 'bg-emerald-500 ring-emerald-500/20',
+                  'in-progress': 'bg-amber-500 ring-amber-500/20 animate-pulse',
+                  upcoming: 'bg-blue-500 ring-blue-500/20',
+                };
+
+                return (
+                  <div key={ev.id} className="relative group">
+                    <span
+                      className={`absolute -left-[19px] top-1 w-3 h-3 rounded-full ring-4 bg-fd-card ${nodeColors[ev.status]}`}
+                    />
+
+                    <div className="bg-fd-background rounded-lg p-3.5 border border-fd-border shadow-2xs">
+                      <div className="flex items-center justify-between gap-2 mb-1.5">
+                        <span className="text-xs font-mono font-semibold text-fd-muted-foreground">
+                          {ev.time}
+                        </span>
+                        <div className="flex items-center gap-1.5">
+                          <span
+                            className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full border ${statusColors[ev.status]}`}
+                          >
+                            {ev.status.replace('-', ' ')}
+                          </span>
+                          <span className="text-[10px] font-medium px-2 py-0.5 rounded bg-fd-secondary text-fd-secondary-foreground">
+                            {ev.category}
+                          </span>
+                        </div>
+                      </div>
+
+                      <h4 className="text-xs font-bold text-fd-foreground mb-1">
+                        {ev.title}
+                      </h4>
+                      <p className="text-xs text-fd-muted-foreground leading-relaxed">
+                        {ev.description}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center py-12 text-center">
+              <span className="text-2xl mb-2">🗓️</span>
+              <p className="text-xs font-semibold text-fd-foreground">No events scheduled for this date</p>
+              <p className="text-[11px] text-fd-muted-foreground mt-1 max-w-xs">
+                Select a highlighted date on the calendar to view scheduled timeline milestones.
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
+    </DemoContainer>
+  );
+}
+
 export function ModifiersDemo() {
   const today = new Date();
   const year = today.getFullYear();

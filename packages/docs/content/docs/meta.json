@@ -21,6 +21,7 @@
     "recipes/custom-header-footer",
     "recipes/event-schedule",
     "recipes/availability",
+    "recipes/timeline",
     "---Customization & Advanced---",
     "recipes/custom-styling",
     "recipes/modifiers",
