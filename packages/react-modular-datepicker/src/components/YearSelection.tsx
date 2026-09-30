@@ -2,15 +2,27 @@ import React, { useEffect, useRef, useState } from 'react';
 import clsx from 'clsx';
 import { CalendarClassNames, DateAdapter } from '../types';
 
+/** Props for YearSelection component */
 interface YearSelectionProps {
+  /** Currently active year */
   year: number;
+  /** Optional minimum date bound */
   minDate?: Date | null;
+  /** Optional maximum date bound */
   maxDate?: Date | null;
+  /** Date adapter instance */
   adapter: DateAdapter;
+  /** Callback fired when user selects a year */
   onYearSelect: (year: number) => void;
+  /** Class name customization object */
   classNames?: CalendarClassNames;
 }
 
+/**
+ * Year selection view grid component.
+ * Displays scrollable grid of years bounded by min/max limits with auto-scroll to current year
+ * and accessible keyboard grid navigation.
+ */
 export const YearSelection: React.FC<YearSelectionProps> = ({
   year,
   minDate,
@@ -23,6 +35,7 @@ export const YearSelection: React.FC<YearSelectionProps> = ({
   const [focusedYear, setFocusedYear] = useState<number>(year);
   const buttonRefs = useRef<Map<number, HTMLButtonElement>>(new Map());
 
+  // Generate range of years bounded by minDate/maxDate or defaulting to +- 50 years
   const startYear = minDate ? adapter.get(adapter.date(minDate), 'year') : year - 50;
   const endYear = maxDate ? adapter.get(adapter.date(maxDate), 'year') : year + 50;
   const years: number[] = [];
@@ -30,6 +43,7 @@ export const YearSelection: React.FC<YearSelectionProps> = ({
     years.push(y);
   }
 
+  // Auto-scroll container scrollTop to center currently selected year button
   useEffect(() => {
     if (yearListRef.current) {
       const container = yearListRef.current;
@@ -49,6 +63,7 @@ export const YearSelection: React.FC<YearSelectionProps> = ({
     }
   }, [focusedYear]);
 
+  // Handle keyboard arrow navigation, PageUp/PageDown stepping, Home, and End
   const handleKeyDown = (e: React.KeyboardEvent, y: number) => {
     let nextYear = focusedYear;
 

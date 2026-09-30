@@ -1,5 +1,13 @@
 import type { Calendar, DateAdapter, DateObj, SelectionMode } from './types';
 
+/**
+ * Combines multiple event handlers into a single event handler function.
+ * Executes handlers in sequence until one handler calls `event.preventDefault()`.
+ *
+ * @template E Synthetic event type
+ * @param fns Array of event handler functions (or undefined values)
+ * @returns Combined event handler function
+ */
 export function composeEventHandlers<E extends { defaultPrevented?: boolean } = React.SyntheticEvent>(
     ...fns: (((event: E, ...args: unknown[]) => void) | undefined)[]
 ) {
@@ -12,7 +20,12 @@ export function composeEventHandlers<E extends { defaultPrevented?: boolean } = 
         });
 }
 
-
+/**
+ * Calculates clamped month offset when navigating backward, respecting minimum date bounds.
+ *
+ * @param params Navigation parameters including calendars array, offset step, minDate limit, and date adapter
+ * @returns Valid month step offset bounded by minDate
+ */
 export function subtractMonth({
     calendars,
     offset,
@@ -33,6 +46,12 @@ export function subtractMonth({
     return offset;
 }
 
+/**
+ * Calculates clamped month offset when navigating forward, respecting maximum date bounds.
+ *
+ * @param params Navigation parameters including calendars array, offset step, maxDate limit, and date adapter
+ * @returns Valid month step offset bounded by maxDate
+ */
 export function addMonth({
     calendars,
     offset,
@@ -53,6 +72,12 @@ export function addMonth({
     return offset;
 }
 
+/**
+ * Generates array of `Calendar` month objects for single-month or multi-month calendar displays.
+ *
+ * @param params Grid generation parameters (base date, selection mode, offset, min/max bounds, modifiers, etc.)
+ * @returns Array of Calendar objects containing month metadata and 2D weeks matrix
+ */
 export function getCalendars({
     date,
     selected,
@@ -103,6 +128,9 @@ export function getCalendars({
     return calendars;
 }
 
+/**
+ * Constructs calendar grid data for a single month, including leading/trailing buffer days for full week rows.
+ */
 function getMonthData({
     month,
     year,
@@ -128,6 +156,7 @@ function getMonthData({
     selectionMode: 'single' | 'range' | 'multiple',
     hoveredDate?: Date
 }): Calendar {
+    // Initialize starting from year start to prevent month-end overflow on 29th-31st dates
     let currentMonth = adapter.set(adapter.set(adapter.startOf(adapter.date(), 'year'), 'year', year), 'month', month);
     month = adapter.get(currentMonth, 'month');
     year = adapter.get(currentMonth, 'year');
@@ -188,6 +217,9 @@ function getMonthData({
     };
 }
 
+/**
+ * Creates a `DateObj` cell model with calculated selection flags, active modifiers, and bounds checking.
+ */
 function createDateObj(
     date: Date,
     selectedDates: Date | Date[] | { start?: Date, end?: Date } | null | undefined,
@@ -242,6 +274,9 @@ function createDateObj(
     };
 }
 
+/**
+ * Generates leading buffer days from previous month to align first week according to `firstDayOfWeek`.
+ */
 function fillFrontWeek({
     firstDayOfMonth,
     minDate,
@@ -284,6 +319,9 @@ function fillFrontWeek({
     return dates;
 }
 
+/**
+ * Generates trailing buffer days into next month to complete the final week row of a month view.
+ */
 function fillBackWeek({
     lastDayOfMonth,
     minDate,
@@ -326,6 +364,9 @@ function fillBackWeek({
     return dates;
 }
 
+/**
+ * Splits flat array of `DateObj` cells into a 2D matrix of weeks (7 days per row).
+ */
 function getWeeks(dates: (DateObj | null)[]): (DateObj | null)[][] {
     const weeksLength = Math.ceil(dates.length / 7);
     const weeks: (DateObj | null)[][] = [];
@@ -338,6 +379,9 @@ function getWeeks(dates: (DateObj | null)[]): (DateObj | null)[][] {
     return weeks;
 }
 
+/**
+ * Determines selection and range states (start, end, between, hovering, active) for a date.
+ */
 function isSelected(
     selectedDates: Date | Date[] | { start?: Date, end?: Date } | null | undefined,
     date: Date,
@@ -406,6 +450,9 @@ function isSelected(
     return { selected: false };
 }
 
+/**
+ * Checks whether a date is selectable (not before minDate, after maxDate, or in disabledDates).
+ */
 function isSelectable(minDate: Date | undefined, maxDate: Date | undefined, disabledDates: Date[] | undefined, date: Date, adapter: DateAdapter): boolean {
     const d = adapter.date(date);
     const isMinDateInvalid = minDate && adapter.isBefore(d, adapter.date(minDate), 'day');
@@ -414,6 +461,12 @@ function isSelectable(minDate: Date | undefined, maxDate: Date | undefined, disa
     return !isMinDateInvalid && !isMaxDateInvalid && !isDisabled;
 }
 
+/**
+ * Checks if backward month navigation is disabled due to minDate boundaries.
+ *
+ * @param params Navigation state including calendars array, minDate limit, and date adapter
+ * @returns True if previous navigation is disabled
+ */
 export function isBackDisabled({
     calendars,
     minDate,
@@ -430,6 +483,12 @@ export function isBackDisabled({
     return adapter.isSame(adapter.startOf(adapter.date(firstDay), 'month'), adapter.startOf(adapter.date(minDate), 'month'), 'month') || adapter.isBefore(adapter.date(firstDay), adapter.date(minDate), 'month');
 }
 
+/**
+ * Checks if forward month navigation is disabled due to maxDate boundaries.
+ *
+ * @param params Navigation state including calendars array, maxDate limit, and date adapter
+ * @returns True if next navigation is disabled
+ */
 export function isForwardDisabled({
     calendars,
     maxDate,

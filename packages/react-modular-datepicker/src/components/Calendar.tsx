@@ -9,20 +9,34 @@ import { Day } from './Day';
 import { MonthSelection } from './MonthSelection';
 import { YearSelection } from './YearSelection';
 
+/** Props for the `Calendar` component */
 interface CalendarProps extends UseDatesProps {
+  /** Class name customization object */
   classNames?: CalendarClassNames;
+  /** Locale code for month and weekday localization (e.g. `'es'`, `'de'`) */
   locale?: string;
+  /** Custom translation strings object */
   translations?: Partial<Translations>;
+  /** Custom header element or render prop function */
   header?: React.ReactNode | ((props: HeaderProps) => React.ReactNode);
+  /** Custom footer element rendered at the bottom of the calendar */
   footer?: React.ReactNode;
+  /** Function to return dynamic HTML attributes or event listeners for individual day cells */
   getDayProps?: (dateObj: DateObj) => Record<string, unknown>;
 }
 
 type CalendarView = 'days' | 'months' | 'years';
 
+/** Formats a Date object into a unique map key string `YYYY-MM-DD` */
 const getDateKey = (d: Date): string =>
   `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
 
+/**
+ * Main `Calendar` component.
+ * Provides a ready-to-use, fully accessible calendar datepicker UI supporting single,
+ * range, and multiple date selection, view switching (days, months, years), keyboard navigation,
+ * animations, custom styling, and localization.
+ */
 export const Calendar: React.FC<CalendarProps> = (props) => {
   const {
     classNames,
@@ -59,6 +73,7 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
     setOffset
   } = useDates({ ...useDatesProps, adapter, firstDayOfWeek });
 
+  // Dynamically measure height of days view container to maintain consistent view height during view switches
   useEffect(() => {
     if (view === 'days' && daysContainerRef.current) {
       const el = daysContainerRef.current;
@@ -79,6 +94,7 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
     }
   }, [view, calendars]);
 
+  // Update screen reader live region announcements on view change or month navigation
   useEffect(() => {
     if (view === 'days' && calendars.length > 0) {
       if (calendars.length === 1) {
@@ -97,7 +113,7 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
     }
   }, [view, calendars, monthNames]);
 
-  // Determine default active focused date if focusedDate is not set
+  // Determine active focus date fallback for roving tabindex (selected date -> today -> first selectable day)
   const defaultFocusedDate = useMemo(() => {
     for (const cal of calendars) {
       for (const week of cal.weeks) {
@@ -131,6 +147,7 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
 
   const currentFocusedDate = focusedDate || defaultFocusedDate;
 
+  // Move browser DOM focus to new active date element during keyboard arrow navigation
   useEffect(() => {
     if (view === 'days' && currentFocusedDate && isKeyboardNavigating.current) {
       const key = getDateKey(currentFocusedDate);
@@ -146,6 +163,7 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
   const currentCalendar = calendars[0];
   const { month, year } = currentCalendar;
 
+  // Handle month overlay selection
   const handleMonthSelect = (newMonth: number) => {
     const currentMonth = adapter.set(adapter.set(adapter.date(props.date || new Date()), 'year', year), 'month', month);
     const targetMonth = adapter.set(currentMonth, 'month', newMonth);
@@ -156,6 +174,7 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
     setView('days');
   };
 
+  // Handle year overlay selection
   const handleYearSelect = (newYear: number) => {
     const currentMonth = adapter.set(adapter.set(adapter.date(props.date || new Date()), 'year', year), 'month', month);
     const targetMonth = adapter.set(currentMonth, 'year', newYear);
@@ -168,6 +187,7 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
 
   const stepOffset = useDatesProps.monthsToDisplay || 1;
 
+  // Wrap back button navigation handler to set slide animation direction
   const wrappedGetBackProps = (args?: Record<string, unknown>) => {
     const props = getBackProps({ offset: stepOffset, ...args }) as { onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void; [key: string]: unknown };
     return {
@@ -179,6 +199,7 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
     };
   };
 
+  // Wrap forward button navigation handler to set slide animation direction
   const wrappedGetForwardProps = (args?: Record<string, unknown>) => {
     const props = getForwardProps({ offset: stepOffset, ...args }) as { onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void; [key: string]: unknown };
     return {
@@ -190,6 +211,7 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
     };
   };
 
+  // WAI-ARIA APG keyboard grid navigation (Arrow keys, Home, End, PageUp, PageDown) with RTL awareness
   const handleDayKeyDown = (e: React.KeyboardEvent, dateObj: DateObj) => {
     const isRTL = Boolean(
       rootRef.current?.closest('[dir="rtl"]') ||
@@ -278,6 +300,7 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
 
   return (
     <div ref={rootRef} className={clsx('rmd', 'rmd-root', classNames?.root)}>
+      {/* Live region screen reader announcements */}
       <div className="rmd-sr-only" aria-live="polite" aria-atomic="true">
         {announcement}
       </div>

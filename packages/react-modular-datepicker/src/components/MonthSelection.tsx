@@ -2,16 +2,28 @@ import React, { useState, useRef, useEffect } from 'react';
 import clsx from 'clsx';
 import { CalendarClassNames } from '../types';
 
+/** Props for MonthSelection component */
 interface MonthSelectionProps {
+  /** Target year number */
   year: number;
+  /** Currently active month index (0-11) */
   month: number;
+  /** Array of localized month names */
   monthNames: string[];
+  /** Optional lower date bound */
   minDate?: Date | null;
+  /** Optional upper date bound */
   maxDate?: Date | null;
+  /** Callback fired when user selects a month */
   onMonthSelect: (month: number) => void;
+  /** Class name customization object */
   classNames?: CalendarClassNames;
 }
 
+/**
+ * Month selection view grid component.
+ * Allows switching to a specific month in 3x4 grid layout with keyboard navigation support.
+ */
 export const MonthSelection: React.FC<MonthSelectionProps> = ({
   year,
   month,
@@ -28,6 +40,7 @@ export const MonthSelection: React.FC<MonthSelectionProps> = ({
     buttonRefs.current[focusedMonth]?.focus();
   }, [focusedMonth]);
 
+  // Checks minDate and maxDate limits for specific month option
   const isMonthDisabled = (monthIdx: number) => {
     if (minDate && year === minDate.getFullYear() && monthIdx < minDate.getMonth()) {
       return true;
@@ -38,6 +51,7 @@ export const MonthSelection: React.FC<MonthSelectionProps> = ({
     return false;
   };
 
+  // Keyboard navigation across 3x4 grid using Arrow keys, Home, and End
   const handleKeyDown = (e: React.KeyboardEvent, idx: number) => {
     let nextIndex = focusedMonth;
 

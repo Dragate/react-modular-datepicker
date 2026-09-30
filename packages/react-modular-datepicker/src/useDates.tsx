@@ -10,14 +10,17 @@ import {
     subtractMonth
 } from './utils';
 
+/** Helper to check whether offset is controlled via props */
 function isOffsetControlled(propOffset?: number) {
     return propOffset !== undefined;
 }
 
+/** Resolves effective month offset from controlled prop or internal state */
 function getOffset(prop?: number, state: number = 0): number {
     return isOffsetControlled(prop) ? prop! : state;
 }
 
+/** Constructs props object for day buttons including click handler and accessibility attributes */
 function getDateProps<E extends { defaultPrevented?: boolean } = React.SyntheticEvent>(
     onDateSelected: (dateObj: DateObj, event: E) => void,
     { onClick, dateObj, ...rest }: { onClick?: (event: E) => void, dateObj: DateObj, [key: string]: unknown }
@@ -33,6 +36,7 @@ function getDateProps<E extends { defaultPrevented?: boolean } = React.Synthetic
     };
 }
 
+/** Constructs props object for backward month navigation button */
 function getBackProps<E extends { defaultPrevented?: boolean } = React.SyntheticEvent>(
     { minDate, offsetMonth, handleOffsetChanged, adapter }: { minDate?: Date, offsetMonth: number, handleOffsetChanged: (newOffset: number) => void, adapter: DateAdapter },
     {
@@ -53,6 +57,7 @@ function getBackProps<E extends { defaultPrevented?: boolean } = React.Synthetic
     };
 }
 
+/** Constructs props object for forward month navigation button */
 function getForwardProps<E extends { defaultPrevented?: boolean } = React.SyntheticEvent>(
     { maxDate, offsetMonth, handleOffsetChanged, adapter }: { maxDate?: Date, offsetMonth: number, handleOffsetChanged: (newOffset: number) => void, adapter: DateAdapter },
     {
@@ -73,26 +78,54 @@ function getForwardProps<E extends { defaultPrevented?: boolean } = React.Synthe
     };
 }
 
+/**
+ * Configuration options for the `useDates` hook.
+ */
 export interface UseDatesProps<E extends { defaultPrevented?: boolean } = React.SyntheticEvent> {
+    /** Base focus date around which calendar view is centered (defaults to today) */
     date?: Date;
+    /** Upper date bound; dates after maxDate are unselectable */
     maxDate?: Date;
+    /** Lower date bound; dates before minDate are unselectable */
     minDate?: Date;
+    /** Array of explicit dates that should be disabled/unselectable */
     disabledDates?: Date[];
+    /** Number of consecutive month grids to compute (defaults to 1) */
     monthsToDisplay?: number;
+    /** First day of week index: 0 = Sunday, 1 = Monday, etc. (defaults to 0) */
     firstDayOfWeek?: number;
+    /** Controlled month offset relative to base date */
     offset?: number;
+    /** Low-level event handler invoked when any day button is selected */
     onDateSelected?: (dateObj: DateObj, event: E) => void;
+    /** Callback fired when month navigation offset changes */
     onOffsetChanged?: (newOffset: number) => void;
+    /** Controlled selected date value (Date, Date[], Date range object, or null) */
     selected?: Date | Date[] | { start?: Date, end?: Date } | null;
+    /** Initial selected date value for uncontrolled mode */
     defaultSelected?: Date | Date[] | { start?: Date, end?: Date } | null;
+    /** Map of custom date modifier predicate functions */
     modifiers?: Record<string, (date: Date, month: number, year: number) => boolean>;
+    /** Date selection mode: `'single'`, `'range'`, or `'multiple'` (defaults to `'single'`) */
     selectionMode?: SelectionMode;
+    /** DateAdapter instance for date calculations (defaults to DayjsAdapter) */
     adapter?: DateAdapter;
+    /** Callback invoked when date selection state changes */
     onChange?: (selected: Date | Date[] | { start?: Date, end?: Date } | null) => void;
+    /** Callback fired when month view changes, passing array of first day of each visible month */
     onMonthChange?: (dates: Date[]) => void;
+    /** Callback fired when visible year changes */
     onYearChange?: (date: Date) => void;
 }
 
+/**
+ * Headless React hook that manages calendar view offset, date selection logic (single, range, multiple),
+ * hover states, and prop getters for headless UI calendar implementations.
+ *
+ * @template E Synthetic event type
+ * @param props UseDatesProps configuration
+ * @returns Object containing computed `calendars`, `getDateProps`, `getBackProps`, `getForwardProps`, and `setOffset`
+ */
 export function useDates<E extends { defaultPrevented?: boolean } = React.SyntheticEvent>({
     date = new Date(),
     maxDate,
@@ -119,6 +152,7 @@ export function useDates<E extends { defaultPrevented?: boolean } = React.Synthe
         Date | Date[] | { start?: Date; end?: Date } | null | undefined
     >(defaultSelected ?? null);
 
+    // Reset uncontrolled offset to 0 when base date prop changes to a different calendar day
     if (!adapter.isSame(adapter.date(prevDate), adapter.date(date), 'day')) {
         setPrevDate(date);
         if (!isOffsetControlled(offset)) {
