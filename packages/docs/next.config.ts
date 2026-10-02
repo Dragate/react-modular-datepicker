@@ -15,7 +15,8 @@ const config: NextConfig = {
     }),
     rules: {
       "*.css": {
-        loaders: ["@tailwindcss/webpack"],
+        loaders: ["@tailwindcss/turbopack"],
+        as: "*.css",
       },
     },
   },
