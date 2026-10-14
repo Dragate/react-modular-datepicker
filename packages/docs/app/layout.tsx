@@ -1,7 +1,7 @@
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { RootProvider } from 'fumadocs-ui/provider/next';
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
 import './global.css';
 
@@ -61,6 +61,10 @@ export const metadata: Metadata = {
     google: 'cPwTWWsKpgpJaiwv1lo8Q16c19J9l6bztgp4-o5BXiw',
   },
 };
+
+export const viewport: Viewport = {
+  themeColor: "#c5a059",
+}
 
 export default function Layout({ children }: LayoutProps<'/'>) {
   return (

@@ -4,8 +4,8 @@ export default function manifest(): MetadataRoute.Manifest {
     return {
         name: "React Modular Datepicker",
         short_name: "RMD",
-        theme_color: "#ffffff",
-        background_color: "#ffffff",
+        theme_color: "#c5a059",
+        background_color: "#121212",
         display: "standalone",
         icons: [{
             "src": "/web-app-manifest-192x192.png",
